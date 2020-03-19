@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node dist/main.js",
+    "start:prod": "MODE_ENV=production node dist/main.js",
     "build": "tsc",
     "watch-ts": "tsc -w",
-    "dev": "nodemon"
+    "dev": "NODE_ENV=local nodemon"
   },
   "dependencies": {
     "@types/express": "4.17.3",

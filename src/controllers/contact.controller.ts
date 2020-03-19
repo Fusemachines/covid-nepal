@@ -1,7 +1,5 @@
 import { Router, Request, Response, response } from "express";
 import { IController } from "../shared/interfaces";
-import { UserService } from "../services";
-
 
 export class ContactController implements IController {
     public route: string = "contact";
