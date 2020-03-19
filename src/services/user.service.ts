@@ -4,11 +4,7 @@ export class UserService {
 
     async getAllUsers() {
         try {
-            const users = [{
-                name: "user1",
-                email: "user1@mail.com"
-            }]
-            return users;
+            return await UserModel.find().exec();
         } catch (error) {
             throw new Error(error);
         }

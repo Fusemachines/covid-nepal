@@ -1,6 +1,6 @@
 import Express, { Application, Response, Request } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
-import { createConnection } from "mongoose";
+import { connect } from "mongoose";
 
 export default class App {
     private app: Application;
@@ -27,7 +27,7 @@ export default class App {
     async createDatabaseConnection(connOptions: IDatabaseConnectionOptions) {
         try {
             let connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
-            await createConnection(connectionUri, {
+            await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             });
