@@ -1,0 +1,33 @@
+{
+  "name": "covid-node-backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "watch-ts": "tsc -w",
+    "dev": "nodemon"
+  },
+  "dependencies": {
+    "@types/express": "4.17.3",
+    "@types/mongoose": "5.7.6",
+    "@types/typescript": "2.0.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "8.2.0",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "mongoose": "5.9.5",
+    "morgan": "~1.9.1",
+    "winston": "3.2.1"
+  },
+  "devDependencies": {
+    "@types/winston": "2.4.4",
+    "concurrently": "5.1.0",
+    "nodemon": "2.0.2",
+    "ts-node": "8.7.0",
+    "tsconfig-paths": "3.9.0",
+    "typescript": "3.8.3"
+  }
+}
