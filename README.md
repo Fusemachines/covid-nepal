@@ -1,23 +1,28 @@
 # Covid Nepal
 
 ## Installation
-```
+
+```[bash]
 git clone https://github.com/Fusemachines/covid-nepal.git
 yarn install
 ```
 
-## Configuration
+### Configuration
+
 copy `.env.sample` file to `.env.development` and update your configuration
 
-## Running Server
-```
+### Running local Server
+
+```[bash]
 yarn dev
 ```
-> Application should be running under [Localhost:8000](http://localhost:8000)
 
+> Application should be running under [localhost:5000](http://localhost:8000)
 
-### Deployment
-copy `.env.sample` file to `.env.production` and update your configuration
+### Production Deployment
 
-Run ```yarn prod``` to start production
-Run ```pm2 logs``` to watch logs
+Copy `.env.sample` file to `.env.production` and update your configuration for production
+environment in .env.production file
+
+- Run ```yarn prod``` to start production
+- Run ```pm2 logs``` to watch logs
