@@ -16,7 +16,7 @@ class UserController {
         this.route = "user";
         this.getAllUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = this.userService.getAllUsers();
+                const result = yield this.userService.getAllUsers();
                 return res.json(result);
             }
             catch (error) {

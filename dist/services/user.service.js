@@ -14,8 +14,7 @@ class UserService {
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield user_model_1.UserModel.find({}).lean().exec();
-                return users;
+                return yield user_model_1.UserModel.find().exec();
             }
             catch (error) {
                 throw new Error(error);

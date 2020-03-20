@@ -32,13 +32,14 @@ class App {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
-                yield mongoose_1.createConnection(connectionUri, {
+                yield mongoose_1.connect(connectionUri, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
                 });
             }
             catch (error) {
-                console.log("Database connection not established");
+                console.log("Error connecting to database");
+                console.log(error);
             }
         });
     }
