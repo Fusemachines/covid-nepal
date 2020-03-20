@@ -5,7 +5,8 @@ import {
 } from "express";
 import { config } from "dotenv";
 import { UserController } from "./controllers/user.controller";
-import { UserService } from "./services";
+import { LiveDataController } from "./controllers/livedata.controller";
+import { UserService, LiveDataService } from "./services";
 import { ContactController } from "./controllers";
 
 config();
@@ -13,7 +14,8 @@ config();
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        new ContactController()
+        new LiveDataController(new LiveDataService()),
+        new ContactController(),
     ],
     middlewares: [
         json(),
@@ -21,7 +23,7 @@ const app = new App({
             extended: true
         })
     ],
-    port: 5000
+    port: parseInt(process.env.APP_PORT, 10)
 })
 
 app.run(() => {

@@ -6,8 +6,7 @@ export default class App {
     private app: Application;
     port: number;
 
-    constructor(
-        {
+    constructor({
             controllers, middlewares, port
         }: IApplicationOptions
     ) {
@@ -26,13 +25,18 @@ export default class App {
 
     async createDatabaseConnection(connOptions: IDatabaseConnectionOptions) {
         try {
-            let connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
+            let connectionUri = `mongodb://${connOptions.host}:${connOptions.port}/${connOptions.database}`;
+            if (connOptions.username  || connOptions.password) {
+                connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
+            }
+
             await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             });
+            
         } catch (error) {
-            console.log("Error connecting to database");
+            console.warn("Error connecting to database");
             console.log(error);
         }
     }
