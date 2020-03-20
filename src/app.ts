@@ -33,6 +33,7 @@ export default class App {
             await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
+                useFindAndModify: false
             });
             
         } catch (error) {
