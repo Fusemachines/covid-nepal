@@ -30,7 +30,7 @@ export class VirusCountController implements IController {
   getLatestVirusCounts = async (req: Request, res: Response) => { 
     try {
       const counts = await this.virusCountsService.getLatestVirusCounts();
-      return res.json(counts);
+      return res.json({"data": counts});
     } catch (error) {
       console.log(error);
       return response.status(500).json({ error })
