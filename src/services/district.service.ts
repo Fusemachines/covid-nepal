@@ -1,10 +1,10 @@
 import DistrictModel from "../models/district.model";
-import { IDistrict } from "../shared/interfaces";
+import { IDistrict, IDistrictFilter } from "../shared/interfaces";
 
 export class DistrictService {
 
     async getDistricts(
-        { province }: IDistrict
+        { province }: IDistrictFilter
     ) {
         const districts = await DistrictModel.find({
             ...(province ? { province } : {})

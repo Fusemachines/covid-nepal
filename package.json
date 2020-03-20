@@ -7,7 +7,9 @@
     "prod": "yarn clean:build && NODE_ENV=production pm2 start ./dist/main.js -- --production",
     "build": "tsc",
     "watch-ts": "tsc -w",
-    "dev": "NODE_ENV=development nodemon"
+    "dev": "NODE_ENV=development nodemon",
+    "seed:dev": "NODE_ENV=development ts-node ./src/seed/seeder.ts",
+    "seed:prod": "NODE_ENV=production ts-node ./src/seed/seeder.ts"
   },
   "dependencies": {
     "@types/express": "4.17.3",
