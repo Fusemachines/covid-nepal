@@ -1,6 +1,7 @@
 import Express, { Application, Response, Request } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
+import cors from "cors"
 
 export default class App {
     private app: Application;
@@ -8,6 +9,8 @@ export default class App {
 
     constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
+        this.app.use(cors())
+        
         this.port = port;
         this.createDatabaseConnection({
             database: process.env.DB_DATABASE,

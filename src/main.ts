@@ -10,7 +10,7 @@ import { LiveDataController } from "./controllers/livedata.controller";
 import { UserService, LiveDataService } from "./services";
 import { ContactController, VirusCountController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
-import { VirusCountService } from "services/virus-count.service";
+import { VirusCountService } from "./services/virus-count.service";
 
 const environment = process.env.NODE_ENV;
 

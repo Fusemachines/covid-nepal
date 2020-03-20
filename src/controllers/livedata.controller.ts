@@ -63,7 +63,7 @@ export class LiveDataController implements IController {
             const result:any = await this.liveDataService.delete(request.params.id);
             if (result === null) {
                 return response.status(500).json({
-                    "error": "Unable to delete livedata record"
+                    error: "Unable to delete livedata record"
                 })
             }
 
