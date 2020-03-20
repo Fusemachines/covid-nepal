@@ -3,7 +3,7 @@ import { Router } from "express";
 export interface IApplicationOptions {
     controllers: any[];
     middlewares: any[];
-    port: number;
+    port: string;
 }
 
 export interface IDatabaseConnectionOptions {
@@ -18,3 +18,5 @@ export interface IController {
     router: Router;
     initRoutes: () => void;
 }
+
+export * from "./district.interface";
