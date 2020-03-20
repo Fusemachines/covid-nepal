@@ -8,6 +8,7 @@ import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { UserService } from "./services";
 import { ContactController } from "./controllers";
+import LoggerMiddleware from "./middlewares/loggerMiddleware";
 
 const environment = process.env.NODE_ENV;
 
@@ -29,7 +30,8 @@ const app = new App({
         json(),
         urlencoded({
             extended: true
-        })
+        }),
+        LoggerMiddleware
     ],
     port: process.env.APP_PORT
 })
