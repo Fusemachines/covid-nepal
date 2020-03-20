@@ -3,7 +3,7 @@ import LiveDataModel from "../models/livedata.model";
 export class LiveDataService {
     all(query?: { district: string, province: number }) {
         const province: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : 3;
-        const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',')
+        const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
 
         // query filter
         let filter: any = { province };

@@ -1,5 +1,8 @@
 
-.env
+
+.env*
+
+dist/
 node_modules/
 
 logs/

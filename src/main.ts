@@ -4,29 +4,43 @@ import {
     urlencoded,
 } from "express";
 import { config } from "dotenv";
+import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { LiveDataController } from "./controllers/livedata.controller";
 import { UserService, LiveDataService } from "./services";
-import { ContactController } from "./controllers";
+import { ContactController, VirusCountController } from "./controllers";
+import LoggerMiddleware from "./middlewares/loggerMiddleware";
+import { VirusCountService } from "services/virus-count.service";
 
-config();
+const environment = process.env.NODE_ENV;
+
+const { error } = config({
+    path: resolve(__dirname, "../", `.env.${environment}`)
+});
+
+
+if (error) {
+    throw new Error(error.message);
+}
 
 const app = new App({
     controllers: [
         new UserController(new UserService()),
         new LiveDataController(new LiveDataService()),
         new ContactController(),
+        new VirusCountController(new VirusCountService())
     ],
     middlewares: [
         json(),
         urlencoded({
             extended: true
-        })
+        }),
+        LoggerMiddleware
     ],
-    port: parseInt(process.env.APP_PORT, 10)
+    port: Number(process.env.APP_PORT)
 })
 
 app.run(() => {
-    console.log("Server running on port", app.port)
+    console.log(`Server running on port in ${environment} mode`);
 })
 

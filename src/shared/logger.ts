@@ -16,7 +16,7 @@ const logger = createLogger({
         new (winston.transports.File)({ filename: `./logs/${logDate}-info.log`, level: "info" })
     ],
     silent: process.env.NODE_ENV === "production",
-    ...(process.env.NODE_ENV === "local" ? {
+    ...(process.env.NODE_ENV === "development" ? {
         format: format.combine(
             format.timestamp(),
             format.colorize({
