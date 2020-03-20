@@ -4,11 +4,21 @@ import {
     urlencoded,
 } from "express";
 import { config } from "dotenv";
+import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { UserService } from "./services";
 import { ContactController } from "./controllers";
 
-config();
+const environment = process.env.NODE_ENV;
+
+const { error } = config({
+    path: resolve(__dirname, "../", `.env.${environment}`)
+});
+
+
+if (error) {
+    throw new Error(error.message);
+}
 
 const app = new App({
     controllers: [
@@ -21,10 +31,10 @@ const app = new App({
             extended: true
         })
     ],
-    port: 5000
+    port: process.env.APP_PORT
 })
 
 app.run(() => {
-    console.log("Server running on port", app.port)
+    console.log(`Server running on port in ${environment} mode`);
 })
 

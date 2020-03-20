@@ -3,7 +3,7 @@ import { Router } from "express";
 export interface IApplicationOptions {
     controllers: any[];
     middlewares: any[];
-    port: number;
+    port: string;
 }
 
 export interface IDatabaseConnectionOptions {

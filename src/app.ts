@@ -4,7 +4,7 @@ import { connect } from "mongoose";
 
 export default class App {
     private app: Application;
-    port: number;
+    port: string;
 
     constructor(
         {
