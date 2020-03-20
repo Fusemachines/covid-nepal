@@ -4,13 +4,9 @@ import { connect } from "mongoose";
 
 export default class App {
     private app: Application;
-    port: string;
+    port: number;
 
-    constructor(
-        {
-            controllers, middlewares, port
-        }: IApplicationOptions
-    ) {
+    constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
         this.port = port;
         this.createDatabaseConnection({
@@ -26,13 +22,19 @@ export default class App {
 
     async createDatabaseConnection(connOptions: IDatabaseConnectionOptions) {
         try {
-            let connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
+            let connectionUri = `mongodb://${connOptions.host}:${connOptions.port}/${connOptions.database}`;
+            if (connOptions.username || connOptions.password) {
+                connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
+            }
+
             await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
+                useFindAndModify: false
             });
+
         } catch (error) {
-            console.log("Error connecting to database");
+            console.warn("Error connecting to database");
             console.log(error);
         }
     }
@@ -56,8 +58,4 @@ export default class App {
     run(cb: () => void) {
         this.app.listen(this.port, cb);
     }
-
-
-
-
 }

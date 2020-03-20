@@ -6,7 +6,8 @@ import {
 import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
-import { UserService } from "./services";
+import { LiveDataController } from "./controllers/livedata.controller";
+import { UserService, LiveDataService } from "./services";
 import { ContactController, VirusCountController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import { VirusCountService } from "services/virus-count.service";
@@ -25,6 +26,7 @@ if (error) {
 const app = new App({
     controllers: [
         new UserController(new UserService()),
+        new LiveDataController(new LiveDataService()),
         new ContactController(),
         new VirusCountController(new VirusCountService())
     ],
@@ -35,7 +37,7 @@ const app = new App({
         }),
         LoggerMiddleware
     ],
-    port: process.env.APP_PORT
+    port: Number(process.env.APP_PORT)
 })
 
 app.run(() => {
