@@ -17,7 +17,7 @@ copy `.env.sample` file to `.env.development` and update your configuration
 yarn dev
 ```
 
-> Application should be running under [localhost:5000](http://localhost:8000)
+> Application should be running under [localhost:5001](http://localhost:5000)
 
 ### Production Deployment
 
