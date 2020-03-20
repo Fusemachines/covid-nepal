@@ -9,6 +9,7 @@ import { UserController } from "./controllers/user.controller";
 import { UserService, DistrictService } from "./services";
 import { ContactController, DistrictController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
+import { ContactService } from "./services/contact.service";
 
 const environment = process.env.NODE_ENV;
 
@@ -24,7 +25,9 @@ if (error) {
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        new ContactController(),
+        new ContactController(
+            new ContactService()
+        ),
         new DistrictController(new DistrictService())
     ],
     middlewares: [
