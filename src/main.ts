@@ -7,8 +7,9 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { UserService } from "./services";
-import { ContactController } from "./controllers";
+import { ContactController, VirusCountController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
+import { VirusCountService } from "services/virus-count.service";
 
 const environment = process.env.NODE_ENV;
 
@@ -24,7 +25,8 @@ if (error) {
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        new ContactController()
+        new ContactController(),
+        new VirusCountController(new VirusCountService())
     ],
     middlewares: [
         json(),
