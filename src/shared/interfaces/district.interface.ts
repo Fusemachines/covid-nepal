@@ -1,12 +1,12 @@
 
 export enum EProvince {
-    Province01 = "Province-01",
-    Province02 = "Province-02",
-    Province03 = "Province-03",
-    Province04 = "Province-04",
-    Province05 = "Province-05",
-    Province06 = "Province-06",
-    Province07 = "Province-07"
+    Province01 = 1,
+    Province02 = 2,
+    Province03 = 3,
+    Province04 = 4,
+    Province05 = 5,
+    Province06 = 6,
+    Province07 = 7
 }
 export interface IDistrictFilter {
     province: string;

@@ -53,6 +53,9 @@ const app = new App({
 })
 
 app.run(() => {
-    console.log(`Server running on port in ${environment} mode`);
+    global.logger.log({
+        level: "info",
+        message: `Server running in ${environment} mode`
+    });
 })
 

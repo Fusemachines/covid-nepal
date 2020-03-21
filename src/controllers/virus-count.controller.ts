@@ -22,7 +22,6 @@ export class VirusCountController implements IController {
       const counts = await this.virusCountsService.getVirusCountsToday();
       return res.json(counts);
     } catch (error) {
-      console.log(error);
       return response.status(500).json({ error })
     }
   }
