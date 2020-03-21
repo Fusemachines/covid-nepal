@@ -20,9 +20,30 @@ export class ContactController implements IController {
         this.router.get("/emergency", this.getEmergencyContacts);
         this.router.get("/hospitals", this.getHospitalContacts);
         this.router.delete('/:id', this.removeContact);
+        this.router.patch("/:id", this.updateContact);
     }
 
 
+    updateContact = async (request: CRequest, response: CResponse) => {
+
+        const contactId = request.params.id;
+        try {
+            global.logger.log({
+                level: 'info',
+                message: `Updaing hospital->id:${request.params.id}, body: ${JSON.stringify(request.body)}`
+            });
+            const result = await this.contactService.updateContactById(contactId, request.body);
+            return response.json(result);
+        } catch (error) {
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
+            })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
+        }
+
+    }
     createContact = async (request: Request, response: Response) => {
         try {
             const contact = await this.contactService.createContact(request.body);
