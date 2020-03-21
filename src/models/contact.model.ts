@@ -19,7 +19,7 @@ const ContactSchema = new Schema({
         required: true,
     },
     province: {
-        type: Schema.Types.String,
+        type: Schema.Types.Number,
         required: true
     }
 }, {

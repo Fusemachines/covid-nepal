@@ -66,8 +66,10 @@ export class ContactController implements IController {
 
     getHospitalContacts = async (request: Request, response: Response) => {
         const { district } = request.query;
+        const province = request.query.province;
+
         try {
-            const docs = await this.contactService.getHospitals({ district });
+            const docs = await this.contactService.getHospitals(province, { district });
             response.status(200).json({ docs });
         } catch (error) {
             response.status(500).json({
