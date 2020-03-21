@@ -14,8 +14,21 @@ export class ContactController implements IController {
     }
 
     initRoutes() {
+        this.router.post("/", this.createContact);
         this.router.get("/emergency", this.getEmergencyContacts);
         this.router.get("/hospitals", this.getHospitalContacts)
+    }
+
+
+    createContact = async (request: Request, response: Response) => {
+        try {
+            const contact = await this.contactService.createContact(request.body);
+            response.status(201).json({
+                contact
+            })
+        } catch (error) {
+            response.status(500).json({ error });
+        }
     }
 
     getEmergencyContacts = async (request: Request, response: Response) => {
