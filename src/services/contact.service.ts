@@ -41,4 +41,14 @@ export class ContactService {
         return emergencyContacts;
     }
 
+    async removeContactById(id: string) {
+        return ContactModel.findByIdAndRemove(id);
+    }
+
+    async updateContactById(id: string, data: any) {
+        const oldRecord: any = await ContactModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean();
+        const newRecord = { ...oldRecord, ...data }
+        return ContactModel.findByIdAndUpdate(id, newRecord, { new: true })
+    }
+    
 }
