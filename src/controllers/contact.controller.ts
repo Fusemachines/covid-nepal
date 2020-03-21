@@ -1,6 +1,8 @@
 import { Router, Request, Response, response } from "express";
 import { ContactService } from "../services/contact.service";
 import { IController } from "../shared/interfaces";
+import { CRequest, CResponse } from "../shared/interfaces/http.interface";
+import HttpException from "../shared/exceptions/httpException";
 
 export class ContactController implements IController {
     public route: string = "contacts";
@@ -16,7 +18,8 @@ export class ContactController implements IController {
     initRoutes() {
         this.router.post("/", this.createContact);
         this.router.get("/emergency", this.getEmergencyContacts);
-        this.router.get("/hospitals", this.getHospitalContacts)
+        this.router.get("/hospitals", this.getHospitalContacts);
+        this.router.delete('/:id', this.removeContact);
     }
 
 
@@ -49,6 +52,35 @@ export class ContactController implements IController {
             response.status(500).json({
                 error
             })
+        }
+    }
+
+    removeContact = async (request: CRequest, response: CResponse) => {
+
+        const contactId = request.params.id;
+        try {
+            const result: any = await this.contactService.removeContactById(contactId);
+            if (result === null) {
+                const error: any = new HttpException({
+                    statusCode: 500,
+                    description: "Unable to delete contact record",
+                })
+                const parsedError = error.parse()
+                return response.status(parsedError.statusCode).json(parsedError)
+            }
+
+            return response.json({
+                message: `'${result.name || ""}' contact removed successfully.`
+            });
+
+        } catch (error) {
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
+            })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
+
         }
     }
 

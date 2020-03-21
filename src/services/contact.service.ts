@@ -41,4 +41,8 @@ export class ContactService {
         return emergencyContacts;
     }
 
+    async removeContactById(id: string) {
+        return ContactModel.findByIdAndRemove(id);
+    }
+
 }
