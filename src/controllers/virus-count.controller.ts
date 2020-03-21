@@ -44,7 +44,7 @@ export class VirusCountController implements IController {
     try {
       const virusCount = await this.virusCountsService.addVirusCount(req.body);
       console.log(virusCount);
-      return response.json(virusCount);
+      return res.json(virusCount);
     } catch (error) {
       error = new HttpException({
         statusCode: 500,
@@ -72,24 +72,24 @@ export class VirusCountController implements IController {
   deleteVirusCount = async (request: Request, response: Response) => {
     try {
 
-        const result:any = await this.virusCountsService.delete(request.params.id);
-        if (result === null) {
-            return response.status(500).json({
-                error: "Unable to delete virus count record"
-            })
-        }
-
-        return response.json({
-            message: `Virus count data removed successfully.`
-        });
-    } catch (error) {
-        error = new HttpException({
-            statusCode: 500,
-            description: error.message,
+      const result: any = await this.virusCountsService.delete(request.params.id);
+      if (result === null) {
+        return response.status(500).json({
+          error: "Unable to delete virus count record"
         })
-        const parsedError = error.parse()
-        response.status(parsedError.statusCode).json(parsedError)
+      }
+
+      return response.json({
+        message: `Virus count data removed successfully.`
+      });
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      })
+      const parsedError = error.parse()
+      response.status(parsedError.statusCode).json(parsedError)
     }
-}
+  }
 
 }

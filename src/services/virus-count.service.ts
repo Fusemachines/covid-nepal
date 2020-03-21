@@ -22,8 +22,8 @@ export class VirusCountService {
         return VirusCountModel.create(data)
     }
 
-    update(id: string, data: object) {
-        const oldRecord = VirusCountModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+    async update(id: string, data: object) {
+        const oldRecord = await VirusCountModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
         const newRecord = { ...oldRecord, ...data }
 
         return VirusCountModel.findByIdAndUpdate(id, newRecord, { new: true })
