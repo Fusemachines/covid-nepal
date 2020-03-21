@@ -1,7 +1,6 @@
-import { Router, Request, Response, response } from "express";
+import { Router, Request, Response, response, json } from "express";
 import { IController } from "../shared/interfaces";
 import { LiveDataService } from "../services";
-
 
 export class LiveDataController implements IController {
     public route: string = "livedata";
@@ -21,6 +20,11 @@ export class LiveDataController implements IController {
 
     all = async (request: Request, response: Response) => {
         try {
+            global.logger.log({
+                level: 'info',
+                message: `Getting all livedata`
+            });
+
             const result =  await this.liveDataService.all(request.query);
             return response.json({
                 docs: result
@@ -35,6 +39,11 @@ export class LiveDataController implements IController {
 
     create = async (request: Request, response: Response) => {
         try {
+            global.logger.log({
+                level: 'info',
+                message: `Creating live data -> body: ${JSON.stringify(request.body)}`
+            });
+
             const result =  await this.liveDataService.create(request.body);
             return response.json(result);
         } catch (error) {
@@ -47,6 +56,11 @@ export class LiveDataController implements IController {
 
     update = async (request: Request, response: Response) => {
         try {
+            global.logger.log({
+                level: 'info',
+                message: `Updaing livedata->id:${request.params.id}, body: ${JSON.stringify(request.body)}`
+            });
+
             const result =  await this.liveDataService.update(request.params.id, request.body);
             return response.json(result);
         } catch (error) {
@@ -59,6 +73,10 @@ export class LiveDataController implements IController {
 
     delete = async (request: Request, response: Response) => {
         try {
+            global.logger.log({
+                level: 'info',
+                message: `Deleting livedata->id:${request.params.id}`
+            });
 
             const result:any = await this.liveDataService.delete(request.params.id);
             if (result === null) {

@@ -11,17 +11,26 @@ import { UserService, LiveDataService } from "./services";
 import { ContactController, VirusCountController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import { VirusCountService } from "./services/virus-count.service";
+import logger from "./shared/logger"
 
+// Bootstraping Global NameSpace for NodeJS
+declare global {
+    namespace NodeJS {
+        interface Global {
+            [key: string]: any
+        }
+    }
+}
+
+// Configuration
 const environment = process.env.NODE_ENV;
-
 const { error } = config({
     path: resolve(__dirname, "../", `.env.${environment}`)
 });
+if (error) throw new Error(error.message);
 
-
-if (error) {
-    throw new Error(error.message);
-}
+// Global logger
+global.logger = logger;
 
 const app = new App({
     controllers: [
