@@ -6,7 +6,10 @@ const HospitalSchema = new Schema({
         type: Schema.Types.String,
         required: true
     },
-
+    nameSlug: {
+        type: Schema.Types.String,
+        required: true
+    },
     hospitalType: {
         type: Schema.Types.String,
         required: true

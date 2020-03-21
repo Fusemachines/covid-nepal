@@ -3,12 +3,13 @@ import { ECovidTest } from "../shared/interfaces";
 
 
 export class HospitalService {
-    async createHospital(data: any) {
-        const hospital = await HospitalModel.create(data);
-        return hospital;
+    createHospital(data: any) {
+        // create slug
+        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        return HospitalModel.create(data);
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: ECovidTest }) {
+    getHospitals(query?: { district: string, province: number, covidTest: ECovidTest }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
 
         // query filter
@@ -20,25 +21,32 @@ export class HospitalService {
         if (query.covidTest !== undefined && query.covidTest !== ECovidTest.ALL) {
             filter = { ...filter, covidTest: query.covidTest === ECovidTest.AVAILABLE ? true : false }
         }
-        const hospitals = await HospitalModel.find(filter).select("-__v").lean().exec();
-        return hospitals;
+
+        return HospitalModel.find(filter).select("-__v").lean();
     }
 
-    async getCovidHospitals() {
-        const hospitals = await HospitalModel.find({
+    getCovidHospitals() {
+        return HospitalModel.find({
             covidTest: true
-        }).select("hospitalName availableTime openDays availableBeds totalBeds").lean().exec();
-        return hospitals;
+        }).select("hospitalName nameSlug availableTime openDays availableBeds totalBeds").lean();
     }
 
-
-    async getHospitalById(id: string) {
-        const hospitalData = await HospitalModel.findById(id).select("-__v").lean().exec();
-        return hospitalData;
+    getHospitalBySlug(slug: string) {
+        return HospitalModel.find({
+            nameSlug: slug
+        }).select("-__v").lean();
     }
 
-    async update(id: string, data: object) {
-        const oldRecord = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+    getHospitalById(id: string) {
+        return HospitalModel.findById(id).select("-__v").lean();
+    }
+
+    async update(id: string, data: any) {
+        const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+        const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        if (oldRecord.slug !== nameSlug) {
+            data.nameSlug = nameSlug
+        }
         const newRecord = { ...oldRecord, ...data }
 
         return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })

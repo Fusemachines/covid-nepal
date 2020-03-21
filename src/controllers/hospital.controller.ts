@@ -1,6 +1,6 @@
 import { IController } from "../shared/interfaces";
 import { Router, Request, Response } from "express";
-import { HospitalService } from "../services";
+import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 
@@ -18,7 +18,7 @@ export class HospitalController implements IController {
         this.router.post("/", this.createHospital);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
-        this.router.get("/:id", this.getHospitalById);
+        this.router.get("/:nameSlug", this.getHospitalBySlug);
         this.router.patch("/:id", this.updateHospital);
         this.router.delete("/:id", this.removeHospital);
     }
@@ -27,7 +27,7 @@ export class HospitalController implements IController {
         try {
             const hospitalData = request.body;
             const hospital = await this.hospitalService.createHospital(hospitalData);
-
+            
             response.status(201).json(hospital);
         } catch (error) {
             error = new HttpException({
@@ -117,10 +117,10 @@ export class HospitalController implements IController {
         }
     }
 
-    getHospitalById = async (request: CRequest, response: CResponse) => {
-        const hospitalId = request.params.id;
+    getHospitalBySlug = async (request: CRequest, response: CResponse) => {
         try {
-            const hospital = await this.hospitalService.getHospitalById(hospitalId);
+            const nameSlug = request.params.nameSlug;
+            const hospital = await this.hospitalService.getHospitalBySlug(nameSlug);
             response.status(200).json(hospital);
         } catch (error) {
             error = new HttpException({
