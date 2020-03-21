@@ -1,6 +1,7 @@
 import { Router, Request, Response, response, json } from "express";
 import { IController } from "../shared/interfaces";
 import { LiveDataService } from "../services";
+import HttpException from "../shared/exceptions/httpException";
 
 export class LiveDataController implements IController {
     public route: string = "livedata";
@@ -25,15 +26,21 @@ export class LiveDataController implements IController {
                 message: `Getting all livedata`
             });
 
+            throw new HttpException({
+                title: "NOT FOUND",
+                statusCode: 500,
+                description: `Error while getting all livedata`,
+                isOperational: true
+            })
+
             const result =  await this.liveDataService.all(request.query);
             return response.json({
                 docs: result
             });
+
         } catch (error) {
-            console.log(error);
-            return response.status(500).json({
-                error
-            })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
         }
     }
 
@@ -47,7 +54,11 @@ export class LiveDataController implements IController {
             const result =  await this.liveDataService.create(request.body);
             return response.json(result);
         } catch (error) {
-            console.warn(error);
+            global.logger.log({
+                level: 'error',
+                message: `Error while creating livedata -> error: ${error.message}}`
+            });
+
             return response.status(500).json({
                 error
             })
@@ -64,7 +75,11 @@ export class LiveDataController implements IController {
             const result =  await this.liveDataService.update(request.params.id, request.body);
             return response.json(result);
         } catch (error) {
-            console.warn(error);
+            global.logger.log({
+                level: 'error',
+                message: `Error while updaint livedata -> error: ${error.message}}`
+            });
+
             return response.status(500).json({
                 error
             })
@@ -89,7 +104,11 @@ export class LiveDataController implements IController {
                 message: `'${result.nameOfHospital}' removed successfully.`
             });
         } catch (error) {
-            console.warn(error);
+            global.logger.log({
+                level: 'error',
+                message: `Error while deleting livedata -> error: ${error.message}}`
+            });
+
             return response.status(500).json({
                 error
             })

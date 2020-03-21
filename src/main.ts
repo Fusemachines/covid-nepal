@@ -29,7 +29,7 @@ const { error } = config({
 });
 if (error) throw new Error(error.message);
 
-// Global logger
+// Global Logger
 global.logger = logger;
 
 const app = new App({

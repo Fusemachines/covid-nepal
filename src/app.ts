@@ -1,4 +1,4 @@
-import Express, { Application, Response, Request } from "express";
+import Express, { Application, Response, Request, NextFunction, Errback } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
@@ -9,10 +9,9 @@ export default class App {
 
     constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
-        this.app.use(cors())
-        this.app.disable('x-powered-by')
-        
         this.port = port;
+
+        this.middlewares(middlewares);
         this.createDatabaseConnection({
             database: process.env.DB_DATABASE,
             username: process.env.DB_USER,
@@ -20,7 +19,6 @@ export default class App {
             host: process.env.DB_HOST,
             port: parseInt(process.env.DB_PORT, 10)
         });
-        this.middlewares(middlewares);
         this.initRoutes(controllers);
     }
 
@@ -44,9 +42,12 @@ export default class App {
     }
 
     initRoutes(controllers: any[]) {
-        this.app.get('/', function (req: Request, res: Response) {
-            res.send("Server running");
+        this.app.get('/', function (request: Request, response: Response) {
+            response.json({
+                status: "UP"
+            });
         })
+
         controllers.forEach(controller => {
             this.app.use(`/${controller.route}`, controller.router);
         })
@@ -54,6 +55,8 @@ export default class App {
     }
 
     middlewares(middlewares: any[]) {
+        this.app.use(cors())
+        this.app.disable('x-powered-by')
         middlewares.forEach(middleware => {
             this.app.use(middleware);
         })
