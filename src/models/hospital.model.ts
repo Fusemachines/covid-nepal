@@ -2,11 +2,16 @@ import { model, Schema, } from "mongoose";
 
 
 const HospitalSchema = new Schema({
-    hospitalName: {
+    name: {
         type: Schema.Types.String,
         required: true
     },
-    
+
+    hospitalType: {
+        type: Schema.Types.String,
+        required: true
+    },
+
     availableTime: {
         type: [Schema.Types.String],
         required: true
@@ -34,6 +39,9 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Boolean
     },
 
+    testingProcess: {
+        type: Schema.Types.String
+    },
 
     // designated by government ?
     govtDesignated: {
@@ -54,7 +62,7 @@ const HospitalSchema = new Schema({
     },
 
     contact: {
-        type: [Schema.Types.Number]
+        type: [Schema.Types.String]
     },
 
 
@@ -73,6 +81,8 @@ const HospitalSchema = new Schema({
         type: Schema.Types.String,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 

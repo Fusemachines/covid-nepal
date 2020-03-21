@@ -14,5 +14,8 @@ export interface IDistrictFilter {
 
 export interface IDistrict {
     name: string;
-    province: EProvince
+    province: {
+        code: EProvince;
+        name: String
+    } | EProvince
 }
