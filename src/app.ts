@@ -8,6 +8,7 @@ import { CRequest, CResponse } from "./shared/interfaces/http.interface";
 import swaggerUI from "swagger-ui-express"
 // @ts-ignore: Resolve json module
 import swaggerJSON from "../api_docs/swagger.json"
+import compression from "compression"
 
 export default class App {
     private app: Application;
@@ -72,6 +73,7 @@ export default class App {
     }
 
     middlewares(middlewares: any[]) {
+        this.app.use(compression())
         this.app.use(cors())
         this.app.disable('x-powered-by')
         middlewares.forEach(middleware => {
