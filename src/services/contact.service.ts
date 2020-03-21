@@ -9,6 +9,7 @@ export class ContactService {
     }
 
     async getHospitals(
+        province: number,
         {
             district
         }: IHospitalFilter
@@ -21,10 +22,11 @@ export class ContactService {
 
         const hospitals = await ContactModel.find({
             contactType: "hospital",
+            province: province,
             ...(districtArray.length > 0 ? {
                 district: {
                     $in: districtArray
-                }
+                }                
             } : {})
         }).lean().exec();
 
