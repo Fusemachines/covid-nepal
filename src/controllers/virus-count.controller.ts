@@ -15,10 +15,11 @@ export class VirusCountController implements IController {
 
   initRoutes() {
     this.router.get("/today", this.getVirusCountsToday);
-    this.router.get("/", this.getLatestVirusCounts);
+    this.router.get("/latest", this.getLatestVirusCounts);
     this.router.post("/", this.addVirusCount);
     this.router.put("/:id", this.updateVirusCount);
     this.router.delete("/:id", this.deleteVirusCount);
+    this.router.get("/", this.getVirusCountsWithPagination);
   }
 
   getVirusCountsToday = async (req: Request, res: Response) => {
@@ -89,6 +90,15 @@ export class VirusCountController implements IController {
       })
       const parsedError = error.parse()
       response.status(parsedError.statusCode).json(parsedError)
+    }
+  }
+
+  getVirusCountsWithPagination =  async (req: Request, res: Response) => {
+    try {
+      const obj = await this.virusCountsService.getVirusCountsWithPagination(req.query.page, req.query.size);
+      return res.json(obj);
+    } catch (error) {
+      return response.status(500).json({ error })
     }
   }
 
