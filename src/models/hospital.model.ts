@@ -2,7 +2,12 @@ import { model, Schema, } from "mongoose";
 
 
 const HospitalSchema = new Schema({
-    hospitalName: {
+    name: {
+        type: Schema.Types.String,
+        required: true
+    },
+
+    hospitalType: {
         type: Schema.Types.String,
         required: true
     },
