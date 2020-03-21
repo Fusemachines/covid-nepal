@@ -18,4 +18,19 @@ export class VirusCountService {
         }
     }
 
+    addVirusCount(data: object) {
+        return VirusCountModel.create(data)
+    }
+
+    update(id: string, data: object) {
+        const oldRecord = VirusCountModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+        const newRecord = { ...oldRecord, ...data }
+
+        return VirusCountModel.findByIdAndUpdate(id, newRecord, { new: true })
+    }
+
+    delete(id: string) {
+        return VirusCountModel.findByIdAndRemove(id)
+    }
+
 }
