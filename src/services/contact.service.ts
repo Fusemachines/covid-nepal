@@ -4,6 +4,10 @@ import { IHospitalFilter } from "../shared/interfaces/contact.interface";
 export class ContactService {
 
 
+    createContact(data: any) {
+        return ContactModel.create(data);
+    }
+
     async getHospitals(
         {
             district
@@ -14,7 +18,7 @@ export class ContactService {
         if (district) {
             districtArray = district.split(",");
         }
-        
+
         const hospitals = await ContactModel.find({
             contactType: "hospital",
             ...(districtArray.length > 0 ? {
