@@ -41,13 +41,19 @@ export class VirusCountService {
             let query = VirusCountModel.find({});
             const data = query.skip(page * size).limit(size).exec();
 
-            console.log(data);
+            const totalItems = await VirusCountModel.count({});
+            const totalPages = Math.ceil(totalItems / size);
 
-            const count = await VirusCountModel.count({});
+            return {
+                meta: {
+                    page,
+                    size,
+                    totalItems,
+                    totalPages,
+                },
+                data
+            }
 
-            const obj = {count, data};
-
-            return obj;
         } catch (error) {
             throw new Error(error);
         }

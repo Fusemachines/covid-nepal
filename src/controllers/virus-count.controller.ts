@@ -1,7 +1,7 @@
 import { Router, Request, Response, response } from "express";
 import { IController } from "shared/interfaces";
 import { VirusCountService } from "../services"
-import HttpException from "shared/exceptions/httpException";
+import HttpException from "../shared/exceptions/httpException";
 
 export class VirusCountController implements IController {
 
@@ -95,8 +95,8 @@ export class VirusCountController implements IController {
 
   getVirusCountsWithPagination =  async (req: Request, res: Response) => {
     try {
-      const obj = await this.virusCountsService.getVirusCountsWithPagination(req.query.page, req.query.size);
-      return res.json(obj);
+      const data = await this.virusCountsService.getVirusCountsWithPagination(req.query.page, req.query.size);
+      return res.json(data);
     } catch (error) {
       return response.status(500).json({ error })
     }
