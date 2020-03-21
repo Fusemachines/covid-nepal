@@ -2,7 +2,12 @@ import Express, { Application } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
+import { readFileSync } from "fs"
+import https from "https"
 import { CRequest, CResponse } from "./shared/interfaces/http.interface";
+import swaggerUI from "swagger-ui-express"
+// @ts-ignore: Resolve json module
+import swaggerJSON from "../api_docs/swagger.json"
 
 export default class App {
     private app: Application;
@@ -46,11 +51,17 @@ export default class App {
     }
 
     initRoutes(controllers: any[]) {
+
         this.app.get('/', function (request: CRequest, response: CResponse) {
             response.json({
                 status: "UP"
             });
         })
+
+        // Swagger docs
+        this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
+
+
         controllers.forEach(controller => {
             this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
                 req.lang = req.params.lang
@@ -69,6 +80,18 @@ export default class App {
     }
 
     run(cb: () => void) {
-        this.app.listen(this.port, cb);
+
+        if (process.env.NODE_ENV === "production") {
+
+            https.createServer({
+                key: readFileSync("pathtokey.key", 'utf8'),
+                cert: readFileSync("pathtocert.cert", 'utf8')
+            }, this.app).listen(443, () => {
+                console.log(`App is running under 443 port`)
+            })
+
+        } else {
+            this.app.listen(this.port, cb);
+        }
     }
 }

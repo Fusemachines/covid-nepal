@@ -8,7 +8,7 @@ import { UserService, LiveDataService, DistrictService, VirusCountService } from
 import { ContactController, VirusCountController, DistrictController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import logger from "./shared/logger"
-import { ContactService } from "./services/contact.service";
+import { ContactService } from "./services/contact.service"
 
 // Bootstraping Global NameSpace for NodeJS
 declare global {
