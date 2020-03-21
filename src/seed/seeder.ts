@@ -64,7 +64,14 @@ class Seeder {
 
     private async seedDistricts() {
         await DistrictModel.deleteMany({});
-        await DistrictModel.insertMany(districts);
+        const updatedDistricts = districts.map(item => ({
+            name: item.name,
+            province: {
+                code: item.province,
+                name: `Province-0${item.province}`
+            }
+        }));
+        await DistrictModel.insertMany(updatedDistricts);
         console.log("Seed Completed");
         process.exit();
     }

@@ -1,14 +1,14 @@
 import DistrictModel from "../models/district.model";
-import { IDistrict, IDistrictFilter } from "../shared/interfaces";
+import { IDistrictFilter } from "../shared/interfaces";
 
 export class DistrictService {
 
-    async getDistricts(
+    getDistricts(
         { province }: IDistrictFilter
     ) {
-        const districts = await DistrictModel.find({
-            ...(province ? { province } : {})
-        }).lean().exec();
+        const districts = DistrictModel.find({
+            ...(province ? { "province.code": province } : {})
+        }).select("-_id -createdDate -updatedDate -__v  -province ").lean().exec();
         return districts;
     }
 }

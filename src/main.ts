@@ -1,14 +1,11 @@
 import App from "./app";
-import {
-    json,
-    urlencoded,
-} from "express";
+import { json, urlencoded, } from "express";
 import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { LiveDataController } from "./controllers/livedata.controller";
-import { UserService, LiveDataService, DistrictService, VirusCountService } from "./services";
-import { ContactController, VirusCountController, DistrictController } from "./controllers";
+import { UserService, LiveDataService, DistrictService, VirusCountService, HospitalService } from "./services";
+import { ContactController, VirusCountController, DistrictController, HospitalController} from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import logger from "./shared/logger"
 import { ContactService } from "./services/contact.service";
@@ -29,18 +26,20 @@ const { error } = config({
 });
 if (error) throw new Error(error.message);
 
-// Global logger
+// Global Logger
 global.logger = logger;
 
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        new LiveDataController(new LiveDataService()),
+        // removed live data route 
+        // new LiveDataController(new LiveDataService()),
         new VirusCountController(new VirusCountService()),
         new ContactController(
             new ContactService()
         ),
-        new DistrictController(new DistrictService())
+        new DistrictController(new DistrictService()),
+        new HospitalController(new HospitalService())
     ],
     middlewares: [
         json(),
@@ -53,6 +52,9 @@ const app = new App({
 })
 
 app.run(() => {
-    console.log(`Server running on port in ${environment} mode`);
+    global.logger.log({
+        level: "info",
+        message: `Server running in ${environment} mode`
+    });
 })
 

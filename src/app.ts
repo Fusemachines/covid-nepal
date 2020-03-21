@@ -1,7 +1,14 @@
-import Express, { Application, Response, Request } from "express";
+import Express, { Application } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
+import { readFileSync } from "fs"
+import https from "https"
+import { CRequest, CResponse } from "./shared/interfaces/http.interface";
+import swaggerUI from "swagger-ui-express"
+// @ts-ignore: Resolve json module
+import swaggerJSON from "../api_docs/swagger.json"
+import compression from "compression"
 
 export default class App {
     private app: Application;
@@ -9,10 +16,9 @@ export default class App {
 
     constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
-        this.app.use(cors())
-        this.app.disable('x-powered-by')
-        
         this.port = port;
+
+        this.middlewares(middlewares);
         this.createDatabaseConnection({
             database: process.env.DB_DATABASE,
             username: process.env.DB_USER,
@@ -20,7 +26,6 @@ export default class App {
             host: process.env.DB_HOST,
             port: parseInt(process.env.DB_PORT, 10)
         });
-        this.middlewares(middlewares);
         this.initRoutes(controllers);
     }
 
@@ -38,28 +43,60 @@ export default class App {
             });
 
         } catch (error) {
-            console.warn("Error connecting to database");
-            console.log(error);
+            global.logger.log({
+                level: "Error",
+                message: "Error connecting to database"
+            })
+            // console.warn(error);
         }
     }
 
     initRoutes(controllers: any[]) {
-        this.app.get('/', function (req: Request, res: Response) {
-            res.send("Server running");
+
+        this.app.get('/', function (request: CRequest, response: CResponse) {
+            response.json({
+                status: "UP"
+            });
         })
+
+        // Swagger docs
+        this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
+
         controllers.forEach(controller => {
+            // Old support for localization
+            //  this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
+            //     req.lang = req.params.lang
+            //     next()
+            // }, controller.router);
+
             this.app.use(`/${controller.route}`, controller.router);
         })
 
     }
 
     middlewares(middlewares: any[]) {
+        this.app.use(compression())
+        this.app.use(cors())
+        this.app.disable('x-powered-by')
         middlewares.forEach(middleware => {
             this.app.use(middleware);
         })
     }
 
     run(cb: () => void) {
-        this.app.listen(this.port, cb);
+
+        if (process.env.NODE_ENV === "production") {
+
+            https.createServer({
+                key: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/privkey.pem"),
+                cert: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/cert.pem"),
+                ca: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/chain.pem")
+            }, this.app).listen(5000, () => {
+                console.log(`App is running under 5000 port`)
+            })
+
+        } else {
+            this.app.listen(this.port, cb);
+        }
     }
 }

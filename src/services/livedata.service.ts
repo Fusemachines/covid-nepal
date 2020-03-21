@@ -1,35 +1,42 @@
 import LiveDataModel from "../models/livedata.model";
+import HospitalModel from "../models/hospital.model";
+import { ECovidTest } from "../shared/interfaces";
 
 export class LiveDataService {
-    all(query?: { district: string, province: number }) {
-        const province: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : 3;
+    all(query?: { district: string, province: number, covidTest: ECovidTest }) {
+        // const province: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : 3;
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
 
         // query filter
-        let filter: any = { province };
+        let filter: any = {};
         if (queryDistrict.length) {
             filter = { ...filter, district: { $in: queryDistrict } }
         }
 
-        return LiveDataModel.find(filter).lean();
+        if (query.covidTest !== undefined && query.covidTest !== ECovidTest.ALL) {
+            filter = { ...filter, covidTest: query.covidTest === ECovidTest.AVAILABLE ? true : false }
+        }
+
+
+        return HospitalModel.find(filter).lean();
     }
 
     findById(id: string) {
-        return LiveDataModel.findById(id)
+        return HospitalModel.findById(id)
     }
 
     create(data: object) {
-        return LiveDataModel.create(data)
+        return HospitalModel.create(data)
     }
 
     async update(id: string, data: object) {
-        const oldRecord = await LiveDataModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+        const oldRecord = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
         const newRecord = { ...oldRecord, ...data }
 
-        return LiveDataModel.findByIdAndUpdate(id, newRecord, { new: true })
+        return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
     }
 
     delete(id: string) {
-        return LiveDataModel.findByIdAndRemove(id)
+        return HospitalModel.findByIdAndRemove(id)
     }
 }
