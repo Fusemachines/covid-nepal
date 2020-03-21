@@ -76,6 +76,8 @@ const HospitalSchema = new Schema({
         type: Schema.Types.String,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 
