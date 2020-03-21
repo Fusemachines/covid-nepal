@@ -22,6 +22,10 @@ export class DistrictController implements IController {
             const docs = await this.districtService.getDistricts({ province });
             response.status(200).json({ docs });
         } catch (error) {
+            global.logger.log({
+                level: "error",
+                error
+            })
             response.status(500).json({ error });
         }
     }

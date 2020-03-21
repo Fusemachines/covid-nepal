@@ -31,6 +31,21 @@ const VirusCountSchema = new Schema({
     deathTotal: {
         type: Schema.Types.Number
     },
+    testedGlobal: {
+        type: Schema.Types.Number
+    },
+    confirmedGlobal: {
+        type: Schema.Types.Number
+    },
+    recoveredGlobal: {
+        type: Schema.Types.Number
+    },
+    seriousGlobal: {
+        type: Schema.Types.Number
+    },
+    deathGlobal: {
+        type: Schema.Types.Number
+    },
     district: {
         type: Schema.Types.String
     },

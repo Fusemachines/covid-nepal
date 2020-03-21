@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 
 const DistrictSchema = new Schema({
     name: {
-        type: String,
+        type: Schema.Types.String,
         required: true
     },
     province: {
-        type: String,
+        type: Schema.Types.Number,
         required: true
     }
 }, {
