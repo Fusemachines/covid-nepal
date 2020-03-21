@@ -62,12 +62,14 @@ export default class App {
         // Swagger docs
         this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
 
-
         controllers.forEach(controller => {
-            this.app.use(`/:lang(en|np)/${controller.route}`,function(req:CRequest, res:CResponse, next) {
-                req.lang = req.params.lang
-                next()
-            }, controller.router);
+            // Old support for localization
+            //  this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
+            //     req.lang = req.params.lang
+            //     next()
+            // }, controller.router);
+
+            this.app.use(`/${controller.route}`, controller.router);
         })
 
     }
