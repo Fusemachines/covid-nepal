@@ -4,11 +4,11 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { LiveDataController } from "./controllers/livedata.controller";
-import { UserService, LiveDataService, DistrictService, VirusCountService } from "./services";
-import { ContactController, VirusCountController, DistrictController } from "./controllers";
+import { UserService, LiveDataService, DistrictService, VirusCountService, HospitalService } from "./services";
+import { ContactController, VirusCountController, DistrictController, HospitalController} from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import logger from "./shared/logger"
-import { ContactService } from "./services/contact.service"
+import { ContactService } from "./services/contact.service";
 
 // Bootstraping Global NameSpace for NodeJS
 declare global {
@@ -37,7 +37,8 @@ const app = new App({
         new ContactController(
             new ContactService()
         ),
-        new DistrictController(new DistrictService())
+        new DistrictController(new DistrictService()),
+        new HospitalController(new HospitalService())
     ],
     middlewares: [
         json(),

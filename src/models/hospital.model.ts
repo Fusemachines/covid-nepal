@@ -6,7 +6,7 @@ const HospitalSchema = new Schema({
         type: Schema.Types.String,
         required: true
     },
-    
+
     availableTime: {
         type: [Schema.Types.String],
         required: true
@@ -34,6 +34,9 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Boolean
     },
 
+    testingProcess: {
+        type: Schema.Types.String
+    },
 
     // designated by government ?
     govtDesignated: {
@@ -54,7 +57,7 @@ const HospitalSchema = new Schema({
     },
 
     contact: {
-        type: [Schema.Types.Number]
+        type: [Schema.Types.String]
     },
 
 
