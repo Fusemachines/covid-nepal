@@ -87,8 +87,8 @@ export default class App {
                 key: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/privkey.pem"),
                 cert: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/cert.pem"),
                 ca: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/chain.pem")
-            }, this.app).listen(443, () => {
-                console.log(`App is running under 443 port`)
+            }, this.app).listen(8443, () => {
+                console.log(`App is running under 8443 port`)
             })
 
         } else {
