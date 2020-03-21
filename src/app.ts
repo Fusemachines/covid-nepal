@@ -64,7 +64,7 @@ export default class App {
 
 
         controllers.forEach(controller => {
-            this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
+            this.app.use(`/:lang(en|np)/${controller.route}`,function(req:CRequest, res:CResponse, next) {
                 req.lang = req.params.lang
                 next()
             }, controller.router);

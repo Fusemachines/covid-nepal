@@ -11,12 +11,12 @@
     },
     "tags": [
       {
-        "name": "Users",
-        "description": "API for users in the system"
+        "name": "Government Virus Count",
+        "description": "API for government virus counts"
       },
       {
-        "name": "Designations",
-        "description": "User designations"
+        "name": "Hospital",
+        "description": "Api for hospital"
       }
     ],
     "schemes": [
@@ -29,30 +29,17 @@
       "application/json"
     ],
     "paths": {
-      "/api/v1/users": {
+      "/en/hospitals": {
         "get": {
           "tags": [
-            "Users"
+            "Government Virus Count"
           ],
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "description": "Bearer",
-              "default": "Bearer *token*",
-              "schema": {
-                "type": "string",
-                "$ref": "#/definitions/User"
-              },
-              "required": true
-            }
-          ],
-          "summary": "Get all users in system",
+          "summary": "Get all hospital",
           "responses": {
             "200": {
               "description": "OK",
               "schema": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/definitions/Hospital"
               }
             }
           }
@@ -208,7 +195,7 @@
       }
     },
     "definitions": {
-      "Designation": {
+      "CovidUpdate": {
         "properties": {
           "title": {
             "type": "string"
@@ -221,68 +208,86 @@
           }
         }
       },
-      "User": {
+      "Hospital": {
         "properties": {
           "_id": {
             "type": "string",
             "uniqueItems": true
           },
-          "fullname": {
+          "name": {
             "type": "string",
             "required": true
           },
-          "email": {
+          "type": {
             "type": "string",
-            "required": true,
-            "uniqueItems": true
+            "required": true
           },
-          "image": {
+          "availableTime": {
+            "type": "string",
+            "required": true
+          },
+          "openDays": {
             "type": "string"
           },
-          "password": {
+          "location": {
             "type": "string",
             "required": true
           },
-          "passwordResetToken": {
+          "mapLink": {
             "type": "string"
           },
           "passwordResetExpiresAt": {
             "type": "data-time"
           },
-          "fireBaseToken": {
+          "coordinates": {
             "type": "array",
             "items": {
-              "type": "string",
-              "required": true
+              "type": "string"
             }
           },
-          "token": {
-            "type": "object",
+          "totalBeds": {
+            "type": "number"
+          },
+          "availableBeds": {
+            "type": "number"
+          },
+          "covidTest": {
+            "type": "bool"
+          },
+          "govtDesignated": {
+            "type": "bool"
+          },
+          "numIsolationBeds": {
+            "type": "number"
+          },
+          "icu": {
+            "type": "number"
+          },
+          "focalPoint": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "province": {
+            "type":"object", 
             "properties": {
-              "accessToken": {
-                "type": "string"
+              "code": {
+                "type": "number",
+                "required": "true"
               },
-              "refreshToken": {
-                "type": "string"
-              },
-              "expiresAt": {
-                "type": "data-time"
-              },
-              "scopes": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+              "name": {
+                "type": "string",
+                "required": "true"
               }
             }
           },
-          "role": {
+          "district": {
             "type": "string",
-            "required": true
-          },
-          "designation": {
-            "type": "number",
-            "required": true
+            "required": "true"
           },
           "createdAt": {
             "type": "date-time"
