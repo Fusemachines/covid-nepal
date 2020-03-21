@@ -84,8 +84,9 @@ export default class App {
         if (process.env.NODE_ENV === "production") {
 
             https.createServer({
-                key: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/privkey.pem", 'utf8'),
-                cert: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/cert.pem", 'utf8')
+                key: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/privkey.pem"),
+                cert: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/cert.pem"),
+                ca: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/chain.pem")
             }, this.app).listen(443, () => {
                 console.log(`App is running under 443 port`)
             })
