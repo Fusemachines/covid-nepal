@@ -32,7 +32,8 @@ global.logger = logger;
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        new LiveDataController(new LiveDataService()),
+        // removed live data route 
+        // new LiveDataController(new LiveDataService()),
         new VirusCountController(new VirusCountService()),
         new ContactController(
             new ContactService()
