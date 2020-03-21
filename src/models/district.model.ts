@@ -7,8 +7,8 @@ const DistrictSchema = new Schema({
         required: true
     },
     province: {
-        type: Schema.Types.Number,
-        required: true
+        code: Schema.Types.Number,
+        name: Schema.Types.String
     }
 }, {
     timestamps: {
