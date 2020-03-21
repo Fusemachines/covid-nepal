@@ -1,7 +1,8 @@
-import { Router, Request, Response, response, json } from "express";
+import { Router } from "express";
 import { IController } from "../shared/interfaces";
 import { LiveDataService } from "../services";
 import HttpException from "../shared/exceptions/httpException";
+import { CRequest, CResponse } from "shared/interfaces/http.interface";
 
 export class LiveDataController implements IController {
     public route: string = "livedata";
@@ -19,8 +20,11 @@ export class LiveDataController implements IController {
         this.router.delete("/delete/:id", this.delete);
     }
 
-    all = async (request: Request, response: Response) => {
+    all = async (request: CRequest, response: CResponse) => {
         try {
+            
+            console.log(request.lang)
+
             global.logger.log({
                 level: 'info',
                 message: `Getting all livedata`
@@ -41,7 +45,7 @@ export class LiveDataController implements IController {
         }
     }
 
-    create = async (request: Request, response: Response) => {
+    create = async (request: CRequest, response: CResponse) => {
         try {
             global.logger.log({
                 level: 'info',
@@ -60,7 +64,7 @@ export class LiveDataController implements IController {
         }
     }
 
-    update = async (request: Request, response: Response) => {
+    update = async (request: CRequest, response: CResponse) => {
         try {
             global.logger.log({
                 level: 'info',
@@ -79,7 +83,7 @@ export class LiveDataController implements IController {
         }
     }
 
-    delete = async (request: Request, response: Response) => {
+    delete = async (request: CRequest, response: CResponse) => {
         try {
             global.logger.log({
                 level: 'info',

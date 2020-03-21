@@ -1,7 +1,8 @@
-import Express, { Application, Response, Request } from "express";
+import Express, { Application } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
+import { CRequest, CResponse } from "./shared/interfaces/http.interface";
 
 export default class App {
     private app: Application;
@@ -45,14 +46,16 @@ export default class App {
     }
 
     initRoutes(controllers: any[]) {
-        this.app.get('/', function (request: Request, response: Response) {
+        this.app.get('/', function (request: CRequest, response: CResponse) {
             response.json({
                 status: "UP"
             });
         })
-
         controllers.forEach(controller => {
-            this.app.use(`/${controller.route}`, controller.router);
+            this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
+                req.lang = req.params.lang
+                next()
+            }, controller.router);
         })
 
     }

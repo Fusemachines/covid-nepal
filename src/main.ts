@@ -1,8 +1,5 @@
 import App from "./app";
-import {
-    json,
-    urlencoded,
-} from "express";
+import { json, urlencoded, } from "express";
 import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
