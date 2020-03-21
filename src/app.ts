@@ -10,6 +10,7 @@ export default class App {
     constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
         this.app.use(cors())
+        this.app.disable('x-powered-by')
         
         this.port = port;
         this.createDatabaseConnection({

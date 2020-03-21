@@ -2,7 +2,6 @@ import { VirusCountModel } from "../models/virus-count.model";
 
 
 export class VirusCountService {
-
     getVirusCountsToday() {
         try {
             return VirusCountModel.findOne({}, {}, { sort: { 'createdDate' : -1 } });
