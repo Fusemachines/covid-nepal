@@ -7,11 +7,11 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
 import { LiveDataController } from "./controllers/livedata.controller";
-import { UserService, LiveDataService } from "./services";
-import { ContactController, VirusCountController } from "./controllers";
+import { UserService, LiveDataService, DistrictService, VirusCountService } from "./services";
+import { ContactController, VirusCountController, DistrictController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
-import { VirusCountService } from "./services/virus-count.service";
 import logger from "./shared/logger"
+import { ContactService } from "./services/contact.service";
 
 // Bootstraping Global NameSpace for NodeJS
 declare global {
@@ -36,8 +36,11 @@ const app = new App({
     controllers: [
         new UserController(new UserService()),
         new LiveDataController(new LiveDataService()),
-        new ContactController(),
-        new VirusCountController(new VirusCountService())
+        new VirusCountController(new VirusCountService()),
+        new ContactController(
+            new ContactService()
+        ),
+        new DistrictController(new DistrictService())
     ],
     middlewares: [
         json(),
