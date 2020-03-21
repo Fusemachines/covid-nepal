@@ -1,4 +1,4 @@
-import Express, { Application, Response, Request, NextFunction, Errback } from "express";
+import Express, { Application, Response, Request } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
@@ -36,8 +36,11 @@ export default class App {
             });
 
         } catch (error) {
-            console.warn("Error connecting to database");
-            console.log(error);
+            global.logger.log({
+                level: "Error",
+                message: "Error connecting to database"
+            })
+            // console.warn(error);
         }
     }
 

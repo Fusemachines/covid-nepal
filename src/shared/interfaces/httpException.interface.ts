@@ -7,7 +7,7 @@ export interface HttpExceptionInterface {
 }
 
 export interface ParamsInterface {
-    title: string,
+    title?: string,
     statusCode: number,
     description: string,
     isOperational?: boolean
