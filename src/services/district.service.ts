@@ -3,12 +3,12 @@ import { IDistrict, IDistrictFilter } from "../shared/interfaces";
 
 export class DistrictService {
 
-    async getDistricts(
+    getDistricts(
         { province }: IDistrictFilter
     ) {
-        const districts = await DistrictModel.find({
+        const districts = DistrictModel.find({
             ...(province ? { province } : {})
-        }).lean().exec();
+        }).select("-_id -createdDate -updatedDate -__v ").lean().exec();
         return districts;
     }
 }

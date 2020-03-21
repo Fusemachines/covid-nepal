@@ -1,6 +1,8 @@
-import { Router, Request, Response, response, json } from "express";
+import { Router } from "express";
 import { IController } from "../shared/interfaces";
 import { LiveDataService } from "../services";
+import HttpException from "../shared/exceptions/httpException";
+import { CRequest, CResponse } from "shared/interfaces/http.interface";
 
 export class LiveDataController implements IController {
     public route: string = "livedata";
@@ -18,8 +20,11 @@ export class LiveDataController implements IController {
         this.router.delete("/delete/:id", this.delete);
     }
 
-    all = async (request: Request, response: Response) => {
+    all = async (request: CRequest, response: CResponse) => {
         try {
+            
+            console.log(request.lang)
+
             global.logger.log({
                 level: 'info',
                 message: `Getting all livedata`
@@ -29,15 +34,18 @@ export class LiveDataController implements IController {
             return response.json({
                 docs: result
             });
+
         } catch (error) {
-            console.log(error);
-            return response.status(500).json({
-                error
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
             })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
         }
     }
 
-    create = async (request: Request, response: Response) => {
+    create = async (request: CRequest, response: CResponse) => {
         try {
             global.logger.log({
                 level: 'info',
@@ -47,14 +55,16 @@ export class LiveDataController implements IController {
             const result =  await this.liveDataService.create(request.body);
             return response.json(result);
         } catch (error) {
-            console.warn(error);
-            return response.status(500).json({
-                error
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
             })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
         }
     }
 
-    update = async (request: Request, response: Response) => {
+    update = async (request: CRequest, response: CResponse) => {
         try {
             global.logger.log({
                 level: 'info',
@@ -64,14 +74,16 @@ export class LiveDataController implements IController {
             const result =  await this.liveDataService.update(request.params.id, request.body);
             return response.json(result);
         } catch (error) {
-            console.warn(error);
-            return response.status(500).json({
-                error
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
             })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
         }
     }
 
-    delete = async (request: Request, response: Response) => {
+    delete = async (request: CRequest, response: CResponse) => {
         try {
             global.logger.log({
                 level: 'info',
@@ -89,10 +101,12 @@ export class LiveDataController implements IController {
                 message: `'${result.nameOfHospital}' removed successfully.`
             });
         } catch (error) {
-            console.warn(error);
-            return response.status(500).json({
-                error
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
             })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
         }
     }
 }

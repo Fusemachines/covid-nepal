@@ -1,8 +1,5 @@
 import App from "./app";
-import {
-    json,
-    urlencoded,
-} from "express";
+import { json, urlencoded, } from "express";
 import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
@@ -11,7 +8,7 @@ import { UserService, LiveDataService, DistrictService, VirusCountService } from
 import { ContactController, VirusCountController, DistrictController } from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import logger from "./shared/logger"
-import { ContactService } from "./services/contact.service";
+import { ContactService } from "./services/contact.service"
 
 // Bootstraping Global NameSpace for NodeJS
 declare global {
@@ -29,7 +26,7 @@ const { error } = config({
 });
 if (error) throw new Error(error.message);
 
-// Global logger
+// Global Logger
 global.logger = logger;
 
 const app = new App({
@@ -53,6 +50,9 @@ const app = new App({
 })
 
 app.run(() => {
-    console.log(`Server running on port in ${environment} mode`);
+    global.logger.log({
+        level: "info",
+        message: `Server running in ${environment} mode`
+    });
 })
 

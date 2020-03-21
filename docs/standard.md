@@ -1,4 +1,3 @@
-
 ## Database Naming Convention
 * camelCase
 * append DB on the end of name

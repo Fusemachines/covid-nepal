@@ -1,0 +1,296 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0",
+      "title": "COVID-NEPAL",
+      "description": "Covid19 Open source project",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      },
+      {
+        "name": "Designations",
+        "description": "User designations"
+      }
+    ],
+    "schemes": [
+      "https"
+    ],
+    "consumes": [
+      "application/x-www-form-urlencoded"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/api/v1/users": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "Bearer",
+              "default": "Bearer *token*",
+              "schema": {
+                "type": "string",
+                "$ref": "#/definitions/User"
+              },
+              "required": true
+            }
+          ],
+          "summary": "Get all users in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/users/create/user": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Create new user in system",
+          "parameters": [
+            {
+              "name": "fullname",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "email",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "role",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "designation",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "password",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "confirmPassword",
+              "in": "formData",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "New user is created",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/users/{userId}/update": {
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of user that we want to find",
+            "type": "string"
+          }
+        ],
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Update user in system",
+          "parameters": [
+            {
+              "name": "fullname",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "email",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "role",
+              "in": "formData"
+            },
+            {
+              "name": "designation",
+              "in": "formData",
+              "required": true
+            },
+            {
+              "name": "password",
+              "in": "formData"
+            },
+            {
+              "name": "confirmPassword",
+              "in": "formData"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "User is updated",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/users/{userId}/delete": {
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of user that we want to find",
+            "type": "string"
+          }
+        ],
+        "delete": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Delete User",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "User is deleted",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Designation": {
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "data-time"
+          },
+          "updatedAt": {
+            "type": "data-time"
+          }
+        }
+      },
+      "User": {
+        "properties": {
+          "_id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "fullname": {
+            "type": "string",
+            "required": true
+          },
+          "email": {
+            "type": "string",
+            "required": true,
+            "uniqueItems": true
+          },
+          "image": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "required": true
+          },
+          "passwordResetToken": {
+            "type": "string"
+          },
+          "passwordResetExpiresAt": {
+            "type": "data-time"
+          },
+          "fireBaseToken": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "required": true
+            }
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              },
+              "refreshToken": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "type": "data-time"
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "role": {
+            "type": "string",
+            "required": true
+          },
+          "designation": {
+            "type": "number",
+            "required": true
+          },
+          "createdAt": {
+            "type": "date-time"
+          },
+          "updatedAt": {
+            "type": "date-time"
+          }
+        }
+      }
+    }
+  }

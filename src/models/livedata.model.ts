@@ -2,8 +2,12 @@ import { Schema, model } from "mongoose";
 
 const LiveDataSchema = new Schema({
     nameOfHospital: {
-        type: Schema.Types.String,
-        required: true
+        en: {
+            type: Schema.Types.String
+        },
+        np: {
+            type: Schema.Types.String
+        }
     },
     numberOfBed: {
         type: Schema.Types.Number,
