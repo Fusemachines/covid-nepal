@@ -5,6 +5,7 @@
   "scripts": {
     "clean:build": "rm -rf ./dist && tsc",
     "prod": "yarn clean:build && NODE_ENV=production pm2 start ./dist/main.js -- --production",
+    "prod:deploy": "tsc && pm2 restart all",
     "build": "tsc",
     "watch-ts": "tsc -w",
     "dev": "NODE_ENV=development nodemon",
