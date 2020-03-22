@@ -39,7 +39,7 @@ export class HospitalService {
     getCovidHospitals() {
         return HospitalModel.find({
             covidTest: true
-        }).select("hospitalName nameSlug availableTime openDays availableBeds totalBeds").lean();
+        }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
     }
 
     getHospitalBySlug(slug: string) {
