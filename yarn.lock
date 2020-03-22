@@ -152,6 +152,13 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
+"@types/lusca@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@types/lusca/-/lusca-1.6.1.tgz#39c352ad0a8597566d7beeb28ba8343bf450d21d"
+  integrity sha512-/W+YaK0aJUt1XU0/bpVR4p1LAh7zva4bDfgijfzFhF+A/On3hQmXzezQDrVG3Kv3EaLWQeKvp8uNdXUmGjFyWg==
+  dependencies:
+    "@types/express" "*"
+
 "@types/mime@*":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"

@@ -10,6 +10,7 @@ import swaggerUI from "swagger-ui-express"
 import swaggerJSON from "../api_docs/swagger.json"
 import compression from "compression";
 const basicAuth = require('express-basic-auth');
+import lusca from "lusca"
 
 export default class App {
     private app: Application;
@@ -100,9 +101,29 @@ export default class App {
     }
 
     middlewares(middlewares: any[]) {
-        this.app.use(compression())
-        this.app.use(cors())
+        /**
+         * Security headers
+         * 
+         */
+        this.app.use(lusca.xframe("SAMEORIGIN"))
+        this.app.use(lusca.xssProtection(true))
+        this.app.use(lusca.nosniff())
+        this.app.use(lusca.csp({
+            policy: {
+                'default-src': process.env.APP_CSP_SRC ? `'self' ${process.env.APP_CSP_SRC}` : '*',
+                'img-src': "* data:",
+                'style-src': "* 'unsafe-inline'",
+                'font-src': "'self' data:",
+            }
+        }))
+        this.app.use(lusca.referrerPolicy('same-origin'))
+        this.app.use(lusca.hsts({
+            maxAge: 31536000,
+            includeSubDomains: true
+        }))
         this.app.disable('x-powered-by')
+        this.app.use(cors())
+
         middlewares.forEach(middleware => {
             this.app.use(middleware);
         })
