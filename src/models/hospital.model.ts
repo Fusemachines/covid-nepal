@@ -1,6 +1,5 @@
 import { model, Schema, } from "mongoose";
 
-
 const HospitalSchema = new Schema({
     name: {
         type: Schema.Types.String,

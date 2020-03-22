@@ -1,6 +1,6 @@
 import ContactModel from "../models/contact.model";
 import { IHospitalFilter, IHospitalContact } from "../shared/interfaces/contact.interface";
-import HospitalModel from "models/hospital.model";
+import HospitalModel from "../models/hospital.model";
 
 export class ContactService {
 

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { IController } from "../shared/interfaces";
 import { LiveDataService } from "../services";
 import HttpException from "../shared/exceptions/httpException";
-import { CRequest, CResponse } from "shared/interfaces/http.interface";
+import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 
 export class LiveDataController implements IController {
     public route: string = "livedata";
