@@ -1,4 +1,4 @@
-import Express, { Application } from "express";
+import Express, { Application, NextFunction } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
@@ -8,7 +8,8 @@ import { CRequest, CResponse } from "./shared/interfaces/http.interface";
 import swaggerUI from "swagger-ui-express"
 // @ts-ignore: Resolve json module
 import swaggerJSON from "../api_docs/swagger.json"
-import compression from "compression"
+import compression from "compression";
+const basicAuth = require('express-basic-auth');
 
 export default class App {
     private app: Application;
@@ -17,7 +18,7 @@ export default class App {
     constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
         this.port = port;
-
+        
         this.middlewares(middlewares);
         this.createDatabaseConnection({
             database: process.env.DB_DATABASE,
@@ -47,12 +48,16 @@ export default class App {
                 level: "Error",
                 message: "Error connecting to database"
             })
-            // console.warn(error);
         }
     }
 
-    initRoutes(controllers: any[]) {
+    getUnauthorizedResponse(request: any) {
+        return request.auth
+            ? ('Unable to access')
+            : 'No credentials provided'
+    }
 
+    initRoutes(controllers: any[]) {
         this.app.get('/', function (request: CRequest, response: CResponse) {
             response.json({
                 status: "UP"
@@ -60,6 +65,11 @@ export default class App {
         })
 
         // Swagger docs
+        this.app.use(basicAuth({
+            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            unauthorizedResponse: this.getUnauthorizedResponse
+        }))
+
         this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
 
         controllers.forEach(controller => {
