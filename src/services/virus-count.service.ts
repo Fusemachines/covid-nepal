@@ -39,7 +39,7 @@ export class VirusCountService {
             size = Number(size);
 
             let query = VirusCountModel.find({});
-            const data = query.skip(page * size).limit(size).exec();
+            const data = await query.skip(page * size).limit(size).exec();
 
             const totalItems = await VirusCountModel.count({});
             const totalPages = Math.ceil(totalItems / size);
