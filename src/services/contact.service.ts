@@ -1,5 +1,6 @@
 import ContactModel from "../models/contact.model";
-import { IHospitalFilter } from "../shared/interfaces/contact.interface";
+import { IHospitalFilter, IHospitalContact } from "../shared/interfaces/contact.interface";
+import HospitalModel from "models/hospital.model";
 
 export class ContactService {
 
@@ -20,17 +21,32 @@ export class ContactService {
             districtArray = district.split(",");
         }
 
-        const hospitals = await ContactModel.find({
-            contactType: "hospital",
-            province: province,
+        const contacts = new Array();
+
+        await HospitalModel.find({
+            'province.code': province,
             ...(districtArray.length > 0 ? {
                 district: {
                     $in: districtArray
-                }                
+                }
             } : {})
-        }).lean().exec();
+        }, (error, hospitals) => {
+            if (error) {
+                console.log('Error occured while fetching hospitals')
+                throw error;
+            }
 
-        return hospitals;
+            hospitals.forEach(function (hospital) {
+                const contact: IHospitalContact = {
+                    name: hospital.get('name'),
+                    landLine: hospital.get('contact')
+                }
+
+                contacts.push(contact);
+            })
+        });
+
+        return contacts;
     }
 
 
@@ -52,5 +68,5 @@ export class ContactService {
         const newRecord = { ...oldRecord, ...data }
         return ContactModel.findByIdAndUpdate(id, newRecord, { new: true })
     }
-    
+
 }
