@@ -22,9 +22,6 @@ export class LiveDataController implements IController {
 
     all = async (request: CRequest, response: CResponse) => {
         try {
-            
-            console.log(request.lang)
-
             global.logger.log({
                 level: 'info',
                 message: `Getting all livedata`
