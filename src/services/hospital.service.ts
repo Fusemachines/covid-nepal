@@ -9,17 +9,28 @@ export class HospitalService {
         return HospitalModel.create(data);
     }
 
-    getHospitals(query?: { district: string, province: number, covidTest: ECovidTest }) {
+    getHospitals(query?: { district: string, province: number, covidTest: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
-
-        // query filter
+        const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
+        let covidTest = null;
+        if (query.covidTest && ["true","false"].includes(query.covidTest)) {
+            covidTest = query.covidTest
+        }
+        
+        // province filer
         let filter: any = {};
+        if (provinceCode !== null) {
+            filter = { ...filter, "province.code": provinceCode }
+        }
+
+        // query district filter
         if (queryDistrict.length) {
             filter = { ...filter, district: { $in: queryDistrict } }
         }
 
-        if (query.covidTest !== undefined && query.covidTest !== ECovidTest.ALL) {
-            filter = { ...filter, covidTest: query.covidTest === ECovidTest.AVAILABLE ? true : false }
+        // covid test filter
+        if (covidTest !== null) {
+            filter = { ...filter, covidTest }
         }
 
         return HospitalModel.find(filter).select("-__v").lean();
@@ -28,7 +39,7 @@ export class HospitalService {
     getCovidHospitals() {
         return HospitalModel.find({
             covidTest: true
-        }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
+        }).select("hospitalName nameSlug availableTime openDays availableBeds totalBeds").lean();
     }
 
     getHospitalBySlug(slug: string) {
@@ -55,7 +66,4 @@ export class HospitalService {
     delete(id: string) {
         return HospitalModel.findByIdAndRemove(id)
     }
-
-
-
 }
