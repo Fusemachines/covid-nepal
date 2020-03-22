@@ -1,5 +1,7 @@
 import { model, Schema, } from "mongoose";
 
+import paginate from "../shared/plugins/pagination.plugin.js";
+
 const HospitalSchema = new Schema({
     name: {
         type: Schema.Types.String,
@@ -88,6 +90,7 @@ const HospitalSchema = new Schema({
 });
 
 
+HospitalSchema.plugin(paginate);
 
 const HospitalModel = model("hospital", HospitalSchema, "hospitals");
 

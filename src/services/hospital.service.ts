@@ -1,22 +1,24 @@
 import HospitalModel from "../models/hospital.model";
-import { ECovidTest } from "../shared/interfaces";
+import { ESortOrder } from "../shared/interfaces/http.interface";
+import { getSorting, getPagination } from "../shared/utils";
 
 
 export class HospitalService {
     createHospital(data: any) {
         // create slug
-        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         return HospitalModel.create(data);
     }
 
-    getHospitals(query?: { district: string, province: number, covidTest: string }) {
+    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
+
         let covidTest = null;
-        if (query.covidTest && ["true","false"].includes(query.covidTest)) {
+        if (query.covidTest && ["true", "false"].includes(query.covidTest)) {
             covidTest = query.covidTest
         }
-        
+
         // province filer
         let filter: any = {};
         if (provinceCode !== null) {
@@ -33,7 +35,15 @@ export class HospitalService {
             filter = { ...filter, covidTest }
         }
 
-        return HospitalModel.find(filter).select("-__v").lean();
+        // query with pagination and sorting
+        return await HospitalModel.paginate(filter, {
+            lean: true,
+            select: "-__v",
+            ...getPagination(query),
+            ...getSorting(query)
+        })
+
+        // return await HospitalModel.find(filter, {}, { sort: getSorting(query) }).select("-__v").lean();
     }
 
     getCovidHospitals() {
@@ -53,8 +63,8 @@ export class HospitalService {
     }
 
     async update(id: string, data: any) {
-        const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-        const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        const oldRecord: any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+        const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         if (oldRecord.slug !== nameSlug) {
             data.nameSlug = nameSlug
         }
