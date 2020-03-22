@@ -3,8 +3,7 @@ import { json, urlencoded, } from "express";
 import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
-import { LiveDataController } from "./controllers/livedata.controller";
-import { UserService, LiveDataService, DistrictService, VirusCountService, HospitalService } from "./services";
+import { UserService, DistrictService, VirusCountService, HospitalService } from "./services";
 import { ContactController, VirusCountController, DistrictController, HospitalController} from "./controllers";
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import logger from "./shared/logger"
@@ -32,8 +31,6 @@ global.logger = logger;
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        // removed live data route 
-        // new LiveDataController(new LiveDataService()),
         new VirusCountController(new VirusCountService()),
         new ContactController(
             new ContactService()
