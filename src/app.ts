@@ -64,13 +64,28 @@ export default class App {
             });
         })
 
-        // Swagger docs
-        this.app.use(basicAuth({
+        this.app.post("*", basicAuth({
             users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
             unauthorizedResponse: this.getUnauthorizedResponse
         }))
 
-        this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
+        this.app.put("*", basicAuth({
+            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            unauthorizedResponse: this.getUnauthorizedResponse
+        }))
+
+        this.app.patch("*", basicAuth({
+            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            unauthorizedResponse: this.getUnauthorizedResponse
+        }))
+
+        this.app.delete("*", basicAuth({
+            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            unauthorizedResponse: this.getUnauthorizedResponse
+        }))
+
+        // Swagger docs
+        // this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
 
         controllers.forEach(controller => {
             // Old support for localization
