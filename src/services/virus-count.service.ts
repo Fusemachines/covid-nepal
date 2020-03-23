@@ -4,7 +4,7 @@ import { VirusCountModel } from "../models/virus-count.model";
 export class VirusCountService {
     getVirusCountsToday() {
         try {
-            return VirusCountModel.findOne({}, {}, { sort: { 'createdDate': -1 } });
+            return VirusCountModel.findOne({}, {}, { sort: { 'createdAt': -1 } });
         } catch (error) {
             throw new Error(error);
         }
@@ -12,7 +12,7 @@ export class VirusCountService {
 
     getLatestVirusCounts() {
         try {
-            return VirusCountModel.find({}, {}, { sort: { 'createdDate': -1 } }).limit(4);
+            return VirusCountModel.find({}, {}, { sort: { 'createdAt': -1 } }).limit(4);
         } catch (error) {
             throw new Error(error);
         }
@@ -39,9 +39,9 @@ export class VirusCountService {
             size = Number(size);
 
             let query = VirusCountModel.find({});
-            const data = query.skip(page * size).limit(size).exec();
+            const data = await query.skip(page * size).limit(size).exec();
 
-            const totalItems = await VirusCountModel.count({});
+            const totalItems = await VirusCountModel.countDocuments({});
             const totalPages = Math.ceil(totalItems / size);
 
             return {

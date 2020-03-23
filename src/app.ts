@@ -121,8 +121,29 @@ export default class App {
             maxAge: 31536000,
             includeSubDomains: true
         }))
+        this.app.use(compression());
         this.app.disable('x-powered-by')
-        this.app.use(cors())
+        
+        // Cross origin request
+        if (["production"].indexOf(process.env.NODE_ENV) !== -1) {
+            const whitelist = ['https://*.covidnepal.org', 'http://*.covidnepal.org'];
+
+            const corsOptions = {
+                origin: function (origin:string, callback:any) {
+                    console.log(`CORS request origin -> ${origin}`);
+
+                    if (whitelist.indexOf(origin) !== -1) {
+                        callback(null, true)
+                    } else {
+                        callback('Domain is not valid.')
+                    }
+                }
+            }
+
+            this.app.use(cors(corsOptions))
+        } else {
+            this.app.use(cors())
+        }
 
         middlewares.forEach(middleware => {
             this.app.use(middleware);
