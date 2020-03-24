@@ -20,7 +20,7 @@ export class HospitalController implements IController {
 
     initRoutes() {
         this.router.post("/", this.createHospital);
-        this.router.get("/import", this.importFromJsonFile);
+        this.router.get("/import/:from/:to", this.importFromJsonFile);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
         this.router.get("/:nameSlug", this.getHospitalBySlug);
@@ -46,10 +46,12 @@ export class HospitalController implements IController {
     }
 
     importFromJsonFile = async (request: CRequest, response: CResponse) => {
+        const { from, to } = request.params
+
         let newRecords:any = []
         for(let record of hospitalJson) {
             let key = record["S/No"][''];
-            if (key > 100 && key <= 201) {
+            if (key >= from && key <= to) {
                 let contacts = []
                 if (record["contact1"]) {
                     contacts.push(record["contact1"])
