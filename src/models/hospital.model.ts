@@ -10,8 +10,7 @@ const HospitalSchema = new Schema({
         required: true
     },
     hospitalType: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     },
 
     availableTime: {
@@ -70,18 +69,15 @@ const HospitalSchema = new Schema({
 
     province: {
         code: {
-            type: Schema.Types.Number,
-            required: true
+            type: Schema.Types.Number
         },
         name: {
-            type: Schema.Types.String,
-            required: true
+            type: Schema.Types.String
         }
     },
 
     district: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     }
 }, {
     timestamps: true

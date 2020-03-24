@@ -1,9 +1,13 @@
 import { IController } from "../shared/interfaces";
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction, response } from "express";
 import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 import validateHospital from "request_validations/hospital.validation";
+// @ts-ignore: Resolve json module
+import hospitalJson from "../../hospitaldata.json"
+import fs from "fs"
+import path from "path"
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -15,7 +19,8 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
-        this.router.post("/", validateHospital, this.createHospital);
+        this.router.post("/", this.createHospital);
+        this.router.get("/import", this.importFromJsonFile);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
         this.router.get("/:nameSlug", this.getHospitalBySlug);
@@ -38,6 +43,60 @@ export class HospitalController implements IController {
             response.status(parsedError.statusCode).json(parsedError)
             response.status(500).json({ error })
         }
+    }
+
+    importFromJsonFile = async (request: CRequest, response: CResponse) => {
+        let newRecords:any = []
+        for(let record of hospitalJson) {
+            let key = record["S/No"][''];
+            if (key > 100 && key <= 201) {
+                let contacts = []
+                if (record["contact1"]) {
+                    contacts.push(record["contact1"])
+                }
+
+                if (record["contact2"]) {
+                    contacts.push(record["contact2"])
+                }
+
+                if (record["contact3"]) {
+                    contacts.push(record["contact3"])
+                }
+
+                let totalNumberOfBed = record["totalBeds"] ? record["totalBeds"].match(/\d+/)[0] : null
+                
+                newRecords.push({
+                    name: record["Hospital Name"],
+                    hospitalType: record["hospitalType"],
+                    availableTime: ["open:time", "close:time"],
+                    openDays: record["openDays"],
+                    location: record["location"],
+                    mapLink: record["mapLink"],
+                    totalBeds: totalNumberOfBed,
+                    availableBeds: record["availableBeds"],
+                    covidTest: !!record["covidTest"],
+                    testingProcess: record["testingProcess"],
+                    govtDesignated: !!record["govtDesignated"],
+                    numIsolationBeds: Number(record["numIsolationBeds"]),
+                    ventilators: record["Ventilators"],
+                    nameSlug: record["nameSlug"],
+                    icu: record["icu"],
+                    contact: contacts,
+                    focalPoint: record["focalPoint"],
+                    province: {
+                        code: Number(record["province code"]),
+                        name: record["province name"]
+                    },
+                    district: record["district"]
+                })
+            }
+        }
+
+        for (let insertData of newRecords) {
+            await this.hospitalService.createHospital(insertData);
+        }
+
+        response.send(newRecords);
     }
 
     updateHospital = async (request: CRequest, response: CResponse) => {
