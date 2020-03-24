@@ -54,21 +54,21 @@ export class HospitalController implements IController {
             if (key >= from && key <= to && record["In Database"] == "0") {
                 let contacts = []
                 if (record["contact1"]) {
-                    contacts.push(record["contact1"])
+                    contacts.push(record["contact1"].trim())
                 }
 
                 if (record["contact2"]) {
-                    contacts.push(record["contact2"])
+                    contacts.push(record["contact2"].trim())
                 }
 
                 if (record["contact3"]) {
-                    contacts.push(record["contact3"])
+                    contacts.push(record["contact3"].trim())
                 }
 
                 let totalNumberOfBed = record["totalBeds"] ? record["totalBeds"].match(/\d+/)[0] : null
                 
                 newRecords.push({
-                    name: record["Hospital Name"],
+                    name: record["Hospital Name"].trim(),
                     hospitalType: record["hospitalType"],
                     availableTime: ["open:time", "close:time"],
                     openDays: record["openDays"],
@@ -79,24 +79,25 @@ export class HospitalController implements IController {
                     covidTest: record["covidTest"] ? !!record["covidTest"] : null,
                     testingProcess: record["testingProcess"],
                     govtDesignated: record["govtDesignated"] ? !!record["govtDesignated"] : null,
-                    numIsolationBeds: Number(record["numIsolationBeds"]),
+                    numIsolationBeds: Number(record["numIsolationBeds"].trim()),
                     ventilators: record["Ventilators"],
-                    nameSlug: record["nameSlug"],
+                    nameSlug: record["nameSlug"].trim(),
                     icu: record["icu"],
                     contact: contacts,
                     focalPoint: record["focalPoint"],
                     province: {
-                        code: Number(record["province code"]),
-                        name: record["province name"]
+                        code: Number(record["province code"].trim()),
+                        name: record["province name"].trim()
                     },
-                    district: record["district"]
+                    district: record["district"].trim()
                 })
             }
         }
 
-        // for (let insertData of newRecords) {
-        //     await this.hospitalService.createHospital(insertData);
-        // }
+        // inserting data
+        for (let insertData of newRecords) {
+            await this.hospitalService.createHospital(insertData);
+        }
 
         response.send(hospitalJson);
     }
