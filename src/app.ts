@@ -126,7 +126,8 @@ export default class App {
         
         // Cross origin request
         if (["production"].indexOf(process.env.NODE_ENV) !== -1) {
-            const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org', 'https://dev.covidnepal.org', 'http://dev.covidnepal.org'];
+            const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org', 
+                                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost'];
 
             const corsOptions = {
                 origin: function (origin:string, callback:any) {
