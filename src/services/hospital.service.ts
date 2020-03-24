@@ -9,14 +9,15 @@ export class HospitalService {
         return HospitalModel.create(data);
     }
 
-    getHospitals(query?: { district: string, province: number, covidTest: string }) {
+    getHospitals(query?: { district: string, province: number, covidTest: string, lang: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         let covidTest = null;
-        if (query.covidTest && ["true","false"].includes(query.covidTest)) {
+        
+        if (query.covidTest && ["true", "false"].includes(query.covidTest)) {
             covidTest = query.covidTest
         }
-        
+
         // province filer
         let filter: any = {};
         if (provinceCode !== null) {

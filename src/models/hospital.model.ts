@@ -1,32 +1,32 @@
 import { model, Schema, } from "mongoose";
+import { LangSchema } from "../shared/schemas";
 
 const HospitalSchema = new Schema({
     name: {
-        type: Schema.Types.String,
-        required: true
+        type: LangSchema,
+        unique: true
     },
+
     nameSlug: {
         type: Schema.Types.String,
         required: true
     },
-    hospitalType: {
-        type: Schema.Types.String,
-        required: true
-    },
+
+    hospitalType: LangSchema,
 
     availableTime: {
-        type: [Schema.Types.String],
+        type: [LangSchema],
         required: true
     },
 
-    openDays: Schema.Types.String,
+    openDays: LangSchema,
 
     location: {
-        type: Schema.Types.String,
+        type: LangSchema,
         required: true
     },
 
-    mapLink: Schema.Types.String,
+    mapLink: LangSchema,
 
     coordinates: {
         type: [Schema.Types.Number],
@@ -41,9 +41,7 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Boolean
     },
 
-    testingProcess: {
-        type: Schema.Types.String
-    },
+    testingProcess: LangSchema,
 
     // designated by government ?
     govtDesignated: {
@@ -59,14 +57,11 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Number
     },
 
-    focalPoint: {
-        type: Schema.Types.String
-    },
+    focalPoint: LangSchema,
 
     contact: {
-        type: [Schema.Types.String]
+        type: [LangSchema]
     },
-
 
     province: {
         code: {
@@ -74,13 +69,12 @@ const HospitalSchema = new Schema({
             required: true
         },
         name: {
-            type: Schema.Types.String,
+            type: LangSchema,
             required: true
         }
     },
-
     district: {
-        type: Schema.Types.String,
+        type: LangSchema,
         required: true
     }
 }, {
