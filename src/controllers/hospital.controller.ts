@@ -51,7 +51,7 @@ export class HospitalController implements IController {
         let newRecords:any = []
         for(let record of hospitalJson) {
             let key = record["S/No"][''];
-            if (key >= from && key <= to) {
+            if (key >= from && key <= to && record["In Database"] == "0") {
                 let contacts = []
                 if (record["contact1"]) {
                     contacts.push(record["contact1"])
@@ -76,9 +76,9 @@ export class HospitalController implements IController {
                     mapLink: record["mapLink"],
                     totalBeds: totalNumberOfBed,
                     availableBeds: record["availableBeds"],
-                    covidTest: !!record["covidTest"],
+                    covidTest: record["covidTest"] ? !!record["covidTest"] : null,
                     testingProcess: record["testingProcess"],
-                    govtDesignated: !!record["govtDesignated"],
+                    govtDesignated: record["govtDesignated"] ? !!record["govtDesignated"] : null,
                     numIsolationBeds: Number(record["numIsolationBeds"]),
                     ventilators: record["Ventilators"],
                     nameSlug: record["nameSlug"],
@@ -94,11 +94,11 @@ export class HospitalController implements IController {
             }
         }
 
-        for (let insertData of newRecords) {
-            await this.hospitalService.createHospital(insertData);
-        }
+        // for (let insertData of newRecords) {
+        //     await this.hospitalService.createHospital(insertData);
+        // }
 
-        response.send(newRecords);
+        response.send(hospitalJson);
     }
 
     updateHospital = async (request: CRequest, response: CResponse) => {
