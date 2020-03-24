@@ -4,8 +4,9 @@ import { ECovidTest } from "../shared/interfaces";
 
 export class HospitalService {
     createHospital(data: any) {
-        // create slug
-        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        // removed dynamic name slug
+        // data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+
         return HospitalModel.create(data);
     }
 
@@ -55,10 +56,11 @@ export class HospitalService {
 
     async update(id: string, data: any) {
         const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-        const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
-        if (oldRecord.slug !== nameSlug) {
-            data.nameSlug = nameSlug
-        }
+        // removed dynamic name slug
+        // const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        // if (oldRecord.slug !== nameSlug) {
+        //     data.nameSlug = nameSlug
+        // }
         const newRecord = { ...oldRecord, ...data }
 
         return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
