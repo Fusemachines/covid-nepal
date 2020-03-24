@@ -4,7 +4,6 @@ import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 
-
 export class HospitalController implements IController {
     route: string = "hospitals"
     router: Router;

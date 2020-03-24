@@ -5,7 +5,8 @@ import { ECovidTest } from "../shared/interfaces";
 export class HospitalService {
     createHospital(data: any) {
         // create slug
-        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        // data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        data.nameSlug = "test";
         return HospitalModel.create(data);
     }
 

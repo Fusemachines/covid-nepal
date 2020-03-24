@@ -89,12 +89,6 @@ export default class App {
         // this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
 
         controllers.forEach(controller => {
-            // Old support for localization
-            //  this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
-            //     req.lang = req.params.lang
-            //     next()
-            // }, controller.router);
-
             this.app.use(`/${controller.route}`, controller.router);
         })
 
@@ -126,7 +120,8 @@ export default class App {
         
         // Cross origin request
         if (["production"].indexOf(process.env.NODE_ENV) !== -1) {
-            const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org', 'https://dev.covidnepal.org', 'http://dev.covidnepal.org'];
+            const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org', 
+                                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost'];
 
             const corsOptions = {
                 origin: function (origin:string, callback:any) {
