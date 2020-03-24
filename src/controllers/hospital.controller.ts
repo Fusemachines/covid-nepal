@@ -3,6 +3,7 @@ import { Router, Request, Response } from "express";
 import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
+import validateHospital from "request_validations/hospital.validation";
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -14,7 +15,7 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
-        this.router.post("/", this.createHospital);
+        this.router.post("/", validateHospital, this.createHospital);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
         this.router.get("/:nameSlug", this.getHospitalBySlug);

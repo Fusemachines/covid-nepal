@@ -1,7 +1,9 @@
 import Joi from "joi";
 import commonLangValidation from "./commonLang.validation";
+import { CRequest, CResponse } from "shared/interfaces/http.interface";
+import { NextFunction } from "express";
 
-export default function(req:any, res: any, next:any) {
+const validateHospital = (req:CRequest, res: CResponse, next: NextFunction) => {
     const { body } = req;
 
     const blogSchema = Joi.object().keys({
@@ -19,24 +21,27 @@ export default function(req:any, res: any, next:any) {
         numIsolationBeds: Joi.number(),
         icu: Joi.number(),
         focalPoint: commonLangValidation,
-        contact: commonLangValidation,
+        contact: Joi.array().items(Joi.object().keys(commonLangValidation)),
         province: Joi.object().keys({
-            code: Joi.number,
+            code: Joi.number(),
             name: commonLangValidation
         }),
         district: commonLangValidation
     })
 
+    console.log(blogSchema)
+    
     const result = Joi.validate(body, blogSchema);
     const { error } = result;
     
     if (error && error.details) {
         res.status(422).json({
             message: 'Invalid request',
-            error
+            errors: error.details
         })
     } else {
         next()
     }
-
 }
+
+export default validateHospital
