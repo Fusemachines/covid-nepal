@@ -72,19 +72,30 @@ export function prepareJsonFileUpdate(options: { data: any }){
 export function prepareData(record:any) {
     // return null if hospital name is not present
     if (!record["Hospital Name"].trim().length) return null;
-
+    
     const contacts = !!record["contacts"] ? record["contacts"].trim().replace(/,+$/g, "").split(',').map((contactNumber: string) => contactNumber.trim()) : [];
     let district = record["district"] ? record["district"].trim().toLowerCase() : "";
     district = capitalize(district);
     let hospitalType = record["hospitalType"] ? record["hospitalType"].trim().toLowerCase() : "";
     hospitalType = capitalize(hospitalType);
-    let totalNumberOfBed = record["totalBeds"] ? record["totalBeds"].trim().match(/\d+/)[0] : null;
+    
+    let totalNumberOfBed = null;
+    if (record["Total Beds"].trim().length) {
+        const bedNumbers = record["Total Beds"].trim().match(/\d+/);
+        if (bedNumbers != null) {
+            totalNumberOfBed = record["Total Beds"].trim().match(/\d+/)[0];
+        } 
+    }
     
     let ventilators = null;
     if (record["Ventilators"] && record["Ventilators"].trim().match(/\d+/) != null) {
         ventilators = record["Ventilators"].trim().match(/\d+/)[0];
     }
 
+    if (record["nameSlug"] == "26-3-kirtipur-hospital") {
+        console.log(record);
+    }
+    
     return {
         name: record["Hospital Name"].trim(),
         hospitalType: hospitalType,
@@ -93,16 +104,16 @@ export function prepareData(record:any) {
         location: record["location"],
         mapLink: record["mapLink"],
         totalBeds: totalNumberOfBed,
-        availableBeds: record["availableBeds"],
+        availableBeds: getNumberFromRecord(record["Available Beds"]),
         covidTest: filterBooleanData(record["covidTest"]),
-        testingProcess: record["testingProcess"],
-        govtDesignated: filterBooleanData(record["govtDesignated"]),
-        numIsolationBeds: record["numIsolationBeds"] ? Number(record["numIsolationBeds"].trim()) : null,
+        testingProcess: record["testingProcess"] ? record["testingProcess"] : null,
+        govtDesignated: filterBooleanData(record["Govt Designated"]),
+        numIsolationBeds: getNumberFromRecord(record["Num Isolation Beds"].trim()),
         ventilators,
         nameSlug: record["nameSlug"].trim(),
-        icu: record["icu"],
+        icu: getNumberFromRecord(record["ICU"]),
         contact: contacts,
-        focalPoint: record["focalPoint"],
+        focalPoint: record["Focal Point"],
         province: {
             code: Number(record["province code"].trim()),
             name: record["province name"].trim()
@@ -117,4 +128,18 @@ function filterBooleanData(record: string = ""): null | boolean {
 
     if (record == "1" || record == "true") return true;
     if (record == "0" || record == "false") return false;
+}
+
+function getNumberFromRecord(record:string = "") :any {
+    let recordNumber:any = "";
+    if (!record.trim().length) {
+        recordNumber = null;
+    }
+
+    recordNumber = record.trim().match(/\d+/);
+    if (recordNumber != null) {
+        recordNumber = Number(recordNumber[0]);
+    }
+
+    return recordNumber;
 }
