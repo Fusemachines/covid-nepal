@@ -6,8 +6,7 @@ import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 import validateHospital from "request_validations/hospital.validation";
 // @ts-ignore: Resolve json module
 import hospitalJson from "../../hospitaldata.json"
-import fs from "fs"
-import path from "path"
+import { prepareJsonFileImport, prepareJsonFileUpdate } from "../services/hospitalExcel.service"
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -20,7 +19,8 @@ export class HospitalController implements IController {
 
     initRoutes() {
         this.router.post("/", this.createHospital);
-        this.router.get("/import/:rows", this.importFromJsonFile);
+        this.router.post("/import-json/:rows", this.importHospitalFromJsonFile);
+        this.router.put("/import-json/update", this.updateHospitalFromJsonFile);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
         this.router.get("/:nameSlug", this.getHospitalBySlug);
@@ -45,13 +45,10 @@ export class HospitalController implements IController {
         }
     }
 
-    capitalize(str: string) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    importFromJsonFile = async (request: CRequest, response: CResponse) => {
+    importHospitalFromJsonFile = async (request: CRequest, response: CResponse) => {
         let insertAll = false
         let from, to;
+
         if(request.params.rows === "all") {
             insertAll = true;
         } else {
@@ -60,94 +57,55 @@ export class HospitalController implements IController {
             to = Number(rows[1]);
         }
 
-        let newRecords:any = []
-        for(let record of hospitalJson) {
-            let key = Number(record["S/No"]['']);
-
-            // insert all
-            if (insertAll) {
-                const contacts = !!record["contacts"] ? record["contacts"].trim().replace(/,+$/g, "").split(',').map((contactNumber: string) => contactNumber.trim()) : [];
-                let district = record["district"] ? record["district"].trim().toLowerCase() : "";
-                district = this.capitalize(district);
-                let hospitalType = record["hospitalType"] ? record["hospitalType"].trim().toLowerCase() : "";
-                hospitalType = this.capitalize(hospitalType);
-                let totalNumberOfBed = record["totalBeds"] ? record["totalBeds"].match(/\d+/)[0] : null;
-
-                if (record["Hospital Name"]) {
-                    newRecords.push({
-                        name: record["Hospital Name"].trim(),
-                        hospitalType: hospitalType,
-                        availableTime: record["availableTime"] ? [record["availableTime"].trim()] : [],
-                        openDays: record["openDays"],
-                        location: record["location"],
-                        mapLink: record["mapLink"],
-                        totalBeds: totalNumberOfBed,
-                        availableBeds: record["availableBeds"],
-                        covidTest: record["covidTest"] ? !!record["covidTest"] : null,
-                        testingProcess: record["testingProcess"],
-                        govtDesignated: record["govtDesignated"] === "TRUE" ? true : null,
-                        numIsolationBeds: record["numIsolationBeds"] ? Number(record["numIsolationBeds"].trim()) : null,
-                        ventilators: record["Ventilators"],
-                        nameSlug: record["nameSlug"].trim(),
-                        icu: record["icu"],
-                        contact: contacts,
-                        focalPoint: record["focalPoint"],
-                        province: {
-                            code: Number(record["province code"].trim()),
-                            name: record["province name"].trim()
-                        },
-                        district
-                    })
-                }
+        let records:any = prepareJsonFileImport({
+            data: hospitalJson,
+            query: {
+                insertAll,
+                from,
+                to
             }
-
-            // partial upload
-            if (!insertAll && from < to && key >= from && key <= to) {
-                console.log("are we here")
-                const contacts = !!record["contacts"] ? record["contacts"].trim().replace(/,+$/g, "").split(',').map((contactNumber: string) => contactNumber.trim()) : [];
-                let district = record["district"] ? record["district"].trim().toLowerCase() : "";
-                district = this.capitalize(district);
-                let hospitalType = record["hospitalType"] ? record["hospitalType"].trim().toLowerCase() : "";
-                hospitalType = this.capitalize(hospitalType);
-                let totalNumberOfBed = record["totalBeds"] ? record["totalBeds"].match(/\d+/)[0] : null
-                
-                 if (record["Hospital Name"]) {
-                    newRecords.push({
-                        name: record["Hospital Name"].trim(),
-                        hospitalType: hospitalType,
-                        availableTime: record["availableTime"] ? [record["availableTime"].trim()] : [],
-                        openDays: record["openDays"],
-                        location: record["location"],
-                        mapLink: record["mapLink"],
-                        totalBeds: totalNumberOfBed,
-                        availableBeds: record["availableBeds"],
-                        covidTest: record["covidTest"] ? !!record["covidTest"] : null,
-                        testingProcess: record["testingProcess"],
-                        govtDesignated: record["govtDesignated"] === "TRUE" ? true : null,
-                        numIsolationBeds: record["numIsolationBeds"] ? Number(record["numIsolationBeds"].trim()) : null,
-                        ventilators: record["Ventilators"],
-                        nameSlug: record["nameSlug"].trim(),
-                        icu: record["icu"],
-                        contact: contacts,
-                        focalPoint: record["focalPoint"],
-                        province: {
-                            code: Number(record["province code"].trim()),
-                            name: record["province name"].trim()
-                        },
-                        district
-                    })
-                }
-            }
-        }
-
-        // inserting data
-        if (newRecords.length) {
-            for (let insertData of newRecords) {
-                await this.hospitalService.createHospital(insertData);
-            }
-        }
+        })
         
+        // inserting data
+        if (records.length) {
+            for (let record of records) {
+                await this.hospitalService.createHospital(record);
+            }
+        }
+
         response.send("Data load completed");
+    }
+
+    updateHospitalFromJsonFile = async (request: CRequest, response: CResponse) => {
+        let updateRecords = prepareJsonFileUpdate({
+            data: hospitalJson
+        });
+
+        const records = updateRecords.data;
+        const updatedSerialNumbers = updateRecords.sn;
+
+        // updaing data
+        if (records.length) {
+            for (let record of records) {
+                const deletedHospital:any = await this.hospitalService.deleteHospitalBySlug(record.nameSlug);
+                if(deletedHospital != null) {
+                    global.logger.log({
+                        level: "info",
+                        message: `Deleted hospital -> ${deletedHospital.name}`
+                    });
+                }
+                
+                await this.hospitalService.createHospital(record);
+            }
+
+            response.json({
+                message: `Hospitals updated successfully`,
+                updatedSerialNumbers 
+            });
+        } 
+        else {
+            response.send("There are no data to update from json.")
+        }
     }
 
     updateHospital = async (request: CRequest, response: CResponse) => {

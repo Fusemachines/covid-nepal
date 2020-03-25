@@ -52,6 +52,12 @@ export class HospitalService {
         }).select("-__v").lean();
     }
 
+    deleteHospitalBySlug(slug: string) {
+        return HospitalModel.findOneAndRemove({
+            nameSlug: slug
+        });
+    }
+
     getHospitalById(id: string) {
         return HospitalModel.findById(id).select("-__v").lean();
     }

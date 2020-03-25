@@ -88,7 +88,6 @@ const HospitalSchema = new Schema({
 });
 
 
-
 const HospitalModel = model("hospital", HospitalSchema, "hospitals");
 
 export default HospitalModel;
