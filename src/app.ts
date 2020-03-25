@@ -45,7 +45,7 @@ export default class App {
 
         } catch (error) {
             global.logger.log({
-                level: "Error",
+                level: "error",
                 message: "Error connecting to database"
             })
         }
