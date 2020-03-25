@@ -7,7 +7,8 @@ const HospitalSchema = new Schema({
     },
     nameSlug: {
         type: Schema.Types.String,
-        required: true
+        required: true,
+        unique: true
     },
     hospitalType: {
         type: Schema.Types.String
@@ -22,7 +23,6 @@ const HospitalSchema = new Schema({
 
     location: {
         type: Schema.Types.String,
-        required: true
     },
 
     mapLink: Schema.Types.String,
@@ -68,8 +68,7 @@ const HospitalSchema = new Schema({
 
 
     ventilators: {
-        type: Schema.Types.Number,
-        required: true
+        type: Schema.Types.Number
     },
 
     province: {
