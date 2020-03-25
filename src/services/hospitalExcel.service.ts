@@ -115,6 +115,6 @@ function filterBooleanData(record: string = ""): null | boolean {
     if (!record.length) return null;
     record = record.trim().toLowerCase();
 
-    if (record === "true") return true;
-    if (record === "false") return false;
+    if (record == "1" || record == "true") return true;
+    if (record == "0" || record == "false") return false;
 }
