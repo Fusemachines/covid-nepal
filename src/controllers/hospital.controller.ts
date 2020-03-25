@@ -52,25 +52,25 @@ export class HospitalController implements IController {
         for(let record of hospitalJson) {
             let key = record["S/No"][''];
             if (key >= from && key <= to && record["In Database"] == "0") {
-                let contacts = []
-                if (record["contact1"]) {
-                    contacts.push(record["contact1"].trim())
-                }
+                // let contacts = []
+                // if (record["contact1"]) {
+                //     contacts.push(record["contact1"].trim())
+                // }
 
-                if (record["contact2"]) {
-                    contacts.push(record["contact2"].trim())
-                }
+                // if (record["contact2"]) {
+                //     contacts.push(record["contact2"].trim())
+                // }
 
-                if (record["contact3"]) {
-                    contacts.push(record["contact3"].trim())
-                }
+                // if (record["contact3"]) {
+                //     contacts.push(record["contact3"].trim())
+                // }
 
                 let totalNumberOfBed = record["totalBeds"] ? record["totalBeds"].match(/\d+/)[0] : null
                 
                 newRecords.push({
                     name: record["Hospital Name"].trim(),
                     hospitalType: record["hospitalType"],
-                    availableTime: ["open:time", "close:time"],
+                    availableTime: [record["availableTime"].trim()],
                     openDays: record["openDays"],
                     location: record["location"],
                     mapLink: record["mapLink"],
@@ -78,12 +78,12 @@ export class HospitalController implements IController {
                     availableBeds: record["availableBeds"],
                     covidTest: record["covidTest"] ? !!record["covidTest"] : null,
                     testingProcess: record["testingProcess"],
-                    govtDesignated: record["govtDesignated"] ? !!record["govtDesignated"] : null,
+                    govtDesignated: record["govtDesignated"] === "TRUE" ? true : null,
                     numIsolationBeds: Number(record["numIsolationBeds"].trim()),
                     ventilators: record["Ventilators"],
                     nameSlug: record["nameSlug"].trim(),
                     icu: record["icu"],
-                    contact: contacts,
+                    contact: record["contacts"].trim(),
                     focalPoint: record["focalPoint"],
                     province: {
                         code: Number(record["province code"].trim()),
