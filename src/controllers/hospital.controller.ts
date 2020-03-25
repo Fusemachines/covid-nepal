@@ -89,8 +89,8 @@ export class HospitalController implements IController {
 
     getAllHospitals = async (request: CRequest, response: CResponse) => {
         try {
-            const docs = await this.hospitalService.getHospitals(request.query);
-            response.status(200).json({ docs })
+            const result = await this.hospitalService.getHospitals(request.query);
+            response.status(200).json(result)
         } catch (error) {
             error = new HttpException({
                 statusCode: 500,

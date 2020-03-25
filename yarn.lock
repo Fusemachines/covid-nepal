@@ -165,6 +165,11 @@
     "@types/bson" "*"
     "@types/node" "*"
 
+"@types/mongoose-paginate@5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@types/mongoose-paginate/-/mongoose-paginate-5.0.8.tgz#6b925c3ccf1c45bfb116830c77471cc1ba045308"
+  integrity sha512-6Ybb8X+iBB1/CeScDhzn0q5ZXljHu2Zzg9Wp4nYI5V3Pjc02YuLq6GHHLQrljsA/hMytULnbwQovUYWeI3IxWA==
+
 "@types/mongoose@5.7.6":
   version "5.7.6"
   resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.7.6.tgz#c08d41b33a4a5e1984fc4d3c7bc2a76cc6e17ffc"
