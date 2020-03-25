@@ -67,6 +67,11 @@ const HospitalSchema = new Schema({
     },
 
 
+    ventilators: {
+        type: Schema.Types.Number,
+        required: true
+    },
+
     province: {
         code: {
             type: Schema.Types.Number

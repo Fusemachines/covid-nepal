@@ -1,12 +1,13 @@
 import { Router, Request, Response, response } from "express";
-import { IController } from "shared/interfaces";
+import { IController } from "../shared/interfaces";
 import { VirusCountService } from "../services"
 import HttpException from "../shared/exceptions/httpException";
+import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 
 export class VirusCountController implements IController {
 
   public router: Router;
-  public route: string = "virus-counts"
+  public route: string = "virus-counts";
 
   constructor(private virusCountsService: VirusCountService) {
     this.router = Router();
@@ -22,31 +23,28 @@ export class VirusCountController implements IController {
     this.router.get("/", this.getVirusCountsWithPagination);
   }
 
-  getVirusCountsToday = async (req: Request, res: Response) => {
+  getVirusCountsToday = async (request: CRequest, response: CResponse) => {
     try {
       const counts = await this.virusCountsService.getVirusCountsToday();
-      return res.json(counts);
-    } catch (error) {
-      return response.status(500).json({ error })
+      response.json(counts);
+    } 
+    catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      })
+      const parsedError = error.parse()
+      response.status(parsedError.statusCode).json(parsedError)
     }
   }
 
-  getLatestVirusCounts = async (req: Request, res: Response) => {
+  getLatestVirusCounts = async (request: CRequest, response: CResponse) => {
     try {
       const counts = await this.virusCountsService.getLatestVirusCounts();
-      return res.json({ "data": counts });
-    } catch (error) {
-      console.log(error);
-      return response.status(500).json({ error })
-    }
-  }
+      response.json({ "data": counts });
 
-  addVirusCount = async (req: Request, res: Response) => {
-    try {
-      const virusCount = await this.virusCountsService.addVirusCount(req.body);
-      console.log(virusCount);
-      return res.json(virusCount);
-    } catch (error) {
+    } 
+    catch (error) {
       error = new HttpException({
         statusCode: 500,
         description: error.message,
@@ -56,11 +54,27 @@ export class VirusCountController implements IController {
     }
   }
 
-  updateVirusCount = async (request: Request, response: Response) => {
+  addVirusCount = async (request: CRequest, response: CResponse) => {
+    try {
+      const virusCount = await this.virusCountsService.addVirusCount(request.body);
+      response.json(virusCount);
+    } 
+    catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      })
+      const parsedError = error.parse()
+      response.status(parsedError.statusCode).json(parsedError)
+    }
+  }
+
+  updateVirusCount = async (request: CRequest, response: CResponse) => {
     try {
       const result = await this.virusCountsService.update(request.params.id, request.body);
-      return response.json(result);
-    } catch (error) {
+      response.json(result);
+    } 
+    catch (error) {
       error = new HttpException({
         statusCode: 500,
         description: error.message,
@@ -70,20 +84,22 @@ export class VirusCountController implements IController {
     }
   }
 
-  deleteVirusCount = async (request: Request, response: Response) => {
+  deleteVirusCount = async (request: CRequest, response: CResponse) => {
     try {
 
       const result: any = await this.virusCountsService.delete(request.params.id);
       if (result === null) {
-        return response.status(500).json({
-          error: "Unable to delete virus count record"
+        throw new HttpException({
+          statusCode: 500,
+          description: "Unable to delete virus count record",
         })
       }
 
-      return response.json({
+      response.json({
         message: `Virus count data removed successfully.`
       });
-    } catch (error) {
+    } 
+    catch (error) {
       error = new HttpException({
         statusCode: 500,
         description: error.message,
@@ -93,11 +109,12 @@ export class VirusCountController implements IController {
     }
   }
 
-  getVirusCountsWithPagination =  async (req: Request, res: Response) => {
+  getVirusCountsWithPagination =  async (request: CRequest, response: CResponse) => {
     try {
-      const data = await this.virusCountsService.getVirusCountsWithPagination(req.query.page, req.query.size);
-      return res.json(data);
-    } catch (error) {
+      const data = await this.virusCountsService.getVirusCountsWithPagination(request.query.page, request.query.size);
+      response.json(data);
+    } 
+    catch (error) {
       return response.status(500).json({ error })
     }
   }

@@ -58,12 +58,15 @@ export class HospitalService {
 
     async update(id: string, data: any) {
         const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-        const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
-        if (oldRecord.slug !== nameSlug) {
-            data.nameSlug = nameSlug
-        }
-        const newRecord = { ...oldRecord, ...data }
 
+        if (!data.nameSlug) {
+            const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+            if (oldRecord.slug !== nameSlug) {
+                data.nameSlug = nameSlug
+            }
+        }
+        
+        const newRecord = { ...oldRecord, ...data }
         return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
     }
 
