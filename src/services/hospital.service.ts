@@ -1,11 +1,7 @@
 import HospitalModel from "../models/hospital.model";
-<<<<<<< HEAD
-import { ECovidTest } from "../shared/interfaces";
-=======
 import { getSorting, getPagination } from "../shared/utils";
 import { IHospitalFilter } from "../shared/interfaces/hospital.interface";
 
->>>>>>> ee775aa525a34ecc0f07e409ac24c00e528744b2
 
 
 export class HospitalService {
@@ -17,18 +13,10 @@ export class HospitalService {
         return HospitalModel.create(data);
     }
 
-<<<<<<< HEAD
-    getHospitals(query?: { district: string, province: number, covidTest: string, lang: string }) {
-=======
     async getHospitals(query?: IHospitalFilter) {
->>>>>>> ee775aa525a34ecc0f07e409ac24c00e528744b2
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         let covidTest = null;
-<<<<<<< HEAD
-        
-=======
->>>>>>> ee775aa525a34ecc0f07e409ac24c00e528744b2
         if (query.covidTest && ["true", "false"].includes(query.covidTest)) {
             covidTest = query.covidTest
         }
