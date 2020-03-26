@@ -40,8 +40,14 @@ export class HospitalService {
             filter = { ...filter, covidTest }
         }
 
+        const total = await HospitalModel.countDocuments();
+
+        const totalVerified = await HospitalModel.countDocuments({
+            isVerified: true
+        });
+
         // query with pagination and sorting
-        return await HospitalModel.paginate(filter, {
+        const hospitals = await HospitalModel.paginate(filter, {
             lean: true,
             select: `
             name.${lang}
@@ -65,6 +71,13 @@ export class HospitalService {
             ...getPagination(query),
             ...getSorting(query)
         });
+
+        return {
+            ...hospitals,
+            totalHospitals: total,
+            totalVerified: totalVerified,
+            totalPending: total - totalVerified
+        }
     }
 
     getCovidHospitals() {
