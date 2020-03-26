@@ -1,35 +1,35 @@
 import { model, Schema, } from "mongoose";
-import paginate from "../shared/plugins/pagination.plugin"
+import { LangSchema } from "../shared/schemas";
 
 const HospitalSchema = new Schema({
     name: {
-        type: Schema.Types.String,
+        type: LangSchema,
         required: true
     },
     nameSlug: {
         type: Schema.Types.String,
-        required: true,
-        unique: true
-    },
-
-    priority: Schema.Types.Number,
-    
-    hospitalType: {
-        type: Schema.Types.String
-    },
-
-    availableTime: {
-        type: [Schema.Types.String],
+        unique: true,
         required: true
     },
 
-    openDays: Schema.Types.String,
+    hospitalType: LangSchema,
 
-    location: {
-        type: Schema.Types.String,
+    availableTime: {
+        type: [LangSchema],
+        required: true
     },
 
-    mapLink: Schema.Types.String,
+    openDays: LangSchema,
+
+    location: {
+        type: LangSchema,
+        required: true
+    },
+
+    mapLink: {
+        type: Schema.Types.String,
+        required: true
+    },
 
     coordinates: {
         type: [Schema.Types.Number],
@@ -44,14 +44,13 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Boolean
     },
 
-    testingProcess: {
-        type: Schema.Types.String
-    },
+    testingProcess: LangSchema,
 
     // designated by government ?
     govtDesignated: {
         type: Schema.Types.Boolean
     },
+
 
     numIsolationBeds: {
         type: Schema.Types.Number
@@ -61,37 +60,31 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Number
     },
 
-    focalPoint: {
-        type: Schema.Types.String
-    },
+    focalPoint: LangSchema,
 
     contact: {
-        type: [Schema.Types.String]
-    },
-
-
-    ventilators: {
-        type: Schema.Types.Number
+        type: [LangSchema]
     },
 
     province: {
         code: {
-            type: Schema.Types.Number
+            type: Schema.Types.Number,
+            required: true
         },
         name: {
-            type: Schema.Types.String
+            type: LangSchema,
+            required: true
         }
     },
-
     district: {
-        type: Schema.Types.String
+        type: LangSchema,
+        required: true
     }
 }, {
     timestamps: true
 });
 
 
-HospitalSchema.plugin(paginate);
 
 const HospitalModel = model("hospital", HospitalSchema, "hospitals");
 
