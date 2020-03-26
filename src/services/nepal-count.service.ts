@@ -1,42 +1,59 @@
 import { NepalCountModel } from "../models/nepal-count.model";
-import { IAddNepalCount } from "../shared/interfaces/nepal-count.interface";
+import { IUpdateNepalCount, IAddNepalCount } from "../shared/interfaces";
+
 
 export class NepalCountService {
 
-  async getLatestCounts() {
+  async getLatestCount() {
     return await NepalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
   async addNepalCount(data: IAddNepalCount) {
-    await this.validateNepalCount(new Date(data.createdAt));
+    let date = new Date(data.createdAt);
+    await this.validateNepalCount(date);
 
-    let testedToday = 0;
-    let confirmedToday = 0;
-    let recoveredToday = 0;
-    let deathToday = 0;
-
-    const latestCount = await this.getLatestCounts();
-
-    if (latestCount != undefined) {
-      testedToday = data.testedTotal - latestCount.get('testedTotal');
-      confirmedToday = data.confirmedTotal - latestCount.get('confirmedTotal');
-      recoveredToday = data.recoveredTotal - latestCount.get('recoveredTotal');
-      deathToday = data.deathTotal - latestCount.get('deathTotal');
-    }
+    date.setUTCHours(0, 0, 0, 0);
+    const previousDate = new Date(date);
+    previousDate.setDate(previousDate.getDate() - 1);
+    const latestCount = await NepalCountModel.findOne({ createdAt: { $gte: previousDate, $lte: date } }).exec();
 
     const nepalCount = new NepalCountModel({
       testedTotal: data.testedTotal,
       recoveredTotal: data.recoveredTotal,
       confirmedTotal: data.confirmedTotal,
       deathTotal: data.deathTotal,
-      testedToday,
-      confirmedToday,
-      recoveredToday,
-      deathToday,
+      testedToday: latestCount != undefined ? data.testedTotal - latestCount.get('testedTotal') : 0,
+      confirmedToday: latestCount != undefined ? data.confirmedTotal - latestCount.get('confirmedTotal') : 0,
+      recoveredToday: latestCount != undefined ? data.recoveredTotal - latestCount.get('recoveredTotal') : 0,
+      deathToday: latestCount != undefined ? data.deathTotal - latestCount.get('deathTotal') : 0,
       createdAt: data.createdAt
     })
 
     return await NepalCountModel.create(nepalCount);
+  }
+
+  async updateNepalCount(id: string, data: IUpdateNepalCount) {
+    let nepalCount = await NepalCountModel.findById(id).exec();
+
+    let date = nepalCount.get('createdAt');
+    date.setUTCHours(0, 0, 0, 0);
+    const previousDate = new Date(date);
+    previousDate.setDate(previousDate.getDate() - 1);
+    const previousCount = await NepalCountModel.findOne({ createdAt: { $gte: previousDate, $lte: date } }).exec();
+
+    let count: any = {}
+    count = { ...count, ...data };
+
+    if (previousCount != undefined) {
+      count.testedToday = data.testedTotal - previousCount.get('testedTotal');
+      count.confirmedToday = data.confirmedTotal - previousCount.get('confirmedTotal');
+      count.recoveredToday = data.recoveredTotal - previousCount.get('recoveredTotal');
+      count.deathToday = data.deathTotal - previousCount.get('deathTotal');
+    }
+
+    await NepalCountModel.findByIdAndUpdate(id, count).lean().exec();
+
+    return await NepalCountModel.findById(id).lean().exec();
   }
 
   private async validateNepalCount(date: Date) {
