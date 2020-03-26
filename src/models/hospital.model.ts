@@ -53,7 +53,6 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Boolean
     },
 
-
     numIsolationBeds: {
         type: Schema.Types.Number
     },

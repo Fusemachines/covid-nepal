@@ -78,7 +78,11 @@ export function prepareData(record:any) {
     district = capitalize(district);
     let hospitalType = record["hospitalType"] ? record["hospitalType"].trim().toLowerCase() : "";
     hospitalType = capitalize(hospitalType);
-    
+    let isVerified = false;
+    if (record['Verified'] && record['Verified'].trim() == "Verified") {
+        isVerified = true;
+    }
+
     let totalNumberOfBed = null;
     if (record["Total Beds"].trim().length) {
         const bedNumbers = record["Total Beds"].trim().match(/\d+/);
@@ -90,10 +94,6 @@ export function prepareData(record:any) {
     let ventilators = null;
     if (record["Ventilators"] && record["Ventilators"].trim().match(/\d+/) != null) {
         ventilators = record["Ventilators"].trim().match(/\d+/)[0];
-    }
-
-    if (record["nameSlug"] == "26-3-kirtipur-hospital") {
-        console.log(record);
     }
     
     return {
@@ -118,7 +118,8 @@ export function prepareData(record:any) {
             code: getNumberFromRecord(record["province code"]),
             name: record["province name"].trim()
         },
-        district
+        district,
+        isVerified
     }
 }
 
