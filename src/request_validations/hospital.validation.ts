@@ -30,8 +30,6 @@ const validateHospital = (req:CRequest, res: CResponse, next: NextFunction) => {
     })
 
     const result = Joi.validate(body, blogSchema);
-    console.log(result.value)
-
     const { error } = result;
     
     if (error && error.details) {

@@ -1,14 +1,6 @@
-import { ESortOrder } from "../interfaces/http.interface";
+import { ESortOrder, IPagination, ISort } from "../interfaces/http.interface";
 
-interface IQuery {
-    order: ESortOrder;
-    orderBy: string;
-    page: number | string;
-    size: number | string;
-
-}
-
-export function getSorting(query: IQuery) {
+export function getSorting(query: ISort) {
     const { order, orderBy } = query;
     if (order === "" || orderBy === "") {
         return {};
@@ -22,7 +14,7 @@ export function getSorting(query: IQuery) {
 }
 
 
-export function getPagination(query: IQuery) {
+export function getPagination(query: IPagination) {
     const {
         size, page
     } = query;
