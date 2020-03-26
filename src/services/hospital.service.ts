@@ -58,14 +58,19 @@ export class HospitalService {
             openDays.${lang}
             location.${lang}
             mapLink
+            totalBeds
+            availableBeds
+            numIsolationBeds
+            isVerified
             coordinates
             covidTest
+            icu
+            ventilators
             govtDesignated
             testingProcess.${lang}
-            numIsolationBeds
             focalPoint.${lang}
             contact.${lang}
-            province,
+            province
             district.${lang}
             `,
             ...getPagination(query),

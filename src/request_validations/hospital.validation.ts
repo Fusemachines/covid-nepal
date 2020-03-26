@@ -23,6 +23,7 @@ const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => 
         numIsolationBeds: Joi.number(),
         icu: Joi.number(),
         focalPoint: commonLangValidation,
+        ventilators: Joi.number(),
         contact: Joi.array().items(Joi.object().keys(commonLangValidation)),
         province: Joi.object().keys({
             code: Joi.number(),

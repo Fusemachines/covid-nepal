@@ -71,6 +71,7 @@ const HospitalSchema = new Schema({
     contact: {
         type: [LangSchema]
     },
+    ventilators: Schema.Types.Number,
 
     province: {
         code: {
