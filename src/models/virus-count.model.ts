@@ -51,16 +51,9 @@ const VirusCountSchema = new Schema({
     },
     province: {
         type: Schema.Types.String
-    },
-    createdDate: {
-        type: Schema.Types.Date
-    },
-    updatedDate: {
-        type: Schema.Types.Date,
-        default: Date.now
     }
 
-})
+}, { timestamps: true })
 
 
 export const VirusCountModel = model("virusCount", VirusCountSchema, "virusCounts");

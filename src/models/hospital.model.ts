@@ -9,11 +9,11 @@ const HospitalSchema = new Schema({
     },
     nameSlug: {
         type: Schema.Types.String,
-        required: true
+        required: true,
+        unique: true
     },
     hospitalType: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     },
 
     availableTime: {
@@ -25,7 +25,6 @@ const HospitalSchema = new Schema({
 
     location: {
         type: Schema.Types.String,
-        required: true
     },
 
     mapLink: Schema.Types.String,
@@ -70,20 +69,21 @@ const HospitalSchema = new Schema({
     },
 
 
+    ventilators: {
+        type: Schema.Types.Number
+    },
+
     province: {
         code: {
-            type: Schema.Types.Number,
-            required: true
+            type: Schema.Types.Number
         },
         name: {
-            type: Schema.Types.String,
-            required: true
+            type: Schema.Types.String
         }
     },
 
     district: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     }
 }, {
     timestamps: true

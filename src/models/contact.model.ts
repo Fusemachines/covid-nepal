@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const ContactSchema = new Schema({
-
     name: Schema.Types.String,
     contactType: Schema.Types.String,
     landLine: [Schema.Types.String],

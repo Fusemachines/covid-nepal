@@ -10,6 +10,7 @@ import swaggerUI from "swagger-ui-express"
 import swaggerJSON from "../api_docs/swagger.json"
 import compression from "compression";
 const basicAuth = require('express-basic-auth');
+import lusca from "lusca"
 
 export default class App {
     private app: Application;
@@ -88,21 +89,57 @@ export default class App {
         // this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
 
         controllers.forEach(controller => {
-            // Old support for localization
-            //  this.app.use(`/:lang(en|np)/${controller.route}`,function(req:any, res, next) {
-            //     req.lang = req.params.lang
-            //     next()
-            // }, controller.router);
-
             this.app.use(`/${controller.route}`, controller.router);
         })
 
     }
 
     middlewares(middlewares: any[]) {
-        this.app.use(compression())
-        this.app.use(cors())
+        /**
+         * Security headers
+         * 
+         */
+        this.app.use(lusca.xframe("SAMEORIGIN"))
+        this.app.use(lusca.xssProtection(true))
+        this.app.use(lusca.nosniff())
+        this.app.use(lusca.csp({
+            policy: {
+                'default-src': process.env.APP_CSP_SRC ? `'self' ${process.env.APP_CSP_SRC}` : '*',
+                'img-src': "* data:",
+                'style-src': "* 'unsafe-inline'",
+                'font-src': "'self' data:",
+            }
+        }))
+        this.app.use(lusca.referrerPolicy('same-origin'))
+        this.app.use(lusca.hsts({
+            maxAge: 31536000,
+            includeSubDomains: true
+        }))
+        this.app.use(compression());
         this.app.disable('x-powered-by')
+        
+        // Cross origin request
+        if (["production"].indexOf(process.env.NODE_ENV) !== -1) {
+            const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org', 
+                                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000'];
+
+            const corsOptions = {
+                origin: function (origin:string, callback:any) {
+                    console.log(`CORS request origin -> ${origin}`);
+
+                    if (whitelist.indexOf(origin) !== -1) {
+                        callback(null, true)
+                    } else {
+                        callback('Domain is not valid.')
+                    }
+                }
+            }
+
+            this.app.use(cors(corsOptions))
+        } else {
+            this.app.use(cors())
+        }
+
         middlewares.forEach(middleware => {
             this.app.use(middleware);
         })

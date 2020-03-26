@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="18982109-01fd-4e3c-89bd-d1220866b732" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/hospital.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/hospital.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/hospital.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/hospital.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1ZZI4ncLFJb0wXh8UTtdUWHfTP3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="18982109-01fd-4e3c-89bd-d1220866b732" name="Default Changelist" comment="" />
+      <created>1585040000693</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585040000693</updated>
+      <workItem from="1585040002305" duration="2177000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="763" y="205" width="438" height="695" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1585041792094">
+      <screen x="55" y="27" width="1865" height="1053" />
+    </state>
+    <state x="763" y="205" width="438" height="695" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/55.27.1865.1053/1920.0.1920.1080@55.27.1865.1053" timestamp="1585041792094" />
+    <state x="651" y="253" key="run.anything.popup" timestamp="1585042090942">
+      <screen x="55" y="27" width="1865" height="1053" />
+    </state>
+    <state x="651" y="253" key="run.anything.popup/55.27.1865.1053/1920.0.1920.1080@55.27.1865.1053" timestamp="1585042090942" />
+    <state x="650" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1585042093727">
+      <screen x="55" y="27" width="1865" height="1053" />
+    </state>
+    <state x="650" y="257" width="672" height="678" key="search.everywhere.popup/55.27.1865.1053/1920.0.1920.1080@55.27.1865.1053" timestamp="1585042093727" />
+  </component>
+</project>

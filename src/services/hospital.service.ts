@@ -1,20 +1,22 @@
 import HospitalModel from "../models/hospital.model";
-import { ESortOrder } from "../shared/interfaces/http.interface";
-import { getSorting, getPagination } from "../shared/utils";
+import { ECovidTest } from "../shared/interfaces";
 
 
 export class HospitalService {
     createHospital(data: any) {
         // create slug
-        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        if (!data.nameSlug) {
+            data.nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        }
+        
         return HospitalModel.create(data);
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number }) {
+    getHospitals(query?: { district: string, province: number, covidTest: string, lang: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
-
         let covidTest = null;
+        
         if (query.covidTest && ["true", "false"].includes(query.covidTest)) {
             covidTest = query.covidTest
         }
@@ -35,15 +37,7 @@ export class HospitalService {
             filter = { ...filter, covidTest }
         }
 
-        // query with pagination and sorting
-        return await HospitalModel.paginate(filter, {
-            lean: true,
-            select: "-__v",
-            ...getPagination(query),
-            ...getSorting(query)
-        })
-
-        // return await HospitalModel.find(filter, {}, { sort: getSorting(query) }).select("-__v").lean();
+        return HospitalModel.find(filter).select("-__v").lean();
     }
 
     getCovidHospitals() {
@@ -58,18 +52,27 @@ export class HospitalService {
         }).select("-__v").lean();
     }
 
+    deleteHospitalBySlug(slug: string) {
+        return HospitalModel.findOneAndRemove({
+            nameSlug: slug
+        });
+    }
+
     getHospitalById(id: string) {
         return HospitalModel.findById(id).select("-__v").lean();
     }
 
     async update(id: string, data: any) {
-        const oldRecord: any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-        const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        if (oldRecord.slug !== nameSlug) {
-            data.nameSlug = nameSlug
-        }
-        const newRecord = { ...oldRecord, ...data }
+        const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
 
+        if (!data.nameSlug) {
+            const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+            if (oldRecord.slug !== nameSlug) {
+                data.nameSlug = nameSlug
+            }
+        }
+        
+        const newRecord = { ...oldRecord, ...data }
         return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
     }
 
