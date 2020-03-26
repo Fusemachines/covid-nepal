@@ -1,16 +1,19 @@
 import HospitalModel from "../models/hospital.model";
-import { ESortOrder } from "../shared/interfaces/http.interface";
 import { getSorting, getPagination } from "../shared/utils";
+import { IHospitalFilter } from "../shared/interfaces/hospital.interface";
+
 
 
 export class HospitalService {
     createHospital(data: any) {
         // create slug
-        data.nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        if (!data.nameSlug) {
+            data.nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+        }
         return HospitalModel.create(data);
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number }) {
+    async getHospitals(query?: IHospitalFilter) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
 
@@ -49,6 +52,8 @@ export class HospitalService {
     getCovidHospitals() {
         return HospitalModel.find({
             covidTest: true
+        }).sort({
+            priority: -1
         }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
     }
 
@@ -58,19 +63,30 @@ export class HospitalService {
         }).select("-__v").lean();
     }
 
+    deleteHospitalBySlug(slug: string) {
+        return HospitalModel.findOneAndRemove({
+            nameSlug: slug
+        });
+    }
+
     getHospitalById(id: string) {
         return HospitalModel.findById(id).select("-__v").lean();
     }
 
     async update(id: string, data: any) {
         const oldRecord: any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-        const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        if (oldRecord.slug !== nameSlug) {
-            data.nameSlug = nameSlug
-        }
-        const newRecord = { ...oldRecord, ...data }
 
-        return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
+
+        // calculate nameSlug if name is present without nameSlug in request body
+        if (data.name && !data.nameSlug) {
+            const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+            if (oldRecord.slug !== nameSlug) {
+                data.nameSlug = nameSlug
+            }
+        }
+
+        const newRecord = { ...oldRecord, ...data }
+        return await HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
     }
 
     delete(id: string) {
