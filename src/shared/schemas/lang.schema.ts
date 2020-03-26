@@ -4,7 +4,7 @@ import {
 
 
 export const LangSchema = new Schema({
-    ne: {
+    np: {
         type: Schema.Types.String
     },
     en: {
