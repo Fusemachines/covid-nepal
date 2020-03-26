@@ -147,12 +147,11 @@ export default class App {
 
     run(cb: () => void) {
 
-        if (process.env.NODE_ENV === "production") {
-
+        if (process.env.NODE_ENV !== "local") {
             https.createServer({
-                key: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/privkey.pem"),
-                cert: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/cert.pem"),
-                ca: readFileSync("/etc/letsencrypt/live/api-prod.covidnepal.org/chain.pem")
+                key: readFileSync(process.env.SSL_KEY),
+                cert: readFileSync(process.env.SSL_CERT),
+                ca: readFileSync(process.env.SSL_CA)
             }, this.app).listen(5000, () => {
                 console.log(`App is running under 5000 port`)
             })
