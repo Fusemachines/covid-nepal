@@ -1,4 +1,29 @@
 import { Schema, model } from "mongoose";
+import { LangSchema } from "../shared/schemas";
+
+const ContactSchemaWithLanguage = new Schema({
+    name: LangSchema,
+    contacType: {
+        type: LangSchema,
+        required: true
+    },
+    landLine: LangSchema,
+    mobile: LangSchema,
+    district: {
+        type: LangSchema,
+        required: true
+    },
+    province: {
+        code: {
+            type: Schema.Types.Number,
+            required: true
+        },
+        name: {
+            type: LangSchema,
+            required: true
+        }
+    }
+})
 
 const ContactSchema = new Schema({
     name: Schema.Types.String,
