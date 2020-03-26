@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { LangSchema } from "../shared/schemas";
 
-const ContactSchemaWithLanguage = new Schema({
+const ContactSchema = new Schema({
     name: LangSchema,
     contacType: {
         type: LangSchema,
@@ -25,7 +25,7 @@ const ContactSchemaWithLanguage = new Schema({
     }
 })
 
-const ContactSchema = new Schema({
+const ContactSchemaOld = new Schema({
     name: Schema.Types.String,
     contactType: Schema.Types.String,
     landLine: [Schema.Types.String],
