@@ -1,8 +1,8 @@
 import { Router, Request, Response, response } from "express";
 import { IController } from "../shared/interfaces";
-import { VirusCountService } from "../services"
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
+import { VirusCountService } from "../services";
 
 export class VirusCountController implements IController {
 
