@@ -30,7 +30,7 @@ export class HospitalService {
             filter = { ...filter, "province.code": provinceCode }
         }
 
-        // query district filter
+
         if (queryDistrict.length) {
             filter = { ...filter, district: { $in: queryDistrict } }
         }
