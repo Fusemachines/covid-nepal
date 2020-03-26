@@ -3,16 +3,18 @@ import commonLangValidation from "./commonLang.validation";
 import { CRequest, CResponse } from "shared/interfaces/http.interface";
 import { NextFunction } from "express";
 
-const validateHospital = (req:CRequest, res: CResponse, next: NextFunction) => {
+const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => {
     const { body } = req;
 
     const blogSchema = Joi.object().keys({
+        coordinates: Joi.array().items(Joi.number()),
         name: commonLangValidation,
+        nameSlug: Joi.string(),
         hospitalType: commonLangValidation,
         availableTime: Joi.array().items(Joi.object().keys(commonLangValidation)),
         openDays: commonLangValidation,
         location: commonLangValidation,
-        mapLink: commonLangValidation,
+        mapLink: Joi.string(),
         totalBeds: Joi.number(),
         availableBeds: Joi.number(),
         covidTest: Joi.bool(),
@@ -26,12 +28,13 @@ const validateHospital = (req:CRequest, res: CResponse, next: NextFunction) => {
             code: Joi.number(),
             name: commonLangValidation
         }),
-        district: commonLangValidation
+        district: commonLangValidation,
+        isVerified: Joi.bool()
     })
 
     const result = Joi.validate(body, blogSchema);
     const { error } = result;
-    
+
     if (error && error.details) {
         res.status(422).json({
             message: 'Invalid request',

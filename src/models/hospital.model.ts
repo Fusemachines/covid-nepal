@@ -1,5 +1,6 @@
 import { model, Schema, } from "mongoose";
 import { LangSchema } from "../shared/schemas";
+import paginate from "../shared/plugins/pagination.plugin";
 
 const HospitalSchema = new Schema({
     name: {
@@ -52,6 +53,11 @@ const HospitalSchema = new Schema({
     },
 
 
+    isVerified: {
+        type: Schema.Types.Boolean,
+        required: true
+    },
+
     numIsolationBeds: {
         type: Schema.Types.Number
     },
@@ -84,6 +90,7 @@ const HospitalSchema = new Schema({
     timestamps: true
 });
 
+HospitalSchema.plugin(paginate);
 
 
 const HospitalModel = model("hospital", HospitalSchema, "hospitals");

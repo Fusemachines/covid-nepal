@@ -3,7 +3,7 @@ import { Router, Request, Response, NextFunction, response } from "express";
 import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
-// import validateHospital from "request_validations/hospital.validation";
+import createHospitalValidation from "request_validations/hospital.validation";
 // @ts-ignore: Resolve json module
 import hospitalJson from "../../hospitaldata.json"
 import { prepareJsonFileImport, prepareJsonFileUpdate } from "../services/hospitalExcel.service"
@@ -18,7 +18,7 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
-        this.router.post("/", this.createHospital);
+        this.router.post("/", createHospitalValidation, this.createHospital);
         this.router.post("/import-json/:rows", this.importHospitalFromJsonFile);
         this.router.put("/import-json/update", this.updateHospitalFromJsonFile);
         this.router.get("/", this.getAllHospitals);
@@ -32,7 +32,7 @@ export class HospitalController implements IController {
         try {
             const hospitalData = request.body;
             const hospital = await this.hospitalService.createHospital(hospitalData);
-            
+
             response.status(201).json(hospital);
         } catch (error) {
             error = new HttpException({
@@ -49,7 +49,7 @@ export class HospitalController implements IController {
         let insertAll = false
         let from, to;
 
-        if(request.params.rows === "all") {
+        if (request.params.rows === "all") {
             insertAll = true;
         } else {
             const rows = request.params.rows.split('-');
@@ -57,7 +57,7 @@ export class HospitalController implements IController {
             to = Number(rows[1]);
         }
 
-        let records:any = prepareJsonFileImport({
+        let records: any = prepareJsonFileImport({
             data: hospitalJson,
             query: {
                 insertAll,
@@ -65,7 +65,7 @@ export class HospitalController implements IController {
                 to
             }
         })
-        
+
         // inserting data
         if (records.length) {
             for (let record of records) {
@@ -87,22 +87,22 @@ export class HospitalController implements IController {
         // updaing data
         if (records.length) {
             for (let record of records) {
-                const deletedHospital:any = await this.hospitalService.deleteHospitalBySlug(record.nameSlug);
-                if(deletedHospital != null) {
+                const deletedHospital: any = await this.hospitalService.deleteHospitalBySlug(record.nameSlug);
+                if (deletedHospital != null) {
                     global.logger.log({
                         level: "info",
                         message: `Deleted hospital -> ${deletedHospital.name}`
                     });
                 }
-                
+
                 await this.hospitalService.createHospital(record);
             }
 
             response.json({
                 message: `Hospitals updated successfully`,
-                updatedSerialNumbers 
+                updatedSerialNumbers
             });
-        } 
+        }
         else {
             response.send("There are no data to update from json.")
         }
