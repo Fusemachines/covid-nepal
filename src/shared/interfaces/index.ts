@@ -21,3 +21,4 @@ export interface IController {
 
 export * from "./district.interface";
 export * from "./livedata.interface";
+export * from "./nepal-count.interface";

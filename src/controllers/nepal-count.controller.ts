@@ -15,11 +15,12 @@ export class NepalCountController implements IController {
   initRoutes() {
     this.router.get("/latest", this.getLatestCounts);
     this.router.post("/", this.addNepalCount);
+    this.router.put("/:id", this.updateNepalCount);
   }
 
   getLatestCounts = async (request: Request, response: Response) => {
     try {
-      const counts = this.nepalCountService.getLatestCounts();
+      const counts = await this.nepalCountService.getLatestCount();
       response.json(counts);
     } catch (error) {
       error = new HttpException({
@@ -45,5 +46,18 @@ export class NepalCountController implements IController {
     }
   }
 
+  updateNepalCount = async (request: Request, response: Response) => {
+    try {
+      const count = await this.nepalCountService.updateNepalCount(request.params.id, request.body);
+      response.json(count);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
 
 }
