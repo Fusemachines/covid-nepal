@@ -10,6 +10,9 @@ const HospitalSchema = new Schema({
         required: true,
         unique: true
     },
+
+    priority: Schema.Types.Number,
+    
     hospitalType: {
         type: Schema.Types.String
     },

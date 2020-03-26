@@ -16,7 +16,7 @@ export class HospitalService {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         let covidTest = null;
-        
+
         if (query.covidTest && ["true", "false"].includes(query.covidTest)) {
             covidTest = query.covidTest
         }
@@ -43,6 +43,8 @@ export class HospitalService {
     getCovidHospitals() {
         return HospitalModel.find({
             covidTest: true
+        }).sort({
+            priority: -1
         }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
     }
 
@@ -65,15 +67,17 @@ export class HospitalService {
     async update(id: string, data: any) {
         const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
 
-        if (!data.nameSlug) {
-            const nameSlug = data.name.trim().toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+
+        // calculate nameSlug if name is present without nameSlug in request body
+        if (data.name && !data.nameSlug) {
+            const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
             if (oldRecord.slug !== nameSlug) {
                 data.nameSlug = nameSlug
             }
         }
         
         const newRecord = { ...oldRecord, ...data }
-        return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
+        return await HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
     }
 
     delete(id: string) {
