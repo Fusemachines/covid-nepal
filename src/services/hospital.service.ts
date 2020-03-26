@@ -1,6 +1,7 @@
 import HospitalModel from "../models/hospital.model";
 import { getSorting, getPagination } from "../shared/utils";
 import { IHospitalFilter } from "../shared/interfaces/hospital.interface";
+import { ESortOrder } from "../shared/interfaces/http.interface";
 
 
 
@@ -13,9 +14,11 @@ export class HospitalService {
         return HospitalModel.create(data);
     }
 
-    async getHospitals(query?: IHospitalFilter) {
+    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
+        const { lang = "en" } = query;
+
         let covidTest = null;
         if (query.covidTest && ["true", "false"].includes(query.covidTest)) {
             covidTest = query.covidTest
@@ -37,7 +40,31 @@ export class HospitalService {
             filter = { ...filter, covidTest }
         }
 
-        return HospitalModel.find(filter).select("-__v").lean();
+        // query with pagination and sorting
+        return await HospitalModel.paginate(filter, {
+            lean: true,
+            select: `
+            name.${lang}
+            nameSlug
+            contact.${lang}
+            hospitalType.${lang}
+            availableTime.${lang}
+            openDays.${lang}
+            location.${lang}
+            mapLink
+            coordinates
+            covidTest
+            govtDesignated
+            testingProcess.${lang}
+            numIsolationBeds
+            focalPoint.${lang}
+            contact.${lang}
+            province,
+            district.${lang}
+            `,
+            ...getPagination(query),
+            ...getSorting(query)
+        });
     }
 
     getCovidHospitals() {
@@ -65,7 +92,7 @@ export class HospitalService {
     }
 
     async update(id: string, data: any) {
-        const oldRecord:any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
+        const oldRecord: any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
 
         // calculate nameSlug if name is present without nameSlug in request body
         if (data.name && !data.nameSlug) {
