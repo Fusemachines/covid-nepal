@@ -86,11 +86,8 @@ export class HospitalService {
 
     getCovidHospitals() {
         return HospitalModel.find({
-            covidTest: true
-        }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
-        // }).sort({
-        //     priority: -1
-        // }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
+            authorizedCovidTest: true
+        }).sort({ priority: 1 }).select("name contact nameSlug availableTime openDays availableBeds totalBeds priority").lean();
     }
 
     getHospitalBySlug(slug: string) {
