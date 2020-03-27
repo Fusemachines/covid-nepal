@@ -32,7 +32,7 @@ export class HospitalService {
 
 
         if (queryDistrict.length) {
-            filter = { ...filter, district: { $in: queryDistrict } }
+            filter = { ...filter, [`district.name.${lang}`]: query.district }
         }
 
         // covid test filter
