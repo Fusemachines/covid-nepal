@@ -19,7 +19,7 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
-        this.router.post("/", this.createHospital);
+        this.router.post("/", validateHospital, this.createHospital);
         this.router.post("/import-json/:rows/:remove", this.importHospitalFromJsonFile);
         this.router.put("/import-json/update", this.updateHospitalFromJsonFile);
         this.router.get("/", this.getAllHospitals);
