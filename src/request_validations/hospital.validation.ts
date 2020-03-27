@@ -1,5 +1,5 @@
 import Joi from "joi";
-import commonLangValidation from "./commonLang.validation";
+import commonLangValidation, { nullableLanguageSchema } from "./commonLang.validation";
 import { CRequest, CResponse } from "shared/interfaces/http.interface";
 import { NextFunction } from "express";
 
@@ -18,13 +18,15 @@ const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => 
         totalBeds: Joi.number(),
         availableBeds: Joi.number(),
         covidTest: Joi.bool(),
-        testingProcess: commonLangValidation,
+        testingProcess: nullableLanguageSchema,
         govtDesignated: Joi.bool(),
         numIsolationBeds: Joi.number(),
         icu: Joi.number(),
-        focalPoint: commonLangValidation,
+        focalPoint: nullableLanguageSchema,
         ventilators: Joi.number(),
         contact: Joi.array().items(Joi.object().keys(commonLangValidation)),
+        authorizedCovidTest: Joi.bool().required(),
+        priority: Joi.optional(),
         province: Joi.object().keys({
             code: Joi.number(),
             name: commonLangValidation
