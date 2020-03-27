@@ -32,9 +32,9 @@ export class HospitalService {
 
 
         if (queryDistrict.length) {
-            filter = { ...filter, [`district.name.${lang}`]: query.district }
+            filter = { ...filter, [`district.${lang}`]: query.district }
         }
-
+        
         // covid test filter
         if (covidTest !== null) {
             filter = { ...filter, covidTest }
@@ -49,7 +49,9 @@ export class HospitalService {
         // query with pagination and sorting
         const hospitals = await HospitalModel.paginate(filter, {
             lean: true,
-            select: `
+            select: lang === "np" ? `
+            -__v
+            ` : `
             name.${lang}
             nameSlug
             contact.${lang}
@@ -63,7 +65,7 @@ export class HospitalService {
             numIsolationBeds
             isVerified
             coordinates
-            covidTest
+            covidTests
             icu
             ventilators
             govtDesignated
