@@ -20,23 +20,23 @@ export class ContactService {
         if (district) {
             districtArray = district.split(",");
         }
-
+        
         const contacts = new Array();
 
         await HospitalModel.find({
             'province.code': province,
             ...(districtArray.length > 0 ? {
-                district: {
+                'district.en': {
                     $in: districtArray
                 }
             } : {})
-        }, (error, hospitals) => {
+        }, (error:any, hospitals:any) => {
             if (error) {
                 console.log('Error occured while fetching hospitals')
                 throw error;
             }
 
-            hospitals.forEach(function (hospital) {
+            hospitals.forEach(function (hospital:any) {
                 const contact: IHospitalContact = {
                     name: hospital.get('name'),
                     landLine: hospital.get('contact')
