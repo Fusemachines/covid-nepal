@@ -1,6 +1,6 @@
 import Joi from "joi";
 import commonLangValidation, { nullableLanguageSchema } from "./commonLang.validation";
-import { CRequest, CResponse } from "shared/interfaces/http.interface";
+import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 import { NextFunction } from "express";
 
 const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => {
