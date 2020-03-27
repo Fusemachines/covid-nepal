@@ -132,4 +132,8 @@ export class HospitalService {
     delete(id: string) {
         return HospitalModel.findByIdAndRemove(id)
     }
+
+    deleteAll() {
+        return HospitalModel.find({}).remove()
+    }
 }
