@@ -7,6 +7,7 @@ import validateHospital from "../request_validations/hospital.validation";
 // @ts-ignore: Resolve json module
 import hospitalJson from "../../hospitaldata.json"
 import { prepareJsonFileImport, prepareJsonFileUpdate } from "../services/hospitalExcel.service"
+import { query } from "winston";
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -18,8 +19,8 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
-        this.router.post("/", validateHospital, this.createHospital);
-        this.router.post("/import-json/:rows", this.importHospitalFromJsonFile);
+        this.router.post("/", this.createHospital);
+        this.router.post("/import-json/:rows/:remove", this.importHospitalFromJsonFile);
         this.router.put("/import-json/update", this.updateHospitalFromJsonFile);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
@@ -64,11 +65,18 @@ export class HospitalController implements IController {
     }
 
     importHospitalFromJsonFile = async (request: CRequest, response: CResponse) => {
-        let insertAll = false
+        let insertAll = false;
+        let removeAll = false;
         let from, to;
 
         if (request.params.rows === "all") {
             insertAll = true;
+
+            // remove all and insert all again
+            if (request.params.remove == "true") {
+                removeAll = true;   
+            }
+
         } else {
             const rows = request.params.rows.split('-');
             from = Number(rows[0]);
@@ -86,6 +94,13 @@ export class HospitalController implements IController {
 
         // inserting data
         if (records.length) {
+
+            // removing all hospital records
+            if (removeAll) {
+                global.logger.log({ level: 'info', message: 'Removing all hospital records'})
+                await this.hospitalService.deleteAll();
+            }
+
             for (let record of records) {
                 await this.hospitalService.createHospital(record);
             }
