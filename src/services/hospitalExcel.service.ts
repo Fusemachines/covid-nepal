@@ -71,9 +71,11 @@ export function prepareJsonFileUpdate(options: { data: any }){
 
 export function prepareData(record:any) {
     // return null if hospital name is not present
-    if (!record["Hospital Name"].trim().length) return null;
+    if (!record["Hospital Name"].trim().length || !record["nameSlug"].trim().length || !record["province code"].trim().length) {
+        return null;
+    };
     
-    const contacts = !!record["contacts"] ? record["contacts"].trim().replace(/,+$/g, "").split(',').map((contactNumber: string) => contactNumber.trim()) : [];
+    const contacts = !!record["contacts"] ? record["contacts"].trim().replace(/,+$/g, "").split(',').map((contactNumber: string) => getMultiLangVal(contactNumber.trim())) : [];
     let district = record["district"] ? record["district"].trim().toLowerCase() : "";
     district = capitalize(district);
     let hospitalType = record["hospitalType"] ? record["hospitalType"].trim().toLowerCase() : "";
@@ -97,29 +99,31 @@ export function prepareData(record:any) {
     }
     
     return {
-        name: record["Hospital Name"].trim(),
-        hospitalType: hospitalType,
-        availableTime: record["availableTime"] ? [record["availableTime"].trim()] : [],
-        openDays: record["openDays"],
-        location: record["location"],
+        name: getMultiLangVal(record["Hospital Name"].trim()),
+        hospitalType: getMultiLangVal(hospitalType),
+        availableTime: record["availableTime"] ? [getMultiLangVal(record["availableTime"].trim())] : [],
+        openDays: getMultiLangVal(record["openDays"]),
+        location: getMultiLangVal(record["location"]),
         mapLink: record["mapLink"],
         totalBeds: totalNumberOfBed,
         availableBeds: getNumberFromRecord(record["Available Beds"]),
         covidTest: filterBooleanData(record["covidTest"]),
-        testingProcess: record["testingProcess"] ? record["testingProcess"] : null,
+        testingProcess: record["testingProcess"] ? getMultiLangVal(record["testingProcess"]) : null,
         govtDesignated: filterBooleanData(record["Govt Designated"]),
         numIsolationBeds: getNumberFromRecord(record["Num Isolation Beds"]),
         ventilators,
         nameSlug: record["nameSlug"].trim(),
         icu: getNumberFromRecord(record["ICU"]),
         contact: contacts,
-        focalPoint: record["Focal Point"],
+        focalPoint: getMultiLangVal(record["Focal Point"]),
         province: {
             code: getNumberFromRecord(record["province code"]),
-            name: record["province name"].trim()
+            name: getMultiLangVal(record["province name"].trim())
         },
-        district,
-        isVerified
+        district: getMultiLangVal(district),
+        isVerified,
+        authorizedCovidTest: filterBooleanData(record["authorizedCovidTest"]) != null ? filterBooleanData(record["authorizedCovidTest"]) : false,
+        priority: getNumberFromRecord(record["Hospital priority"])
     }
 }
 
@@ -143,4 +147,11 @@ function getNumberFromRecord(record:string = "") :any {
     }
 
     return recordNumber;
+}
+
+function getMultiLangVal(record: any) {
+    return {
+        en: record,
+        np: ''
+    }
 }

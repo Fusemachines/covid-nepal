@@ -8,8 +8,7 @@ export const LangSchema = new Schema({
         type: Schema.Types.String
     },
     en: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     }
 }, {
     _id: false,

@@ -86,6 +86,9 @@ export class HospitalController implements IController {
 
         // inserting data
         if (records.length) {
+            // delete all
+            await this.hospitalService.deleteAll();
+
             for (let record of records) {
                 await this.hospitalService.createHospital(record);
             }
