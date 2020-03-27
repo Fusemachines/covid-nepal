@@ -24,8 +24,25 @@ export class HospitalController implements IController {
         this.router.get("/", this.getAllHospitals);
         this.router.get("/covid", this.getHospitalsForCovid);
         this.router.get("/:nameSlug", this.getHospitalBySlug);
+        this.router.get("/id/:id", this.getHospitalById);
         this.router.patch("/:id", this.updateHospital);
         this.router.delete("/:id", this.removeHospital);
+    }
+
+    getHospitalById = async (request: CRequest, response: CResponse) => {
+
+        try {
+            const result = await this.hospitalService.getHospitalById(request.params.id);
+            response.status(200).json(result);
+        } catch (error) {
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
+            })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
+            response.status(500).json({ error })
+        }
     }
 
     createHospital = async (request: CRequest, response: CResponse) => {

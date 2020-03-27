@@ -105,8 +105,10 @@ export class HospitalService {
         });
     }
 
-    getHospitalById(id: string) {
-        return HospitalModel.findById(id).select("-__v").lean();
+    async getHospitalById(id: string) {
+        return await HospitalModel.findById({
+            _id: id
+        }).select("-__v").lean();
     }
 
     async update(id: string, data: any) {
