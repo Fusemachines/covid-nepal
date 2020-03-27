@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
-    name: 'News Feed',
-    script: 'yarn',
+    name: 'newsfeed',
+    script: 'npm',
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'start',
     instances: "max",
@@ -9,12 +9,9 @@ module.exports = {
     watch: false,
     max_memory_restart: '1G',
     env: {
-      NODE_ENV: 'production',
-      DATABASE_HOST: 'localhost',
-      DATABASE_PORT: '5432',
-      DATABASE_NAME: 'strapi',
-      DATABASE_USERNAME: '',
-      DATABASE_PASSWORD: '',
+      NODE_ENV: 'development',
+      DATABASE_URI: 'mongodb://covidnepal-dev-usr:IsCukSKfe7kLrKm07JWykd25sQflPs%2B9%2BbgdaaNLIv4%3D@10.0.0.10:27116/?authSource=covidnepal-dev',
+      DATABASE_NAME: 'newsfeed'
     }
   }]
 };
