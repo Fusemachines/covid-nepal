@@ -7,7 +7,7 @@ import { ESortOrder } from "../shared/interfaces/http.interface";
 export class HospitalService {
     createHospital(data: any) {
         // create slug
-        if (!data.nameSlug) {
+        if (data.name.length && !data.nameSlug) {
             data.nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         }
         return HospitalModel.create(data);
@@ -113,9 +113,8 @@ export class HospitalService {
 
     async update(id: string, data: any) {
         const oldRecord: any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-
         // calculate nameSlug if name is present without nameSlug in request body
-        if (data.name && !data.nameSlug) {
+        if (data.name.length && !data.nameSlug) {
             const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
             if (oldRecord.slug && oldRecord.slug !== nameSlug) {
                 data.nameSlug = nameSlug

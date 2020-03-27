@@ -28,8 +28,7 @@ const HospitalSchema = new Schema({
     },
 
     mapLink: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     },
 
     coordinates: {
@@ -52,7 +51,6 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Boolean
     },
 
-
     isVerified: {
         type: Schema.Types.Boolean,
         required: true
@@ -66,7 +64,7 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Number
     },
 
-    authorizeCovidTets: {
+    authorizedCovidTest: {
         type: Schema.Types.Boolean
     },
 
@@ -74,7 +72,9 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Number,
     },
 
-    focalPoint: LangSchema,
+    focalPoint: {
+        type: LangSchema
+    },
 
     contact: {
         type: [LangSchema]
