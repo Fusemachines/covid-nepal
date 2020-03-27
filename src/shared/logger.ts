@@ -2,7 +2,7 @@ import winston from "winston";
 import { createLogger, format } from "winston";
 
 const today = new Date();
-const logDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDay()
+const logDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
 
 const logFormat = format.printf(({ level, message, timestamp }) => {
     return `${timestamp}  ${level}: ${message}`;
