@@ -34,7 +34,7 @@ export class HospitalService {
         if (queryDistrict.length) {
             filter = { ...filter, [`district.${lang}`]: query.district }
         }
-        
+
         // covid test filter
         if (covidTest !== null) {
             filter = { ...filter, covidTest }
@@ -119,13 +119,13 @@ export class HospitalService {
         // calculate nameSlug if name is present without nameSlug in request body
         if (data.name.length && !data.nameSlug) {
             const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-            if (oldRecord.slug !== nameSlug) {
+            if (oldRecord.slug && oldRecord.slug !== nameSlug) {
                 data.nameSlug = nameSlug
             }
-        }
 
-        const newRecord = { ...oldRecord, ...data }
-        return await HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
+            const newRecord = { ...oldRecord, ...data, province: { ...oldRecord.province, ...data.province } }
+            return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
+        }
     }
 
     delete(id: string) {
@@ -133,6 +133,6 @@ export class HospitalService {
     }
 
     deleteAll() {
-        return HospitalModel.deleteMany()
+        return HospitalModel.find({}).remove()
     }
 }
