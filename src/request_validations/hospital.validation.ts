@@ -6,7 +6,7 @@ import { NextFunction } from "express";
 const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => {
     const { body } = req;
 
-    const blogSchema = Joi.object().keys({
+    const hospitalSchema = Joi.object().keys({
         coordinates: Joi.array().items(Joi.number()),
         name: commonLangValidation,
         nameSlug: Joi.string(),
@@ -33,7 +33,7 @@ const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => 
         isVerified: Joi.bool()
     })
 
-    const result = Joi.validate(body, blogSchema);
+    const result = Joi.validate(body, hospitalSchema);
     const { error } = result;
 
     if (error && error.details) {
