@@ -1,6 +1,5 @@
 import HospitalModel from "../models/hospital.model";
-import { getSorting, getPagination } from "../shared/utils";
-import { IHospitalFilter } from "../shared/interfaces/hospital.interface";
+import { getSorting, getPagination } from "../shared/utils/";
 import { ESortOrder } from "../shared/interfaces/http.interface";
 
 
@@ -32,7 +31,7 @@ export class HospitalService {
 
 
         if (queryDistrict.length) {
-            filter = { ...filter, [`district.${lang}`]: query.district }
+            filter = { ...filter, [`district.en`]: query.district }
         }
         
         // covid test filter
@@ -49,9 +48,7 @@ export class HospitalService {
         // query with pagination and sorting
         const hospitals = await HospitalModel.paginate(filter, {
             lean: true,
-            select: lang === "np" ? `
-            -__v
-            ` : `
+            select: lang === "np" ? `-__v` : `
             name.${lang}
             nameSlug
             contact.${lang}
