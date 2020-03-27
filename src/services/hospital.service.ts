@@ -116,10 +116,11 @@ export class HospitalService {
             if (oldRecord.slug && oldRecord.slug !== nameSlug) {
                 data.nameSlug = nameSlug
             }
-
-            const newRecord = { ...oldRecord, ...data, province: { ...oldRecord.province, ...data.province } }
-            return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
         }
+
+        const newRecord = { ...oldRecord, ...data, province: { ...oldRecord.province, ...data.province } }
+        return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
+
     }
 
     delete(id: string) {
