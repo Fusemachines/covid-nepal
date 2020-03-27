@@ -20,13 +20,13 @@ export class ContactService {
         if (district) {
             districtArray = district.split(",");
         }
-
+        
         const contacts = new Array();
 
         await HospitalModel.find({
             'province.code': province,
             ...(districtArray.length > 0 ? {
-                district: {
+                'district.en': {
                     $in: districtArray
                 }
             } : {})
