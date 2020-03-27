@@ -65,7 +65,7 @@ export class HospitalService {
             numIsolationBeds
             isVerified
             coordinates
-            covidTests
+            covidTest
             icu
             ventilators
             govtDesignated
@@ -90,9 +90,10 @@ export class HospitalService {
     getCovidHospitals() {
         return HospitalModel.find({
             covidTest: true
-        }).sort({
-            priority: -1
         }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
+        // }).sort({
+        //     priority: -1
+        // }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
     }
 
     getHospitalBySlug(slug: string) {

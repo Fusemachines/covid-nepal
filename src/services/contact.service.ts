@@ -30,13 +30,13 @@ export class ContactService {
                     $in: districtArray
                 }
             } : {})
-        }, (error, hospitals) => {
+        }, (error:any, hospitals:any) => {
             if (error) {
                 console.log('Error occured while fetching hospitals')
                 throw error;
             }
 
-            hospitals.forEach(function (hospital) {
+            hospitals.forEach(function (hospital:any) {
                 const contact: IHospitalContact = {
                     name: hospital.get('name'),
                     landLine: hospital.get('contact')

@@ -66,6 +66,14 @@ const HospitalSchema = new Schema({
         type: Schema.Types.Number
     },
 
+    authorizeCovidTets: {
+        type: Schema.Types.Boolean
+    },
+
+    priority: {
+        type: Schema.Types.Number,
+    },
+
     focalPoint: LangSchema,
 
     contact: {
@@ -94,6 +102,6 @@ const HospitalSchema = new Schema({
 HospitalSchema.plugin(paginate);
 
 
-const HospitalModel = model("hospital", HospitalSchema, "hospitals");
+const HospitalModel:any = model("hospital", HospitalSchema, "hospitals");
 
 export default HospitalModel;
