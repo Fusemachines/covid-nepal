@@ -110,7 +110,7 @@ export default class App {
                 'font-src': "'self' data:",
             }
         }))
-        this.app.use(lusca.referrerPolicy('same-origin'))
+        // this.app.use(lusca.referrerPolicy('same-origin'))
         this.app.use(lusca.hsts({
             maxAge: 31536000,
             includeSubDomains: true
