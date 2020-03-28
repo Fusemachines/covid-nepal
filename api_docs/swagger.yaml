@@ -52,9 +52,7 @@ paths:
         405:
           description: "Invalid input"
       security:
-      - petstore_auth:
-        - "write:hospitals"
-        - "read:hospitals"
+      - basicAuth: []
     get:
       tags:
       - "Hospitals"
@@ -99,7 +97,7 @@ paths:
         400:
           description: "Invalid status value"
       security:
-      - petstore_auth:
+      - basicAuth:
         - "write:hospitals"
         - "read:hospitals"
   /hospitals/{nameSlug}:
@@ -124,8 +122,6 @@ paths:
             $ref: "#/definitions/Hospital"
         404:
           description: "Hospital not found"
-      security:
-      - api_key: []
   /hospitals/covid:
     get:
       tags:
@@ -153,8 +149,6 @@ paths:
               $ref: "#/definitions/Hospital"
         404:
           description: "Hospital not found"
-      security:
-      - api_key: []
   /hospitals/{id}:
     get:
       tags:
@@ -178,7 +172,7 @@ paths:
         404:
           description: "Hospital not found"
       security:
-      - api_key: []
+      - basicAuth: []
     patch:
       tags:
       - "Hospitals"
@@ -199,9 +193,7 @@ paths:
         405:
           description: "Invalid input"
       security:
-      - petstore_auth:
-        - "write:hospitals"
-        - "read:hospitals"
+      - basicAuth: []
     delete:
       tags:
       - "Hospitals"
@@ -223,9 +215,7 @@ paths:
         404:
           description: "Pet not found"
       security:
-      - petstore_auth:
-        - "write:hospitals"
-        - "read:hospitals"
+      - basicAuth: []
 
   /contacts:
     post:
@@ -255,7 +245,7 @@ paths:
             items:
               type: "object"
       security:
-      - api_key: []
+      - basicAuth: []
   /contacts/emergency:
     get:
       tags:
@@ -314,7 +304,9 @@ paths:
         400:
           description: "Invalid ID supplied"
         404:
-          description: "Order not found"
+          description: "Contact not found"
+      security:
+      - basicAuth: []
     delete:
       tags:
       - "Contacts"
@@ -336,7 +328,9 @@ paths:
         400:
           description: "Invalid ID supplied"
         404:
-          description: "Order not found"
+          description: "Contact not found"
+      security:
+      - basicAuth: []
 
   /districts:
     get:
@@ -355,8 +349,6 @@ paths:
             type: "array"
             items:
               type: "string"
-        400:
-          description: "Invalid contact"
   /counts/nepal/latest:
     get:
       tags:
@@ -374,8 +366,6 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/NepalCount"
-        400:
-          description: "Invalid contact"
   /counts/nepal/:
     post:
       tags:
@@ -392,7 +382,9 @@ paths:
           schema:
               $ref: "#/definitions/NepalCount"
         400:
-          description: "Invalid contact"
+          description: "Invalid count"
+      security:
+      - basicAuth: []
   /counts/nepal/{id}:
     put:
       tags:
@@ -415,7 +407,9 @@ paths:
           schema:
             $ref: "#/definitions/NepalCount"
         400:
-          description: "Invalid contact"
+          description: "Invalid count"
+      security:
+      - basicAuth: []
   
   /virus-counts:
     post:
@@ -439,7 +433,9 @@ paths:
           schema:
             $ref: "#/definitions/VirusCount"
         400:
-          description: "Invalid contact"
+          description: "Invalid virus count"
+      security:
+      - basicAuth: []
     get:
       tags:
       - "Virus Count"
@@ -456,8 +452,6 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/VirusCount"
-        400:
-          description: "Invalid contact"
   
   /virus-counts/{id}:
     put:
@@ -481,7 +475,9 @@ paths:
           schema:
             $ref: "#/definitions/VirusCount"
         400:
-          description: "Invalid contact"
+          description: "Invalid virus count"
+      security:
+      - basicAuth: []
     delete:
       tags:
       - "Virus Count"
@@ -495,7 +491,9 @@ paths:
         200:
           description: "successful operation"
         400:
-          description: "Invalid contact"
+          description: "Invalid virus count"
+      security:
+      - basicAuth: []
   
   /virus-counts/latest:
     get:
@@ -515,7 +513,7 @@ paths:
             items:
               $ref: "#/definitions/VirusCount"
         400:
-          description: "Invalid contact"
+          description: "Invalid virus count"
   
   /virus-counts/today:
     get:
@@ -535,21 +533,13 @@ paths:
             items:
               $ref: "#/definitions/VirusCount"
         400:
-          description: "Invalid contact"
+          description: "Invalid virus count"
 
 securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
+  basicAuth:
+    type: "basic"
 
+  
 parameters:
   District:
     name: "district"
@@ -694,7 +684,7 @@ definitions:
             type: "number"
             example: 1
           name:
-            $ref: "#/definitions/CategoryType"
+            $ref: "#/definitions/ContactType"
   NepalCount:
     type: "object"
     properties:
