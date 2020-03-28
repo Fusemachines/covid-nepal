@@ -1,6 +1,5 @@
 import HospitalModel from "../models/hospital.model";
-import { getSorting, getPagination } from "../shared/utils";
-import { IHospitalFilter } from "../shared/interfaces/hospital.interface";
+import { getSorting, getPagination } from "../shared/utils/";
 import { ESortOrder } from "../shared/interfaces/http.interface";
 
 
@@ -8,7 +7,7 @@ import { ESortOrder } from "../shared/interfaces/http.interface";
 export class HospitalService {
     createHospital(data: any) {
         // create slug
-        if (!data.nameSlug) {
+        if (data.name.length && !data.nameSlug) {
             data.nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         }
         return HospitalModel.create(data);
@@ -32,7 +31,7 @@ export class HospitalService {
 
 
         if (queryDistrict.length) {
-            filter = { ...filter, [`district.${lang}`]: query.district }
+            filter = { ...filter, [`district.en`]: query.district }
         }
 
         // covid test filter
@@ -49,9 +48,7 @@ export class HospitalService {
         // query with pagination and sorting
         const hospitals = await HospitalModel.paginate(filter, {
             lean: true,
-            select: lang === "np" ? `
-            -__v
-            ` : `
+            select: lang === "np" ? `-__v` : `
             name.${lang}
             nameSlug
             contact.${lang}
@@ -89,11 +86,8 @@ export class HospitalService {
 
     getCovidHospitals() {
         return HospitalModel.find({
-            covidTest: true
-        }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
-        // }).sort({
-        //     priority: -1
-        // }).select("name contact nameSlug availableTime openDays availableBeds totalBeds").lean();
+            authorizedCovidTest: true
+        }).sort({ priority: 1 }).select("name contact nameSlug availableTime openDays availableBeds totalBeds priority").lean();
     }
 
     getHospitalBySlug(slug: string) {
@@ -116,17 +110,17 @@ export class HospitalService {
 
     async update(id: string, data: any) {
         const oldRecord: any = await HospitalModel.findById(id).select("-_id -createdAt -updatedAt -__v").lean()
-
         // calculate nameSlug if name is present without nameSlug in request body
-        if (data.name && !data.nameSlug) {
+        if (data.name.length && !data.nameSlug) {
             const nameSlug = data.name.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
             if (oldRecord.slug && oldRecord.slug !== nameSlug) {
                 data.nameSlug = nameSlug
             }
-
-            const newRecord = { ...oldRecord, ...data, province: { ...oldRecord.province, ...data.province } }
-            return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
         }
+
+        const newRecord = { ...oldRecord, ...data, province: { ...oldRecord.province, ...data.province } }
+        return HospitalModel.findByIdAndUpdate(id, newRecord, { new: true })
+
     }
 
     delete(id: string) {
