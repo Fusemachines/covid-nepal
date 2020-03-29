@@ -22,10 +22,10 @@ export class NepalCountService {
       recoveredTotal: data.recoveredTotal,
       confirmedTotal: data.confirmedTotal,
       deathTotal: data.deathTotal,
-      testedToday: latestCount != undefined ? data.testedTotal - latestCount.get('testedTotal') : 0,
-      confirmedToday: latestCount != undefined ? data.confirmedTotal - latestCount.get('confirmedTotal') : 0,
-      recoveredToday: latestCount != undefined ? data.recoveredTotal - latestCount.get('recoveredTotal') : 0,
-      deathToday: latestCount != undefined ? data.deathTotal - latestCount.get('deathTotal') : 0,
+      testedToday: latestCount ? data.testedTotal - latestCount.get('testedTotal') : 0,
+      confirmedToday: latestCount ? data.confirmedTotal - latestCount.get('confirmedTotal') : 0,
+      recoveredToday: latestCount ? data.recoveredTotal - latestCount.get('recoveredTotal') : 0,
+      deathToday: latestCount ? data.deathTotal - latestCount.get('deathTotal') : 0,
     })
 
     return await NepalCountModel.create(nepalCount);
