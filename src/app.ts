@@ -7,9 +7,7 @@ import https from "https"
 import { CRequest, CResponse } from "./shared/interfaces/http.interface";
 import swaggerUI from "swagger-ui-express"
 // @ts-ignore: Resolve json module
-import swaggerJSON from "../api_docs/swagger.json"
 import compression from "compression";
-const basicAuth = require('express-basic-auth');
 import lusca from "lusca"
 import cron from "node-cron"
 import { NepalCountModel } from "./models/nepal-count.model";
@@ -17,6 +15,10 @@ import axios from "axios";
 import { NepalCountService, GlobalCountService } from "./services";
 import { GlobalCountModel } from "./models/global-count.model";
 import { IGlobalCount } from "./shared/interfaces/global-count.interface";
+
+const YAML = require("yamljs");
+const swaggerYAML = YAML.load("api_docs/swagger.yaml")
+const basicAuth = require('express-basic-auth');
 
 export default class App {
     private app: Application;
@@ -165,7 +167,7 @@ export default class App {
         }))
 
         // Swagger docs
-        // this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON))
+        this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerYAML))
 
         controllers.forEach(controller => {
             this.app.use(`/${controller.route}`, controller.router);
