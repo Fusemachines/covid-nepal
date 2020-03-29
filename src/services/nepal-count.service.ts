@@ -1,5 +1,5 @@
 import { NepalCountModel } from "../models/nepal-count.model";
-import { IUpdateNepalCount, IAddNepalCount } from "../shared/interfaces";
+import { INepalCount } from "../shared/interfaces";
 
 
 export class NepalCountService {
@@ -8,9 +8,9 @@ export class NepalCountService {
     return await NepalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
-  async addNepalCount(data: IAddNepalCount) {
-    let date = new Date(data.createdAt);
-    await this.validateNepalCount(date);
+  async addNepalCount(data: INepalCount) {
+    let date = new Date();
+    // await this.validateNepalCount(date);
 
     date.setUTCHours(0, 0, 0, 0);
     const previousDate = new Date(date);
@@ -22,17 +22,16 @@ export class NepalCountService {
       recoveredTotal: data.recoveredTotal,
       confirmedTotal: data.confirmedTotal,
       deathTotal: data.deathTotal,
-      testedToday: latestCount != undefined ? data.testedTotal - latestCount.get('testedTotal') : 0,
-      confirmedToday: latestCount != undefined ? data.confirmedTotal - latestCount.get('confirmedTotal') : 0,
-      recoveredToday: latestCount != undefined ? data.recoveredTotal - latestCount.get('recoveredTotal') : 0,
-      deathToday: latestCount != undefined ? data.deathTotal - latestCount.get('deathTotal') : 0,
-      createdAt: data.createdAt
+      testedToday: latestCount ? data.testedTotal - latestCount.get('testedTotal') : 0,
+      confirmedToday: latestCount ? data.confirmedTotal - latestCount.get('confirmedTotal') : 0,
+      recoveredToday: latestCount ? data.recoveredTotal - latestCount.get('recoveredTotal') : 0,
+      deathToday: latestCount ? data.deathTotal - latestCount.get('deathTotal') : 0,
     })
 
     return await NepalCountModel.create(nepalCount);
   }
 
-  async updateNepalCount(id: string, data: IUpdateNepalCount) {
+  async updateNepalCount(id: string, data: INepalCount) {
     let nepalCount = await NepalCountModel.findById(id).exec();
 
     let date = nepalCount.get('createdAt');
