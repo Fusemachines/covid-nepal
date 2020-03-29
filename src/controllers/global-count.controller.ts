@@ -5,7 +5,7 @@ import HttpException from "../shared/exceptions/httpException";
 
 export class GlobalCountController implements IController {
   public router: Router;
-  public route: string = "counts/nepal";
+  public route: string = "counts/global";
 
   constructor(private globalCountService: GlobalCountService) {
     this.router = Router();
