@@ -14,17 +14,21 @@ import lusca from "lusca"
 import cron from "node-cron"
 import { NepalCountModel } from "./models/nepal-count.model";
 import axios from "axios";
-import { NepalCountService } from "./services";
+import { NepalCountService, GlobalCountService } from "./services";
+import { GlobalCountModel } from "./models/global-count.model";
+import { IGlobalCount } from "./shared/interfaces/global-count.interface";
 
 export default class App {
     private app: Application;
     port: number;
     nepalCountService: NepalCountService;
+    globalCountService: GlobalCountService;
 
     constructor({ controllers, middlewares, port }: IApplicationOptions) {
         this.app = Express();
         this.port = port;
         this.nepalCountService = new NepalCountService();
+        this.globalCountService = new GlobalCountService();
 
         this.middlewares(middlewares);
         this.createDatabaseConnection({
@@ -36,6 +40,7 @@ export default class App {
         });
         this.initRoutes(controllers);
         this.loadNepalCount();
+        this.loadGlobalCount();
     }
 
     async createDatabaseConnection(connOptions: IDatabaseConnectionOptions) {
@@ -86,7 +91,43 @@ export default class App {
                 }
             })
         } catch (error) {
+            global.logger.log({
+                label: "error",
+                message: error.message
+            });
+        }
+    }
 
+    async loadGlobalCount() {
+        let that = this;
+        try {
+            cron.schedule('* * * * * *', async () => {
+                let date = new Date();
+                date.setUTCHours(0, 0, 0, 0);
+                const nextDate = new Date(date);
+                nextDate.setDate(nextDate.getDate() + 1);
+
+                const count = await GlobalCountModel.findOne({ createdAt: { $gte: date, $lte: nextDate } }).lean().exec();
+
+                const { data } = await axios.get('https://api.coronatracker.com/v3/stats/worldometer/global');
+                const globalCount: IGlobalCount = {
+                    confirmedTotal: data.totalConfirmed,
+                    deathTotal: data.totalDeaths,
+                    recoveredTotal: data.totalRecovered
+                };
+                if (count != undefined) {
+                    // update
+                    await that.globalCountService.updateGlobalCount(count._id, globalCount);
+                } else {
+                    // create
+                    await that.globalCountService.addGlobalCount(globalCount);
+                }
+            })
+        } catch (error) {
+            global.logger.log({
+                label: "error",
+                message: error.message
+            });
         }
     }
 
