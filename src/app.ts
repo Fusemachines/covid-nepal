@@ -20,6 +20,8 @@ import { specs } from "./shared/utils";
 const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
 const basicAuth = require('express-basic-auth');
+const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org',
+                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000', 'https://admin.covidnepal.org'];
 
 export default class App {
     private app: Application;
@@ -167,8 +169,27 @@ export default class App {
             unauthorizedResponse: this.getUnauthorizedResponse
         }))
 
+        this.app.use(cors({
+            origin: (origin, callback) => {
+                if (!origin) return callback(null, true);
+                if (whitelist.indexOf(origin) === -1) {
+                    return callback(new Error('The CORS policy for this site does not allow the specified Origin'), false);
+                }
+                return callback(null, true);
+            },
+            exposedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'api_key', 'x-api-key'],
+            credentials: true
+        }));
+
         // Swagger docs
-        this.app.use('/api-docs', serve, setup(swaggerYAML))
+        const host=  process.env.APP_HOST;
+        const port=  process.env.APP_PORT;
+        const baseUrl = `${host}:${port}`;
+        this.app.use('/api-docs', function(req:any, res:any, next:any){
+            swaggerYAML.host = baseUrl;
+            req.swaggerDoc = swaggerYAML;
+            next();
+        }, serve, setup());
 
         controllers.forEach(controller => {
             this.app.use(`/${controller.route}`, controller.router);
@@ -202,8 +223,6 @@ export default class App {
 
         // Cross origin request
         if (["production"].indexOf(process.env.NODE_ENV) !== -1) {
-            const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org',
-                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000', 'https://admin.covidnepal.org'];
 
             const corsOptions = {
                 origin: function (origin: string, callback: any) {
