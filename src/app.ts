@@ -5,7 +5,7 @@ import cors from "cors"
 import { readFileSync } from "fs"
 import https from "https"
 import { CRequest, CResponse } from "./shared/interfaces/http.interface";
-import swaggerUI from "swagger-ui-express"
+import {serve, setup} from "swagger-ui-express"
 // @ts-ignore: Resolve json module
 import compression from "compression";
 import lusca from "lusca"
@@ -15,6 +15,7 @@ import axios from "axios";
 import { NepalCountService, GlobalCountService } from "./services";
 import { GlobalCountModel } from "./models/global-count.model";
 import { IGlobalCount } from "./shared/interfaces/global-count.interface";
+import { specs } from "./shared/utils";
 
 const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
@@ -105,7 +106,7 @@ export default class App {
     async loadGlobalCount() {
         let that = this;
         try {
-            cron.schedule('* * * * * *', async () => {
+            cron.schedule('0 0 */1 * * *', async () => {
                 let date = new Date();
                 date.setUTCHours(0, 0, 0, 0);
                 const nextDate = new Date(date);
@@ -183,12 +184,12 @@ export default class App {
         // Swagger docs
         const host=  process.env.APP_HOST;
         const port=  process.env.APP_PORT;
-        const baseUrl = host +":" +port;
+        const baseUrl = `${host}:${port}`;
         this.app.use('/api-docs', function(req:any, res:any, next:any){
             swaggerYAML.host = baseUrl;
             req.swaggerDoc = swaggerYAML;
             next();
-        }, swaggerUI.serve, swaggerUI.setup());
+        }, serve, setup());
 
         controllers.forEach(controller => {
             this.app.use(`/${controller.route}`, controller.router);

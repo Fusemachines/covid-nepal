@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "news_feeds",
+  "info": {
+    "name": "News Feed"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": false
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "banner": {
+      "model": "file",
+      "via": "related",
+      "plugin": "upload",
+      "required": false
+    },
+    "addedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "news_types": {
+      "collection": "news-type",
+      "via": "news_feeds",
+      "dominant": true
+    }
+  }
+}

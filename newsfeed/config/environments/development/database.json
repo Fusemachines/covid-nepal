@@ -4,8 +4,8 @@
     "default": {
       "connector": "mongoose",
       "settings": {
-        "uri": "${process.env.DATABASE_URI}",
-        "database": "${process.env.DATABASE_NAME}"
+        "uri": "${process.env.DATABASE_URI || 'mongodb://127.0.0.1:27017' }",
+        "database": "${process.env.DATABASE_NAME || 'newsfeed'}"
       },
       "options": {
         "ssl": false

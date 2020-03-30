@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/news-feeds",
+      "handler": "news-feed.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news-feeds/count",
+      "handler": "news-feed.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news-feeds/:id",
+      "handler": "news-feed.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/news-feeds",
+      "handler": "news-feed.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/news-feeds/:id",
+      "handler": "news-feed.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/news-feeds/:id",
+      "handler": "news-feed.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

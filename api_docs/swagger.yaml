@@ -11,56 +11,54 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 basePath: "/"
 tags:
-- name: "Hospitals"
-  description: "Everything about hostpitals"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "Contacts"
-  description: "Access to hospital contacts"
-- name: "Districts"
-  description: "Access to districts"
-- name: "Nepal Counts"
-  description: "Access to virus counts"
-- name: "Virus Count"
-  description: "Access to global virus counts"
+  - name: "Hospitals"
+    description: "Everything about hostpitals"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Contacts"
+    description: "Access to hospital contacts"
+  - name: "Districts"
+    description: "Access to districts"
+  - name: "Nepal Counts"
+    description: "Access to virus counts"
+  - name: "Virus Count"
+    description: "Access to global virus counts"
 schemes:
-- "https"
-- "http"
+  - "https"
+  - "http"
 paths:
   /hospitals:
     post:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Add a new hospital"
       description: ""
       consumes:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Hospital object that needs to be added"
-        required: true
-        schema:
-          $ref: "#/definitions/Hospital"
+        - in: "body"
+          name: "body"
+          description: "Hospital object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/Hospital"
       responses:
         405:
           description: "Invalid input"
       security:
-      - basicAuth: []
+        - basicAuth: []
     get:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Get Hospitals"
       description: "List all the hospitals"
       operationId: "listHospitals"
       produces:
-      - "application/xml"
-      - "application/json"
+        - "application/xml"
+        - "application/json"
       parameters:
       - $ref: '#/parameters/District'
       - $ref: '#/parameters/Province'
@@ -80,24 +78,23 @@ paths:
         400:
           description: "Invalid status value"
       security:
-      - basicAuth:
-        - "write:hospitals"
-        - "read:hospitals"
+        - basicAuth:
+            - "write:hospitals"
+            - "read:hospitals"
   /hospitals/{nameSlug}:
     get:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Get hospitals by slug"
       description: "Returns hospitals for covid"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
       parameters:
-      - name: "nameSlug"
-        in: "path"
-        description: "Slug of Hospital to return"
-        required: true
-        type: "string"
+        - name: "nameSlug"
+          in: "path"
+          description: "Slug of Hospital to return"
+          required: true
+          type: "string"
       responses:
         200:
           description: "successful operation"
@@ -108,21 +105,20 @@ paths:
   /hospitals/covid:
     get:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Get hospitals for covid"
       description: "Returns hospitals for covid"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
       parameters:
-      - $ref: '#/parameters/District'
-      - $ref: '#/parameters/Province'
-      - $ref: '#/parameters/CovidTest'
-      - $ref: '#/parameters/Order'
-      - $ref: '#/parameters/OrderBy'
-      - $ref: '#/parameters/Size'
-      - $ref: '#/parameters/Page'
-      - $ref: '#/parameters/Lang'
+        - $ref: "#/parameters/District"
+        - $ref: "#/parameters/Province"
+        - $ref: "#/parameters/CovidTest"
+        - $ref: "#/parameters/Order"
+        - $ref: "#/parameters/OrderBy"
+        - $ref: "#/parameters/Size"
+        - $ref: "#/parameters/Page"
+        - $ref: "#/parameters/Lang"
       responses:
         200:
           description: "successful operation"
@@ -135,91 +131,91 @@ paths:
   /hospitals/{id}:
     get:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Get hospitals by id"
       description: "Returns hospitals by given id"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Id of Hospital to return"
-        required: true
-        type: "number"
+        - name: "id"
+          in: "path"
+          description: "Id of Hospital to return"
+          required: true
+          type: "number"
       responses:
         200:
           description: "successful operation"
           schema:
-              $ref: "#/definitions/Hospital"
+            $ref: "#/definitions/Hospital"
         404:
           description: "Hospital not found"
       security:
-      - basicAuth: []
+        - basicAuth: []
     patch:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Partial a Hospital"
       description: ""
       consumes:
-      - "application/x-www-form-urlencoded"
+        - "application/x-www-form-urlencoded"
       produces:
-      - "application/xml"
-      - "application/json"
+        - "application/xml"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Id of Hospital to update"
-        required: true
-        type: "number"
+        - name: "id"
+          in: "path"
+          description: "Id of Hospital to update"
+          required: true
+          type: "number"
       responses:
         405:
           description: "Invalid input"
       security:
-      - basicAuth: []
+        - basicAuth: []
     delete:
       tags:
-      - "Hospitals"
+        - "Hospitals"
       summary: "Deletes a Hospital"
       description: ""
       operationId: "deleteHospital"
       produces:
-      - "application/xml"
-      - "application/json"
+        - "application/xml"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Id of Hospital to delete"
-        required: true
-        type: "number"
+        - name: "id"
+          in: "path"
+          description: "Id of Hospital to delete"
+          required: true
+          type: "number"
       responses:
         400:
           description: "Invalid ID supplied"
         404:
           description: "Pet not found"
       security:
-      - basicAuth: []
+        - basicAuth: []
 
   /contacts:
     post:
       tags:
-      - "Contacts"
+        - "Contacts"
       summary: "Returns all the contacts"
       description: "Returns a list of contacts"
       operationId: "getContact"
       consumes:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Contact object that needs to be added"
-        required: true
-        schema:
-          $ref: "#/definitions/Contact"
+        - in: "body"
+          name: "body"
+          description: "Contact object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/Contact"
       responses:
         200:
           description: "successful operation"
@@ -228,16 +224,16 @@ paths:
             items:
               type: "object"
       security:
-      - basicAuth: []
+        - basicAuth: []
   /contacts/emergency:
     get:
       tags:
-      - "Contacts"
+        - "Contacts"
       summary: "Get emergency contacts"
       description: ""
       operationId: "contactEmergency"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           description: "successful operation"
@@ -248,12 +244,12 @@ paths:
   /contacts/hospitals:
     get:
       tags:
-      - "Contacts"
+        - "Contacts"
       summary: "Get hospital contacts"
       description: ""
       operationId: "contactHospital"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
         200:
           description: "successful operation"
@@ -264,21 +260,21 @@ paths:
   /contacts/{id}:
     patch:
       tags:
-      - "Contacts"
+        - "Contacts"
       summary: "Find purchase order by ID"
       description: "For valid response try integer IDs with value >= 1 and <= 10.         Other values will generated exceptions"
       operationId: "getOrderById"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        type: "integer"
-        maximum: 10.0
-        minimum: 1.0
-        format: "int64"
+        - name: "id"
+          in: "path"
+          description: "ID of pet that needs to be fetched"
+          required: true
+          type: "integer"
+          maximum: 10.0
+          minimum: 1.0
+          format: "int64"
       responses:
         200:
           description: "successful operation"
@@ -289,42 +285,42 @@ paths:
         404:
           description: "Contact not found"
       security:
-      - basicAuth: []
+        - basicAuth: []
     delete:
       tags:
-      - "Contacts"
+        - "Contacts"
       summary: "Delete purchase order by ID"
       description: "For valid response try integer IDs with positive integer value.         Negative or non-integer values will generate API errors"
       operationId: "deleteOrder"
       produces:
-      - "application/xml"
-      - "application/json"
+        - "application/xml"
+        - "application/json"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "ID of the order that needs to be deleted"
-        required: true
-        type: "integer"
-        minimum: 1.0
-        format: "int64"
+        - name: "id"
+          in: "path"
+          description: "ID of the order that needs to be deleted"
+          required: true
+          type: "integer"
+          minimum: 1.0
+          format: "int64"
       responses:
         400:
           description: "Invalid ID supplied"
         404:
           description: "Contact not found"
       security:
-      - basicAuth: []
+        - basicAuth: []
 
   /districts:
     get:
       tags:
-      - "Districts"
+        - "Districts"
       summary: "Get all districts"
       description: ""
       operationId: "getDistrict"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -335,13 +331,13 @@ paths:
   /counts/nepal/latest:
     get:
       tags:
-      - "Nepal Counts"
+        - "Nepal Counts"
       summary: "Get virus count in nepal"
       description: ""
       operationId: "getVirusCountNepal"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -352,38 +348,13 @@ paths:
   /counts/nepal/:
     post:
       tags:
-      - "Nepal Counts"
+        - "Nepal Counts"
       summary: "Get virus count in nepal"
       description: ""
       operationId: "postCount"
       produces:
-      - "application/json"
-      - "application/xml"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-              $ref: "#/definitions/NepalCount"
-        400:
-          description: "Invalid count"
-      security:
-      - basicAuth: []
-  /counts/nepal/{id}:
-    put:
-      tags:
-      - "Nepal Counts"
-      summary: "Get virus count in nepal"
-      description: ""
-      operationId: "updateCount"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "Slug of Hospital to return"
-        required: true
-        type: "number"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -392,12 +363,37 @@ paths:
         400:
           description: "Invalid count"
       security:
-      - basicAuth: []
-  
+        - basicAuth: []
+  /counts/nepal/{id}:
+    put:
+      tags:
+        - "Nepal Counts"
+      summary: "Get virus count in nepal"
+      description: ""
+      operationId: "updateCount"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Slug of Hospital to return"
+          required: true
+          type: "number"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/NepalCount"
+        400:
+          description: "Invalid count"
+      security:
+        - basicAuth: []
+
   /virus-counts:
     post:
       tags:
-      - "Virus Count"
+        - "Virus Count"
       summary: "Add virus count"
       description: ""
       operationId: "postVirusCount"
@@ -412,16 +408,16 @@ paths:
         400:
           description: "Invalid virus count"
       security:
-      - basicAuth: []
+        - basicAuth: []
     get:
       tags:
-      - "Virus Count"
+        - "Virus Count"
       summary: "Get all virus count"
       description: ""
       operationId: "getVirusCount"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -429,23 +425,23 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/VirusCount"
-  
+
   /virus-counts/{id}:
     put:
       tags:
-      - "Virus Count"
+        - "Virus Count"
       summary: "Update virus count"
       description: ""
       operationId: "UpdateVirusCount"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Id of count to update"
-        required: true
-        type: "number"
+        - name: "id"
+          in: "path"
+          description: "Id of count to update"
+          required: true
+          type: "number"
       responses:
         200:
           description: "successful operation"
@@ -454,10 +450,10 @@ paths:
         400:
           description: "Invalid virus count"
       security:
-      - basicAuth: []
+        - basicAuth: []
     delete:
       tags:
-      - "Virus Count"
+        - "Virus Count"
       summary: "Delete virus count"
       description: ""
       operationId: "deleteVirusCountLatest"
@@ -476,18 +472,18 @@ paths:
         400:
           description: "Invalid virus count"
       security:
-      - basicAuth: []
-  
+        - basicAuth: []
+
   /virus-counts/latest:
     get:
       tags:
-      - "Virus Count"
+        - "Virus Count"
       summary: "Get latest virus count"
       description: ""
       operationId: "getVirusCountLatest"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -497,17 +493,17 @@ paths:
               $ref: "#/definitions/VirusCount"
         400:
           description: "Invalid virus count"
-  
+
   /virus-counts/today:
     get:
       tags:
-      - "Virus Count"
+        - "Virus Count"
       summary: "Get today's virus count"
       description: ""
       operationId: "getVirusCountToday"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -522,7 +518,6 @@ securityDefinitions:
   basicAuth:
     type: "basic"
 
-  
 parameters:
   District:
     name: "district"
@@ -563,11 +558,10 @@ parameters:
     description: "Order values that need to be considered for filter"
     type: "number"
   Lang:
-      name: "lang"
-      in: "query"
-      description: "Order values that need to be considered for filter"
-      type: "string"
-
+    name: "lang"
+    in: "query"
+    description: "Order values that need to be considered for filter"
+    type: "string"
 
 definitions:
   Hospital:
@@ -576,19 +570,44 @@ definitions:
       - "name"
     properties:
       name:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
       nameSlug:
         type: "string"
       hospitalType:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
       availableTime:
         type: "array"
         items:
-            type: "string"
+          type: "object"
+          properties:
+            en:
+              type: "string"
+            np:
+              type: "string"
       openDays:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
       location:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
       mapLink:
         type: "string"
       coordinates:
@@ -602,7 +621,12 @@ definitions:
       covidTest:
         type: "boolean"
       testingProcess:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
       govtDesignated:
         type: "boolean"
       numIsolationBeds:
@@ -610,11 +634,21 @@ definitions:
       icu:
         type: "number"
       focalPoint:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
       contact:
         type: "array"
         items:
-          type: "string"
+          type: "object"
+          properties:
+            en:
+              type: "string"
+            np:
+              type: "string"
       ventilators:
         type: "number"
       province:
@@ -624,10 +658,19 @@ definitions:
             type: "number"
             example: 1
           name:
-            type: "string"
-            example: "Bagmati"
+            type: "object"
+            properties:
+              en:
+                type: "string"
+              np:
+                type: "string"
       district:
-        type: "string"
+        type: "object"
+        properties:
+          en:
+            type: "string"
+          np:
+            type: "string"
 
   ContactType:
     type: "object"
@@ -690,7 +733,7 @@ definitions:
         type: "number"
       deathTotal:
         type: "number"
-  
+
   VirusCount:
     type: "object"
     properties:
@@ -731,7 +774,7 @@ definitions:
         type: "number"
       province:
         type: "number"
-      
+
   ApiResponse:
     type: "object"
     properties:
