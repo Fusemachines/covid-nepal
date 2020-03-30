@@ -13,7 +13,7 @@ export class HospitalService {
         return HospitalModel.create(data);
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string }) {
+    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string, name: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         const { lang = "en" } = query;
@@ -37,6 +37,10 @@ export class HospitalService {
         // covid test filter
         if (covidTest !== null) {
             filter = { ...filter, covidTest }
+        }
+
+        if (query.name) {
+            filter = { ...filter, ["name.en"]: new RegExp(query.name, 'gi') }
         }
 
         const total = await HospitalModel.countDocuments();
