@@ -1,5 +1,5 @@
 {
-  "host": "api-dev.covidnepal.org",
+  "host": "localhost",
   "port": 1337,
   "proxy": {
     "enabled": false
