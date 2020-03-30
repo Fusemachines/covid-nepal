@@ -15,6 +15,7 @@ import axios from "axios";
 import { NepalCountService, GlobalCountService } from "./services";
 import { GlobalCountModel } from "./models/global-count.model";
 import { IGlobalCount } from "./shared/interfaces/global-count.interface";
+import { specs } from "./shared/utils";
 
 const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
@@ -168,6 +169,7 @@ export default class App {
 
         // Swagger docs
         this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerYAML))
+        this.app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs))
 
         controllers.forEach(controller => {
             this.app.use(`/${controller.route}`, controller.router);

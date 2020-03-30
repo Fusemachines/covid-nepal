@@ -97,7 +97,7 @@ export class HospitalController implements IController {
 
             // removing all hospital records
             if (removeAll) {
-                global.logger.log({ level: 'info', message: 'Removing all hospital records'})
+                global.logger.log({ level: 'info', message: 'Removing all hospital records' })
                 await this.hospitalService.deleteAll();
             }
 
@@ -188,6 +188,16 @@ export class HospitalController implements IController {
     }
 
 
+
+    /**
+   * @swagger
+   * /hostpitals:
+   *    get:
+   *      description:  Gets list for all hospitals
+   */
+
+
+
     getAllHospitals = async (request: CRequest, response: CResponse) => {
         try {
             const result = await this.hospitalService.getHospitals(request.query);
@@ -202,6 +212,15 @@ export class HospitalController implements IController {
             response.status(500).json({ error })
         }
     }
+
+    /**
+* @swagger
+* /hostpitals/covid:
+*    get:
+*      description:  Gets list for hospitals with covid test sorted by priority
+*/
+
+
 
     getHospitalsForCovid = async (request: CRequest, response: CResponse) => {
         try {
