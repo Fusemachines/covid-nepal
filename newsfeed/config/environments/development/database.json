@@ -4,8 +4,8 @@
     "default": {
       "connector": "mongoose",
       "settings": {
-        "uri": "mongodb://localhost:27017",
-        "database": "newsfeed"
+        "uri": "${process.env.DATABASE_URI || 'mongodb://127.0.0.1:27017' }",
+        "database": "${process.env.DATABASE_NAME || 'newsfeed'}"
       },
       "options": {
         "ssl": false

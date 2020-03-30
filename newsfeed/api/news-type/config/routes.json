@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/news-types",
+      "handler": "news-type.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news-types/count",
+      "handler": "news-type.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news-types/:id",
+      "handler": "news-type.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/news-types",
+      "handler": "news-type.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/news-types/:id",
+      "handler": "news-type.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/news-types/:id",
+      "handler": "news-type.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
