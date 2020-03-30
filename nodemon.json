@@ -1,8 +1,9 @@
 {
     "watch": [
-        "src"
+        "src",
+        "api_docs"
     ],
-    "ext": "ts",
+    "ext": "ts, yaml",
     "ignore": [
         "src/**/*.spec.ts"
     ],
