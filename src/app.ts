@@ -103,7 +103,7 @@ export default class App {
     async loadGlobalCount() {
         let that = this;
         try {
-            cron.schedule('* * * * * *', async () => {
+            cron.schedule('0 0 */1 * * *', async () => {
                 let date = new Date();
                 date.setUTCHours(0, 0, 0, 0);
                 const nextDate = new Date(date);
