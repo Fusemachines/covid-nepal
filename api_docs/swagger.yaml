@@ -9,7 +9,6 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:5000"
 basePath: "/"
 tags:
   - name: "Hospitals"
@@ -61,35 +60,14 @@ paths:
         - "application/xml"
         - "application/json"
       parameters:
-        - $ref: "#/parameters/District"
-        - $ref: "#/parameters/Province"
-        - $ref: "#/parameters/CovidTest"
-        - $ref: "#/parameters/Order"
-        - $ref: "#/parameters/OrderBy"
-        - $ref: "#/parameters/Size"
-        - $ref: "#/parameters/Page"
-        - $ref: "#/parameters/Lang"
-        - $ref: "#/parameters/Name"
-        - name: "orderBy"
-          in: "query"
-          description: "Order values that need to be considered for filter"
-          type: "string"
-        - name: "size"
-          in: "query"
-          description: "Order values that need to be considered for filter"
-          type: "number"
-        - name: "page"
-          in: "query"
-          description: "Order values that need to be considered for filter"
-          type: "number"
-        - name: "lang"
-          in: "query"
-          description: "Order values that need to be considered for filter"
-          type: "string"
-        - name: "name"
-          in: "query"
-          description: "Filter hospital by name over all provinces"
-          type: "string"
+      - $ref: '#/parameters/District'
+      - $ref: '#/parameters/Province'
+      - $ref: '#/parameters/CovidTest'
+      - $ref: '#/parameters/Order'
+      - $ref: '#/parameters/OrderBy'
+      - $ref: '#/parameters/Size'
+      - $ref: '#/parameters/Page'
+      - $ref: '#/parameters/Lang'
       responses:
         200:
           description: "successful operation"
@@ -392,7 +370,7 @@ paths:
         - "Nepal Counts"
       summary: "Get virus count in nepal"
       description: ""
-      operationId: "postCount"
+      operationId: "updateCount"
       produces:
         - "application/json"
         - "application/xml"
@@ -420,14 +398,8 @@ paths:
       description: ""
       operationId: "postVirusCount"
       produces:
-        - "application/json"
-        - "application/xml"
-      parameters:
-        - name: "id"
-          in: "path"
-          description: "Slug of Hospital to return"
-          required: true
-          type: "number"
+      - "application/json"
+      - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -442,7 +414,7 @@ paths:
         - "Virus Count"
       summary: "Get all virus count"
       description: ""
-      operationId: "getVirusCountLatest"
+      operationId: "getVirusCount"
       produces:
         - "application/json"
         - "application/xml"
@@ -486,8 +458,14 @@ paths:
       description: ""
       operationId: "deleteVirusCountLatest"
       produces:
-        - "application/json"
-        - "application/xml"
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of count to update"
+        required: true
+        type: "number"
       responses:
         200:
           description: "successful operation"
