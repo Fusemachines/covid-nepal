@@ -5,7 +5,7 @@ import cors from "cors"
 import { readFileSync } from "fs"
 import https from "https"
 import { CRequest, CResponse } from "./shared/interfaces/http.interface";
-import {serve, setup} from "swagger-ui-express"
+import { serve, setup } from "swagger-ui-express"
 // @ts-ignore: Resolve json module
 import compression from "compression";
 import lusca from "lusca";
@@ -16,6 +16,7 @@ import { NepalCountService, GlobalCountService } from "./services";
 import { GlobalCountModel } from "./models/global-count.model";
 import { IGlobalCount } from "./shared/interfaces/global-count.interface";
 import { specs } from "./shared/utils";
+import { any } from "joi";
 
 const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
@@ -74,6 +75,9 @@ export default class App {
         try {
             cron.schedule('0 0 */1 * * *', async () => {
                 let date = new Date();
+
+                global.logger.log({ level: 'info', message: `Scheduler to update Nepal count triggered. Time: ${date}` });
+
                 date.setUTCHours(0, 0, 0, 0);
                 const nextDate = new Date(date);
                 nextDate.setDate(nextDate.getDate() + 1);
@@ -87,12 +91,28 @@ export default class App {
                     deathTotal: data.death,
                     recoveredTotal: Number(data.confirmed) - Number(data.isolation)
                 };
+
                 if (count != undefined) {
                     // update
-                    await that.nepalCountService.update(count._id, nepalCount);
+                    if (this.isNepalCountLatest(count, nepalCount)) {
+                        await that.nepalCountService.update(count._id, nepalCount);
+                        global.logger.log({ level: 'info', message: `Scheduler successfully updated Nepal count. Time ${date}` });
+                    } else {
+                        global.logger.log({ level: 'info', message: `Scheduler aborted updating Nepal count due to manual override. Time ${date}` });
+                    }
                 } else {
                     // create
-                    await that.nepalCountService.add(nepalCount);
+                    const previousData = await that.nepalCountService.getLatestCount();
+
+                    if (previousData == undefined) {
+                        await that.nepalCountService.add(nepalCount);
+                        global.logger.log({ level: 'info', message: `Scheduler successfully created first Nepal count. Time ${date}` });
+                    } else if (this.isNepalCountLatest(previousData, nepalCount)) {
+                        await that.nepalCountService.add(nepalCount);
+                        global.logger.log({ level: 'info', message: `Scheduler successfully created Nepal count. Time ${date}` });
+                    } else {
+                        global.logger.log({ level: 'info', message: `Scheduler aborted creating new Nepal count due to manual override. Time ${date}` })
+                    }
                 }
             })
         } catch (error) {
@@ -103,11 +123,25 @@ export default class App {
         }
     }
 
+    private isNepalCountLatest(previousData: any, newData: INepalCount): boolean {
+        if (newData.testedTotal < previousData.testedTotal ||
+            newData.confirmedTotal < previousData.confirmedTotal ||
+            newData.recoveredTotal < previousData.recoveredTotal ||
+            newData.deathTotal < previousData.deathTotal) {
+            return false;
+        }
+
+        return true;
+    }
+
     async loadGlobalCount() {
         let that = this;
         try {
             cron.schedule('0 0 */1 * * *', async () => {
                 let date = new Date();
+
+                global.logger.log({ level: 'info', message: `Scheduler to update Nepal count triggered. Time: ${date}` });
+
                 date.setUTCHours(0, 0, 0, 0);
                 const nextDate = new Date(date);
                 nextDate.setDate(nextDate.getDate() + 1);
@@ -120,12 +154,28 @@ export default class App {
                     deathTotal: data.totalDeaths,
                     recoveredTotal: data.totalRecovered
                 };
+
                 if (count != undefined) {
                     // update
-                    await that.globalCountService.update(count._id, globalCount);
+                    if (this.isGlobalCountLatest(count, globalCount)) {
+                        await that.globalCountService.update(count._id, globalCount);
+                        global.logger.log({ level: 'info', message: `Scheduler successfully updated Global count. Time ${date}` });
+                    } else {
+                        global.logger.log({ level: 'info', message: `Scheduler aborted updating Global count due to manual override. Time ${date}` });
+                    }
                 } else {
                     // create
-                    await that.globalCountService.add(globalCount);
+                    const previousData = await that.nepalCountService.getLatestCount();
+
+                    if (previousData == undefined) {
+                        await that.globalCountService.add(globalCount);
+                        global.logger.log({ level: 'info', message: `Scheduler successfully created first Global count. Time ${date}` });
+                    } else if (this.isGlobalCountLatest(previousData, globalCount)) {
+                        await that.globalCountService.add(globalCount);
+                        global.logger.log({ level: 'info', message: `Scheduler successfully created Global count. Time ${date}` });
+                    } else {
+                        global.logger.log({ level: 'info', message: `Scheduler aborted creating new Global count due to manual override. Time ${date}` })
+                    }
                 }
             })
         } catch (error) {
@@ -134,6 +184,16 @@ export default class App {
                 message: error.message
             });
         }
+    }
+
+    private isGlobalCountLatest(previousData: any, newData: IGlobalCount) {
+        if (newData.confirmedTotal < previousData.confirmedTotal ||
+            newData.recoveredTotal < previousData.recoveredTotal ||
+            newData.deathTotal < previousData.deathTotal) {
+            return false;
+        }
+
+        return true;
     }
 
     getUnauthorizedResponse(request: any) {
@@ -182,10 +242,10 @@ export default class App {
         }));
 
         // Swagger docs
-        const host=  process.env.APP_HOST;
-        const port=  process.env.APP_PORT;
+        const host = process.env.APP_HOST;
+        const port = process.env.APP_PORT;
         const baseUrl = `${host}:${port}`;
-        this.app.use('/api-docs', function(req:any, res:any, next:any){
+        this.app.use('/api-docs', function (req: any, res: any, next: any) {
             swaggerYAML.host = baseUrl;
             req.swaggerDoc = swaggerYAML;
             next();
@@ -224,7 +284,7 @@ export default class App {
         // Cross origin request
         if (["production"].indexOf(process.env.NODE_ENV) !== -1) {
             const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org',
-                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000', 'https://admin.covidnepal.org' ,'https://admin-dev.covidnepal.org'];
+                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000', 'https://admin.covidnepal.org', 'https://admin-dev.covidnepal.org'];
 
 
             const corsOptions = {
