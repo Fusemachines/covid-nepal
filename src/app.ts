@@ -8,8 +8,8 @@ import { CRequest, CResponse } from "./shared/interfaces/http.interface";
 import {serve, setup} from "swagger-ui-express"
 // @ts-ignore: Resolve json module
 import compression from "compression";
-import lusca from "lusca"
-import cron from "node-cron"
+import lusca from "lusca";
+import cron from "node-cron";
 import { NepalCountModel } from "./models/nepal-count.model";
 import axios from "axios";
 import { NepalCountService, GlobalCountService } from "./services";

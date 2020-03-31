@@ -1,5 +1,5 @@
 {
-  "host": "${process.env.HOST} || 'localhost'",
+  "host": "api-dev.covidnepal.org",
   "port": 1337,
   "proxy": {
     "enabled": false
