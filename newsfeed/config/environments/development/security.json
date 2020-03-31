@@ -1,6 +1,6 @@
 {
   "csp": {
-    "enabled": true,
+    "enabled": false,
     "policy": ["block-all-mixed-content"]
   },
   "p3p": {
