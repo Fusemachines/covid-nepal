@@ -8,7 +8,7 @@
     "value": ""
   },
   "hsts": {
-    "enabled": true,
+    "enabled": false,
     "maxAge": 31536000,
     "includeSubDomains": true
   },
@@ -17,11 +17,11 @@
     "value": "SAMEORIGIN"
   },
   "xss": {
-    "enabled": true,
+    "enabled": false,
     "mode": "block"
   },
   "cors": {
-    "enabled": true,
+    "enabled": false,
     "origin": "http://api-dev.covidnepal.org:1337, https://covidnepal.org, https://www.covidnepal.org, http://www.covidnepal.org, https://dev.covidnepal.org, http://dev.covidnepal.org, http://localhost:3000, https://admin.covidnepal.org, https://admin-dev.covidnepal.org"
   },
   "ip": {
