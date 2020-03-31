@@ -5,7 +5,7 @@ module.exports = {
     instances: "max",
     env: {
       NODE_ENV: "development",
-      HOST: 'http://api-dev.covidnepal.org/',
+      HOST: 'api-dev.covidnepal.org',
       DATABASE_URI: "mongodb://newsfeeddb-usr:e7kLrKm07JWykd25sQflPs@10.0.0.10:27116/?authSource=admin",
       DATABASE_NAME: "newsfeed"
     }
