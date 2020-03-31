@@ -55,6 +55,27 @@ export class NepalCountService {
     return await NepalCountModel.findById(id).lean().exec();
   }
 
+  async getCountsWithPagination(page: number, size: number) {
+    page = Number(page);
+    size = Number(size);
+
+    let query = NepalCountModel.find({});
+    const data = await query.skip(page * size).limit(size).exec();
+
+    const totalItems = await NepalCountModel.countDocuments({}).exec();
+    const totalPages = Math.ceil(totalItems / size);
+
+    return {
+      meta: {
+        page,
+        size,
+        totalItems,
+        totalPages,
+      },
+      data
+    }
+  }
+
   private async validateNepalCount(date: Date) {
     if (date > new Date()) {
       throw Error("Cannot create for future date.");

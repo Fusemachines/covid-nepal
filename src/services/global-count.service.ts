@@ -48,4 +48,25 @@ export class GlobalCountService {
 
     return await GlobalCountModel.findById(id).lean().exec();
   }
+
+  async getCountsWithPagination(page: number, size: number) {
+    page = Number(page);
+    size = Number(size);
+
+    let query = GlobalCountModel.find({});
+    const data = await query.skip(page * size).limit(size).exec();
+
+    const totalItems = await GlobalCountModel.countDocuments({}).exec();
+    const totalPages = Math.ceil(totalItems / size);
+
+    return {
+      meta: {
+        page,
+        size,
+        totalItems,
+        totalPages,
+      },
+      data
+    }
+  }
 }
