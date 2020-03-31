@@ -34,7 +34,7 @@ export class NepalCountController implements IController {
 
   addNepalCount = async (request: Request, response: Response) => {
     try {
-      const count = await this.nepalCountService.addNepalCount(request.body);
+      const count = await this.nepalCountService.add(request.body);
       response.json(count);
     } catch (error) {
       error = new HttpException({
@@ -48,7 +48,7 @@ export class NepalCountController implements IController {
 
   updateNepalCount = async (request: Request, response: Response) => {
     try {
-      const count = await this.nepalCountService.updateNepalCount(request.params.id, request.body);
+      const count = await this.nepalCountService.update(request.params.id, request.body);
       response.json(count);
     } catch (error) {
       error = new HttpException({

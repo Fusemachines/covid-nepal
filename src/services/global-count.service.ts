@@ -6,7 +6,7 @@ export class GlobalCountService {
     return await GlobalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
-  async addGlobalCount(data: IGlobalCount) {
+  async add(data: IGlobalCount) {
     let date = new Date();
 
     date.setUTCHours(0, 0, 0, 0);
@@ -26,7 +26,7 @@ export class GlobalCountService {
     return await GlobalCountModel.create(nepalCount);
   }
 
-  async updateGlobalCount(id: string, data: IGlobalCount) {
+  async update(id: string, data: IGlobalCount) {
     let nepalCount = await GlobalCountModel.findById(id).exec();
 
     let date = nepalCount.get('createdAt');

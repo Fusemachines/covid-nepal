@@ -89,10 +89,10 @@ export default class App {
                 };
                 if (count != undefined) {
                     // update
-                    await that.nepalCountService.updateNepalCount(count._id, nepalCount);
+                    await that.nepalCountService.update(count._id, nepalCount);
                 } else {
                     // create
-                    await that.nepalCountService.addNepalCount(nepalCount);
+                    await that.nepalCountService.add(nepalCount);
                 }
             })
         } catch (error) {
@@ -122,10 +122,10 @@ export default class App {
                 };
                 if (count != undefined) {
                     // update
-                    await that.globalCountService.updateGlobalCount(count._id, globalCount);
+                    await that.globalCountService.update(count._id, globalCount);
                 } else {
                     // create
-                    await that.globalCountService.addGlobalCount(globalCount);
+                    await that.globalCountService.add(globalCount);
                 }
             })
         } catch (error) {

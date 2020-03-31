@@ -8,7 +8,7 @@ export class NepalCountService {
     return await NepalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
-  async addNepalCount(data: INepalCount) {
+  async add(data: INepalCount) {
     let date = new Date();
     // await this.validateNepalCount(date);
 
@@ -31,7 +31,7 @@ export class NepalCountService {
     return await NepalCountModel.create(nepalCount);
   }
 
-  async updateNepalCount(id: string, data: INepalCount) {
+  async update(id: string, data: INepalCount) {
     let nepalCount = await NepalCountModel.findById(id).exec();
 
     let date = nepalCount.get('createdAt');
