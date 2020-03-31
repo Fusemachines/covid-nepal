@@ -21,7 +21,7 @@ const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
 const basicAuth = require('express-basic-auth');
 const whitelist = ['https://covidnepal.org', 'https://www.covidnepal.org', 'http://www.covidnepal.org',
-                'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000', 'https://admin.covidnepal.org'];
+    'https://dev.covidnepal.org', 'http://dev.covidnepal.org', 'http://localhost:3000', 'https://admin.covidnepal.org', 'https://admin-dev.covidnepal.org'];
 
 export default class App {
     private app: Application;
