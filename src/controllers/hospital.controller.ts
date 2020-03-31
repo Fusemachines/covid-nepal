@@ -1,5 +1,5 @@
 import { IController } from "../shared/interfaces";
-import { Router, Request, Response, NextFunction, response } from "express";
+import { Router } from "express";
 import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
@@ -23,6 +23,7 @@ export class HospitalController implements IController {
         this.router.post("/import-json/:rows/:remove", this.importHospitalFromJsonFile);
         this.router.put("/import-json/update", this.updateHospitalFromJsonFile);
         this.router.get("/", this.getAllHospitals);
+        this.router.get("/count", this.getHospitalCount);
         this.router.get("/covid", this.getHospitalsForCovid);
         this.router.get("/:nameSlug", this.getHospitalBySlug);
         this.router.get("/id/:id", this.getHospitalById);
@@ -74,7 +75,7 @@ export class HospitalController implements IController {
 
             // remove all and insert all again
             if (request.params.remove == "true") {
-                removeAll = true;   
+                removeAll = true;
             }
 
         } else {
@@ -188,7 +189,21 @@ export class HospitalController implements IController {
     }
 
 
+    getHospitalCount = async (request: CRequest, response: CResponse) => {
+        try {
 
+            const result = await this.hospitalService.getHospitalsCount();
+            response.status(200).json(result);
+        } catch (error) {
+            error = new HttpException({
+                statusCode: 500,
+                description: error.message,
+            })
+            const parsedError = error.parse()
+            response.status(parsedError.statusCode).json(parsedError)
+        }
+    }
+    
     /**
    * @swagger
    * /hostpitals:
@@ -209,7 +224,6 @@ export class HospitalController implements IController {
             })
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
-            response.status(500).json({ error })
         }
     }
 
@@ -233,7 +247,6 @@ export class HospitalController implements IController {
             })
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
-            response.status(500).json({ error })
         }
     }
 
@@ -249,7 +262,6 @@ export class HospitalController implements IController {
             })
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
-            response.status(500).json({ error })
         }
     }
 }
