@@ -21,7 +21,7 @@
     "mode": "block"
   },
   "cors": {
-    "enabled": false,
+    "enabled": true,
     "origin": "http://api-dev.covidnepal.org:1337, https://covidnepal.org, https://www.covidnepal.org, http://www.covidnepal.org, https://dev.covidnepal.org, http://dev.covidnepal.org, http://localhost:3000, https://admin.covidnepal.org, https://admin-dev.covidnepal.org"
   },
   "ip": {
