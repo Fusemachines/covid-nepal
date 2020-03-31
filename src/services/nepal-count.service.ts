@@ -8,7 +8,7 @@ export class NepalCountService {
     return await NepalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
-  async addNepalCount(data: INepalCount) {
+  async add(data: INepalCount) {
     let date = new Date();
     // await this.validateNepalCount(date);
 
@@ -31,7 +31,7 @@ export class NepalCountService {
     return await NepalCountModel.create(nepalCount);
   }
 
-  async updateNepalCount(id: string, data: INepalCount) {
+  async update(id: string, data: INepalCount) {
     let nepalCount = await NepalCountModel.findById(id).exec();
 
     let date = nepalCount.get('createdAt');
@@ -53,6 +53,27 @@ export class NepalCountService {
     await NepalCountModel.findByIdAndUpdate(id, count).lean().exec();
 
     return await NepalCountModel.findById(id).lean().exec();
+  }
+
+  async getCountsWithPagination(page: number, size: number) {
+    page = Number(page);
+    size = Number(size);
+
+    let query = NepalCountModel.find({});
+    const data = await query.skip(page * size).limit(size).exec();
+
+    const totalItems = await NepalCountModel.countDocuments({}).exec();
+    const totalPages = Math.ceil(totalItems / size);
+
+    return {
+      meta: {
+        page,
+        size,
+        totalItems,
+        totalPages,
+      },
+      data
+    }
   }
 
   private async validateNepalCount(date: Date) {

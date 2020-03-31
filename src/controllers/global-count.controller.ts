@@ -14,11 +14,41 @@ export class GlobalCountController implements IController {
 
   initRoutes() {
     this.router.get("/latest", this.getLatestCounts);
+    this.router.put("/:id", this.update);
+    this.router.get("/", this.getCountsWithPagination);
   }
 
   getLatestCounts = async (request: Request, response: Response) => {
     try {
       const counts = await this.globalCountService.getLatestCount();
+      response.json(counts);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
+  update = async (request: Request, response: Response) => {
+    try {
+      const count = await this.globalCountService.update(request.params.id, request.body);
+      response.json(count);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
+  getCountsWithPagination = async (request: Request, response: Response) => {
+    try {
+      const counts = await this.globalCountService.getCountsWithPagination(request.query.page, request.query.size);
       response.json(counts);
     } catch (error) {
       error = new HttpException({
