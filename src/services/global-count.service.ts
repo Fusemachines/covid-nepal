@@ -6,6 +6,10 @@ export class GlobalCountService {
     return await GlobalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
+  async getById(id: string) {
+    return await GlobalCountModel.findById(id).lean().exec();
+  }
+
   async add(data: IGlobalCount) {
     let date = new Date();
 

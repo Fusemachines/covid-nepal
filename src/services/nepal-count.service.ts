@@ -7,6 +7,10 @@ export class NepalCountService {
   async getLatestCount() {
     return await NepalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
+  
+  async getById(id: string) {
+    return await NepalCountModel.findById(id).lean().exec();
+  }
 
   async add(data: INepalCount) {
     let date = new Date();

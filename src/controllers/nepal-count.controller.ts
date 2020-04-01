@@ -17,6 +17,7 @@ export class NepalCountController implements IController {
     this.router.post("/", this.addNepalCount);
     this.router.put("/:id", this.updateNepalCount);
     this.router.get("/", this.getCountsWithPagination);
+    this.router.get("/:id", this.getById);
   }
 
   getLatestCounts = async (request: Request, response: Response) => {
@@ -75,4 +76,17 @@ export class NepalCountController implements IController {
     }
   }
 
+  getById = async (request: Request, response: Response) => {
+    try {
+      const count = await this.nepalCountService.getById(request.params.id);
+      response.json(count);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
 }
