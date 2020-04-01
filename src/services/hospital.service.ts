@@ -32,7 +32,6 @@ export class HospitalService {
         return {
             totalHospitals: total,
             totalVerified: totalVerified,
-            totalPending: total - totalVerified,
             ...counts[0]
         }
     }
