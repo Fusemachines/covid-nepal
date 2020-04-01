@@ -1,6 +1,6 @@
 {
   "csp": {
-    "enabled": true,
+    "enabled": false,
     "policy": ["block-all-mixed-content"]
   },
   "p3p": {
@@ -21,7 +21,8 @@
     "mode": "block"
   },
   "cors": {
-    "enabled": true
+    "enabled": true,
+    "origin": "https://covidnepal.org, https://www.covidnepal.org, http://www.covidnepal.org, https://dev.covidnepal.org, http://dev.covidnepal.org, http://localhost:3000, https://admin.covidnepal.org, https://admin-dev.covidnepal.org"
   },
   "ip": {
     "enabled": false,

@@ -1,6 +1,6 @@
 {
   "csp": {
-    "enabled": true,
+    "enabled": false,
     "policy": ["block-all-mixed-content"]
   },
   "p3p": {
@@ -13,7 +13,7 @@
     "includeSubDomains": true
   },
   "xframe": {
-    "enabled": true,
+    "enabled": false,
     "value": "SAMEORIGIN"
   },
   "xss": {
@@ -21,7 +21,9 @@
     "mode": "block"
   },
   "cors": {
-    "enabled": true
+    "enabled": true,
+    "origin": "https://covidnepal.org, https://www.covidnepal.org, http://www.covidnepal.org, https://dev.covidnepal.org, http://dev.covidnepal.org, http://localhost:3000, https://admin.covidnepal.org, https://admin-dev.covidnepal.org",
+    "expose": ["WWW-Authenticate", "Server-Authorization", "Access-Control-Expose-Headers", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"]
   },
   "ip": {
     "enabled": false,

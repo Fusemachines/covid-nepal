@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "news_types",
+  "info": {
+    "name": "News Type"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "news_feeds": {
+      "via": "news_types",
+      "collection": "news-feed"
+    }
+  }
+}

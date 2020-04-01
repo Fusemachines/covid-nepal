@@ -102,6 +102,6 @@ const HospitalSchema = new Schema({
 HospitalSchema.plugin(paginate);
 
 
-const HospitalModel:any = model("hospital", HospitalSchema, "hospitals");
+const HospitalModel = model("hospital", HospitalSchema, "hospitals");
 
 export default HospitalModel;

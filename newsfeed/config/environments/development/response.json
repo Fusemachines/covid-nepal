@@ -1,12 +1,12 @@
 {
   "gzip": {
-    "enabled": false
+    "enabled": true
   },
   "responseTime": {
     "enabled": false
   },
   "poweredBy": {
     "enabled": true,
-    "value": "Strapi <strapi.io>"
+    "value": "covidnepal <cpvidnepal.org>"
   }
 }

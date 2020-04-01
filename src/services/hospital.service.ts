@@ -13,7 +13,31 @@ export class HospitalService {
         return HospitalModel.create(data);
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string }) {
+    async getHospitalsCount() {
+        const total = await HospitalModel.countDocuments();
+
+        const totalVerified = await HospitalModel.countDocuments({
+            isVerified: true
+        });
+
+        const counts = await HospitalModel.aggregate([{
+            $group: {
+                _id: '',
+                totalBeds: { $sum: '$totalBeds' },
+                totalIsolationBeds: { $sum: "$numIsolationBeds" },
+                totalVentilators: { $sum: "$ventilators" },
+                totalIcus: { $sum: "$icu" }
+            }
+        }])
+        return {
+            totalHospitals: total,
+            totalVerified: totalVerified,
+            totalPending: total - totalVerified,
+            ...counts[0]
+        }
+    }
+
+    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string, name: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         const { lang = "en" } = query;
@@ -39,14 +63,13 @@ export class HospitalService {
             filter = { ...filter, covidTest }
         }
 
-        const total = await HospitalModel.countDocuments();
+        if (query.name) {
+            filter = { ...filter, ["name.en"]: new RegExp(query.name, 'gi') }
+        }
 
-        const totalVerified = await HospitalModel.countDocuments({
-            isVerified: true
-        });
 
         // query with pagination and sorting
-        const hospitals = await HospitalModel.paginate(filter, {
+        return await HospitalModel.paginate(filter, {
             lean: true,
             select: lang === "np" ? `-__v` : `
             name.${lang}
@@ -75,13 +98,6 @@ export class HospitalService {
             ...getPagination(query),
             ...getSorting(query)
         });
-
-        return {
-            ...hospitals,
-            totalHospitals: total,
-            totalVerified: totalVerified,
-            totalPending: total - totalVerified
-        }
     }
 
     getCovidHospitals() {
