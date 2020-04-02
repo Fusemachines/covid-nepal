@@ -1,4 +1,7 @@
 import { RequestModel, SupporterModel } from "../models/frontline.model";
+import { getPagination, getSorting } from "../shared/utils";
+import { ESortOrder } from "../shared/interfaces/http.interface";
+import { filter } from "compression";
 
 
 export class FrontlineService {
@@ -7,13 +10,75 @@ export class FrontlineService {
     private requestModel = RequestModel;
 
 
-    async getSupporters(query: {}) {
+    // Get Help Requests
+    async getRequests(query: {
+        size: number;
+        page: number;
+        order: ESortOrder;
+        orderBy: string;
+        name: string;
+        items: string;
+    }) {
+
+        const filters: any = {};
+
+        if (query.name) {
+            filters["name"] = new RegExp(query.name, 'gi')
+        }
+
+        if (query.items) {
+            const items = query.items.split(",");
+            filters["requestedItems"] = ":"
+        }
+
+
+        const result = await this.requestModel.paginate(
+            filters,
+            {
+                select: "-__v",
+                lean: true,
+                populate: ["fulfilledBy"],
+                ...getPagination(query),
+                ...getSorting(query)
+            }
+        );
+        return result;
 
     }
 
+    // Get Supporters
+    async getSupporters(query: {
+        size: number;
+        page: number;
+        order: ESortOrder;
+        orderBy: string;
+    }) {
 
-    async getRequests(query: {}) {
+        const filters = {};
 
+        const result = await this.supporterModel.paginate(
+            filters,
+            {
+                select: "-__v",
+                lean: true,
+                ...getPagination(query),
+                ...getSorting(query)
+            }
+        );
+        return result
+    }
+
+
+
+    async createRequest(data: any) {
+        const result = this.requestModel.create(data);
+        return result;
+    }
+
+
+    async createSupporter(data: any) {
+        const result = await this.supporterModel.create(data);
+        return result;
     }
 
 
