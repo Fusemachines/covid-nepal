@@ -30,7 +30,7 @@ export class NewsService {
       .limit(size)
       .lean().exec();
 
-    const totalItems = await NewsModel.countDocuments({}).exec();
+    const totalItems = await NewsModel.countDocuments({'type': type}).exec();
     const totalPages = Math.ceil(totalItems / size);
 
     return {
