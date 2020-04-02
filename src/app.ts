@@ -55,13 +55,12 @@ export default class App {
             if (connOptions.username || connOptions.password) {
                 connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
             }
-
-            const connection = await connect(connectionUri, {
+            
+            await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useFindAndModify: false
             });
-            console.log("connected")
 
         } catch (error) {
             global.logger.log({

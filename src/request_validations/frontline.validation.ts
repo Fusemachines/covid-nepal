@@ -9,8 +9,7 @@ export const validateCreateSupporter = (req: CRequest, res: CResponse, next: Nex
         name: Joi.string().required(),
         contact: {
             email: Joi.string().email().required(),
-            mobile: Joi.string(),
-            landLine: Joi.string(),
+            phone: Joi.string()
         },
         organization: Joi.string().required(),
         isVerified: Joi.boolean(),
@@ -40,8 +39,7 @@ export const validateCreateRequest = (req: CRequest, res: CResponse, next: NextF
         name: Joi.string().required(),
         contact: {
             email: Joi.string().email().required(),
-            mobile: Joi.string(),
-            landLine: Joi.string(),
+            phone: Joi.string()
         },
         organization: Joi.string().required(),
         isVerified: Joi.boolean(),
@@ -74,8 +72,7 @@ export const validateUpdateSupporter = (request: CRequest, response: CResponse, 
         name: Joi.string(),
         contact: {
             email: Joi.string().email(),
-            mobile: Joi.string(),
-            landLine: Joi.string(),
+            phone: Joi.string()
         },
         organization: Joi.string(),
         isVerified: Joi.boolean(),
@@ -83,8 +80,41 @@ export const validateUpdateSupporter = (request: CRequest, response: CResponse, 
         providedItems: Joi.array().items(Joi.string()),
         others: Joi.string()
     }
-    
+
     const result = Joi.validate(body, updateSupporterSchema);
+    const { error } = result;
+
+    if (error && error.details) {
+        response.status(422).json({
+            message: 'Invalid request',
+            errors: error.details
+        })
+    } else {
+        next()
+    }
+}
+
+
+
+export const validateUpdateRequest = (request: CRequest, response: CResponse, next: NextFunction) => {
+    const { body } = request;
+
+    const updateRequestSchema = {
+        name: Joi.string(),
+        contact: {
+            email: Joi.string().email(),
+            phone: Joi.string()
+        },
+        organization: Joi.string(),
+        isVerified: Joi.boolean(),
+        isFulfilled: Joi.boolean(),
+        location: Joi.string(),
+        requestedItems: Joi.array().items(Joi.string()),
+        fulfilledBy: Joi.array().items(Joi.string()),
+        others: Joi.string()
+    }
+
+    const result = Joi.validate(body, updateRequestSchema);
     const { error } = result;
 
     if (error && error.details) {

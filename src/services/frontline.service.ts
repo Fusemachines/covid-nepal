@@ -1,14 +1,11 @@
 import { RequestModel, SupporterModel } from "../models/frontline.model";
 import { getPagination, getSorting } from "../shared/utils";
 import { ESortOrder } from "../shared/interfaces/http.interface";
-import { filter } from "compression";
-
 
 export class FrontlineService {
 
     private supporterModel = SupporterModel;
     private requestModel = RequestModel;
-
 
     // Get Help Requests
     async getRequests(query: {
@@ -28,9 +25,10 @@ export class FrontlineService {
 
         if (query.items) {
             const items = query.items.split(",");
-            filters["requestedItems"] = ":"
+            filters["requestedItems"] = {
+                $in: items
+            }
         }
-
 
         const result = await this.requestModel.paginate(
             filters,
@@ -52,9 +50,21 @@ export class FrontlineService {
         page: number;
         order: ESortOrder;
         orderBy: string;
+        items: string;
+        name: string;
     }) {
 
-        const filters = {};
+        const filters: any = {};
+        if (query.items) {
+            const items = query.items.split(",");
+            filters["providedItems"] = {
+                $in: items
+            }
+        }
+
+        if (query.name) {
+            filters["name"] = new RegExp(query.name, 'gi')
+        }
 
         const result = await this.supporterModel.paginate(
             filters,
@@ -82,26 +92,50 @@ export class FrontlineService {
     }
 
 
-    async updateSupporter(id: string, data: any) {
+    async updateSupporter(id: string, { contact, ...rest }: any) {
 
-        const updateData: any = {};
-
-        if (data.contact) {
-            for (let key in data.contact) {
-                if (data.contact[key] !== undefined) {
-                    updateData.contact[key] = data.contact[key]
+        let updateData: any = {};
+        if (contact) {
+            for (let key in contact) {
+                if (contact[key] !== undefined) {
+                    updateData[`contact.${key}`] = contact[key]
                 }
             }
         }
 
-
+        updateData = { ...updateData, ...rest }
         return await this.supporterModel.findByIdAndUpdate({ _id: id }, {
-            ...updateData
+            $set: updateData
         }, {
             new: true
         })
     }
 
 
+    async updateRequest(id: string, { contact, ...rest }: any) {
+
+        let updateData: any = {};
+
+        if (contact) {
+            for (let key in contact) {
+                if (contact[key] !== undefined) {
+                    updateData[`contact.${key}`] = contact[key]
+                }
+            }
+        }
+
+        updateData = { ...updateData, ...rest }
+        return await this.requestModel.findByIdAndUpdate({ _id: id }, {
+            $set: updateData
+        }, {
+            new: true
+        })
+    }
+
+
+    async getSupportersForDropdown() {
+        const results = await this.supporterModel.find({}).select("_id name organization").lean().exec();
+        return results;
+    }
 
 }

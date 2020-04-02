@@ -13,8 +13,7 @@ const RequestSchema = new Schema({
             type: Schema.Types.String,
             required: true
         },
-        mobile: Schema.Types.String,
-        landLine: Schema.Types.String,
+        phone: Schema.Types.String
     },
     organization: {
         type: Schema.Types.String,
@@ -43,10 +42,11 @@ const SupporterSchema = new Schema({
         required: true
     },
     contact: {
-        email: Schema.Types.String,
-        mobile: Schema.Types.String,
-        landLine: Schema.Types.String,
-        requiredPaths: ["email"]
+        email: {
+            type: Schema.Types.String,
+            required: true
+        },
+        phone: Schema.Types.String
     },
     organization: {
         type: Schema.Types.String,

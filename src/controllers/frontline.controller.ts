@@ -3,7 +3,7 @@ import { Router } from "express";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 import { FrontlineService } from "../services";
 import HttpException from "../shared/exceptions/httpException";
-import { validateCreateRequest, validateCreateSupporter, validateUpdateSupporter } from "../request_validations/frontline.validation";
+import { validateCreateRequest, validateCreateSupporter, validateUpdateSupporter, validateUpdateRequest } from "../request_validations/frontline.validation";
 
 export class FrontlineController implements IController {
     route: string = "frontline";
@@ -19,13 +19,16 @@ export class FrontlineController implements IController {
     initRoutes() {
         this.router.get("/supporters", this.getAllSupporters);
         this.router.get("/requests", this.getAllRequests);
+        this.router.get("/supporters/dropdown", this.getDropdownSupporters);
+
+        this.router.get("/supporters/:id", this.getSupporterById);
+        this.router.get("/request/:id", this.getRequestById);
 
         this.router.post("/supporters", validateCreateSupporter, this.createSupporter);
         this.router.post("/requests", validateCreateRequest, this.createRequest);
 
-        this.router.patch("/supporters/:id", validateUpdateSupporter, this.updateSupporter);
-        this.router.patch("/requests", this.updateRequest);
-
+        this.router.patch("/supporters/:id", validateUpdateSupporter, this.updateSupporterById);
+        this.router.patch("/requests/:id", validateUpdateRequest, this.updateRequestById);
     }
 
 
@@ -47,21 +50,22 @@ export class FrontlineController implements IController {
         }
     }
 
-    updateSupporter = async (request: CRequest, response: CResponse) => {
-
+    updateSupporterById = async (request: CRequest, response: CResponse) => {
         try {
-
             const updateResult = await this.frontlineService.updateSupporter(request.params.id, request.body)
-
             response.status(200).json(updateResult);
-
         } catch (error) {
             this.handleError(error, response);
         }
     }
 
-    updateRequest = async (request: CRequest, response: CResponse) => {
-
+    updateRequestById = async (request: CRequest, response: CResponse) => {
+        try {
+            const updateResult = await this.frontlineService.updateRequest(request.params.id, request.body);
+            response.status(200).json(updateResult);
+        } catch (error) {
+            this.handleError(error, response);
+        }
     }
 
 
@@ -80,6 +84,23 @@ export class FrontlineController implements IController {
             response.status(200).json(results);
         } catch (error) {
             this.handleError(error, response)
+        }
+    }
+
+    getSupporterById = async (request: CRequest, response: CResponse) => {
+
+    }
+
+    getRequestById = async (request: CRequest, response: CResponse) => {
+
+    }
+
+    getDropdownSupporters = async (request: CRequest, response: CResponse) => {
+        try {
+            const results = await this.frontlineService.getSupportersForDropdown();
+            response.status(200).send(results);
+        } catch (error) {
+            this.handleError(error, response);
         }
     }
 
