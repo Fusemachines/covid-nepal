@@ -1,5 +1,5 @@
 import { INews } from "../shared/interfaces/news.interface";
-import { NewsModel } from "src/models/news.model";
+import { NewsModel } from "../models/news.model";
 
 export class NewsService {
 
