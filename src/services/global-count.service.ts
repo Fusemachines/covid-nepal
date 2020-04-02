@@ -57,9 +57,7 @@ export class GlobalCountService {
     page = Number(page);
     size = Number(size);
 
-    let query = GlobalCountModel.find({});
-    const data = await query.skip(page * size).limit(size).exec();
-
+    const data = await GlobalCountModel.find({}).skip(page * size).limit(size).exec();
     const totalItems = await GlobalCountModel.countDocuments({}).exec();
     const totalPages = Math.ceil(totalItems / size);
 
