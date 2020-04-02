@@ -14,7 +14,10 @@ export class NewsController implements IController {
 
   initRoutes() {
     this.router.post("/", this.add);
+    this.router.put("/:id", this.update);
     this.router.get("/", this.getWithPagination);
+    this.router.get("/tips", this.getTips);
+    this.router.get("/top", this.getTop);
   }
 
   add = async (request: Request, response: Response) => {
@@ -31,10 +34,52 @@ export class NewsController implements IController {
     }
   }
 
+  update = async (request: Request, response: Response) => {
+    try {
+      const news = await this.newsService.update(request.params.id, request.body);
+      response.json(news);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
   getWithPagination = async (request: Request, response: Response) => {
     try {
       const news = await this.newsService.getWithPagination(request.query.type, request.query.page, request.query.size);
       response.json(news);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
+  getTips = async (request: Request, response: Response) => {
+    try {
+      const tips = await this.newsService.getTips();
+      response.json({ docs: tips });
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
+  getTop = async (request: Request, response: Response) => {
+    try {
+      const top = await this.newsService.getTop();
+      response.json(top);
     } catch (error) {
       error = new HttpException({
         statusCode: 500,

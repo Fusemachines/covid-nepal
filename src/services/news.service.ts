@@ -16,10 +16,14 @@ export class NewsService {
     return await NewsModel.create(news);
   };
 
+  async update(id: string, data: INews) {
+    return await NewsModel.findByIdAndUpdate(id, data).lean().exec();
+  }
+
   async getWithPagination(type: string, page: number, size: number) {
     page = Number(page);
     size = Number(size);
-    
+
     const news = await NewsModel.find({ 'type': type })
       .skip(page * size)
       .limit(size)
@@ -37,6 +41,13 @@ export class NewsService {
       },
       docs: news
     }
+  }
 
+  async getTips() {
+    return await NewsModel.find({ 'type': 'TIP' }).lean().exec();
+  }
+
+  async getTop() {
+    return await NewsModel.findOne({ 'type': 'TOP' }).sort({ 'createdAt': 'desc' }).lean().exec();
   }
 }
