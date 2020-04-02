@@ -9,10 +9,12 @@ const RequestSchema = new Schema({
         required: true
     },
     contact: {
-        email: Schema.Types.String,
+        email: {
+            type: Schema.Types.String,
+            required: true
+        },
         mobile: Schema.Types.String,
         landLine: Schema.Types.String,
-        requiredPaths: ["email"]
     },
     organization: {
         type: Schema.Types.String,

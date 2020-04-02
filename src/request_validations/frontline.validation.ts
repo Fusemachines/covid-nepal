@@ -8,7 +8,7 @@ export const validateCreateSupporter = (req: CRequest, res: CResponse, next: Nex
     const createSupporterSchema = {
         name: Joi.string().required(),
         contact: {
-            email: Joi.string().required(),
+            email: Joi.string().email().required(),
             mobile: Joi.string(),
             landLine: Joi.string(),
         },
@@ -39,7 +39,7 @@ export const validateCreateRequest = (req: CRequest, res: CResponse, next: NextF
     const createRequestSchema = {
         name: Joi.string().required(),
         contact: {
-            email: Joi.string().required(),
+            email: Joi.string().email().required(),
             mobile: Joi.string(),
             landLine: Joi.string(),
         },
@@ -65,3 +65,34 @@ export const validateCreateRequest = (req: CRequest, res: CResponse, next: NextF
     }
 }
 
+
+
+export const validateUpdateSupporter = (request: CRequest, response: CResponse, next: NextFunction) => {
+    const { body } = request;
+
+    const updateSupporterSchema = {
+        name: Joi.string(),
+        contact: {
+            email: Joi.string().email(),
+            mobile: Joi.string(),
+            landLine: Joi.string(),
+        },
+        organization: Joi.string(),
+        isVerified: Joi.boolean(),
+        location: Joi.string(),
+        providedItems: Joi.array().items(Joi.string()),
+        others: Joi.string()
+    }
+    
+    const result = Joi.validate(body, updateSupporterSchema);
+    const { error } = result;
+
+    if (error && error.details) {
+        response.status(422).json({
+            message: 'Invalid request',
+            errors: error.details
+        })
+    } else {
+        next()
+    }
+}

@@ -82,5 +82,26 @@ export class FrontlineService {
     }
 
 
+    async updateSupporter(id: string, data: any) {
+
+        const updateData: any = {};
+
+        if (data.contact) {
+            for (let key in data.contact) {
+                if (data.contact[key] !== undefined) {
+                    updateData.contact[key] = data.contact[key]
+                }
+            }
+        }
+
+
+        return await this.supporterModel.findByIdAndUpdate({ _id: id }, {
+            ...updateData
+        }, {
+            new: true
+        })
+    }
+
+
 
 }
