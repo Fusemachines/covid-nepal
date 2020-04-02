@@ -71,6 +71,10 @@ export default class App {
     }
 
     async loadNepalCount() {
+        if (!((process.env.NODE_ENV === "production" && process.env.NODE_APP_INSTANCE === '0') || process.env.NODE_ENV === "development")) {
+            return;
+        }
+        
         let that = this;
         try {
             cron.schedule('0 0 */1 * * *', async () => {
@@ -135,6 +139,10 @@ export default class App {
     }
 
     async loadGlobalCount() {
+        if (!((process.env.NODE_ENV === "production" && process.env.NODE_APP_INSTANCE === '0') || process.env.NODE_ENV === "development")) {
+            return;
+        }
+
         let that = this;
         try {
             cron.schedule('0 0 */1 * * *', async () => {
@@ -165,7 +173,7 @@ export default class App {
                     }
                 } else {
                     // create
-                    const previousData = await that.nepalCountService.getLatestCount();
+                    const previousData = await that.globalCountService.getLatestCount();
 
                     if (previousData == undefined) {
                         await that.globalCountService.add(globalCount);
