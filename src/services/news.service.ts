@@ -10,7 +10,8 @@ export class NewsService {
       imageUrl: data.imageUrl,
       uploadedAt: data.uploadedAt,
       description: data.description,
-      type: data.type
+      type: data.type,
+      source: data.source
     });
 
     return await NewsModel.create(news);

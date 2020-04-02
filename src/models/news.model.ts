@@ -18,6 +18,9 @@ const NewsSchema = new Schema({
   },
   type: {
     type: Schema.Types.String
+  },
+  source: {
+    type: Schema.Types.String
   }
 }, { timestamps: true })
 
