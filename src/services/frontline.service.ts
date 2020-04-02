@@ -79,6 +79,24 @@ export class FrontlineService {
     }
 
 
+    async getSupporterById(id: string) {
+        const supporter = await this.supporterModel.findById(id);
+        return supporter;
+    }
+
+    async getRequestById(id: string) {
+        const request = await this.requestModel.findById(id);
+        return request;
+    }
+
+    async deleteSupporterById(id: string) {
+        return await this.supporterModel.findByIdAndRemove(id);
+    }
+
+    async deleteRequestById(id: string) {
+        return await this.requestModel.findByIdAndRemove(id);
+    }
+
 
     async createRequest(data: any) {
         const result = this.requestModel.create(data);
