@@ -1,5 +1,5 @@
 import { IController } from "../shared/interfaces";
-import { Router, request, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { NepalCountService } from "../services/nepal-count.service";
 import HttpException from "../shared/exceptions/httpException";
 
