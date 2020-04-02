@@ -63,9 +63,7 @@ export class NepalCountService {
     page = Number(page);
     size = Number(size);
 
-    let query = NepalCountModel.find({});
-    const data = await query.skip(page * size).limit(size).exec();
-
+    const data = await NepalCountModel.find({}).skip(page * size).limit(size).exec();
     const totalItems = await NepalCountModel.countDocuments({}).exec();
     const totalPages = Math.ceil(totalItems / size);
 
