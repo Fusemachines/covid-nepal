@@ -7,6 +7,10 @@ export class NepalCountService {
   async getLatestCount() {
     return await NepalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
+  
+  async getById(id: string) {
+    return await NepalCountModel.findById(id).lean().exec();
+  }
 
   async add(data: INepalCount) {
     let date = new Date();
@@ -59,9 +63,7 @@ export class NepalCountService {
     page = Number(page);
     size = Number(size);
 
-    let query = NepalCountModel.find({});
-    const data = await query.skip(page * size).limit(size).exec();
-
+    const data = await NepalCountModel.find({}).skip(page * size).limit(size).exec();
     const totalItems = await NepalCountModel.countDocuments({}).exec();
     const totalPages = Math.ceil(totalItems / size);
 
