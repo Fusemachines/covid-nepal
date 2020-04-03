@@ -1,7 +1,7 @@
 import { IController } from "../shared/interfaces";
-import { Router, Request, Response } from "express";
-import { NewsService } from "../services";
+import { Router, Request, Response, request } from "express";
 import HttpException from "../shared/exceptions/httpException";
+import { NewsService } from "../services/news.service";
 
 export class NewsController implements IController {
   public router: Router;
@@ -18,6 +18,8 @@ export class NewsController implements IController {
     this.router.get("/", this.getWithPagination);
     this.router.get("/tips", this.getTips);
     this.router.get("/top", this.getTop);
+    this.router.get("/:id", this.getById);
+    this.router.delete("/:id", this.delete);
   }
 
   add = async (request: Request, response: Response) => {
@@ -89,5 +91,34 @@ export class NewsController implements IController {
       response.status(parsedError.statusCode).json(parsedError);
     }
   }
+
+  getById = async (request: Request, response: Response) => {
+    try {
+      const news = await this.newsService.getById(request.params.id);
+      response.json(news);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
+  delete = async (request: Request, response: Response) => {
+    try {
+      await this.newsService.deleteById(request.params.id);
+      response.json({ "message": `News with id '${request.params.id}' deleted.` });
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
 }
 
