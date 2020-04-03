@@ -59,7 +59,8 @@ export default class App {
             await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useFindAndModify: false
+                useFindAndModify: false,
+                useCreateIndex :true
             });
 
         } catch (error) {
