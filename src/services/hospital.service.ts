@@ -20,15 +20,44 @@ export class HospitalService {
             isVerified: true
         });
 
-        const counts = await HospitalModel.aggregate([{
-            $group: {
-                _id: '',
-                totalBeds: { $sum: '$totalBeds' },
-                totalIsolationBeds: { $sum: "$numIsolationBeds" },
-                totalVentilators: { $sum: "$ventilators" },
-                totalIcus: { $sum: "$icu" }
-            }
-        }])
+        const counts = await HospitalModel.aggregate([
+            {
+                $project: {
+                    PositiveVentilatorCount: {
+                        $cond: [{
+                            $gte: ['$ventilators', 0]
+                        }, '$ventilators', 0
+                        ]
+                    },
+                    PositiveBedCount: {
+                        $cond: [{
+                            $gte: ['$totalBeds', 0]
+                        }, '$totalBeds', 0
+                        ]
+                    },
+                    PositiveIcuCount: {
+                        $cond: [{
+                            $gte: ['$icu', 0]
+                        }, '$icu', 0
+                        ]
+                    },
+                    PositiveIsolationBedCount: {
+                        $cond: [{
+                            $gte: ['$numIsolationBeds', 0]
+                        }, '$numIsolationBeds', 0
+                        ]
+                    },
+                }
+            },
+            {
+                $group: {
+                    _id: '',
+                    totalBeds: { $sum: '$PositiveBedCount' },
+                    totalIsolationBeds: { $sum: "$PositiveIsolationBedCount" },
+                    totalVentilators: { $sum: "$PositiveVentilatorCount" },
+                    totalIcus: { $sum: "$PositiveIcuCount" }
+                }
+            }])
         return {
             totalHospitals: total,
             totalVerified: totalVerified,
