@@ -51,4 +51,12 @@ export class NewsService {
   async getTop() {
     return await NewsModel.findOne({ 'type': 'TOP' }).sort({ 'createdAt': 'desc' }).lean().exec();
   }
+
+  async getById(id: string) {
+    return await NewsModel.findById(id).lean().exec();
+  }
+
+  async deleteById(id: string) {
+    await NewsModel.findByIdAndDelete(id).lean().exec();
+  }
 }
