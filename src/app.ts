@@ -89,12 +89,12 @@ export default class App {
 
                 const count = await NepalCountModel.findOne({ createdAt: { $gte: date, $lte: nextDate } }).lean().exec();
 
-                const { data } = await axios.get('https://covidapi.naxa.com.np/api/v1/stats/');
+                const { data } = await axios.get('https://covid19.mohp.gov.np/covid/api/confirmedcases');
                 const nepalCount: INepalCount = {
-                    testedTotal: data.tested,
-                    confirmedTotal: data.confirmed,
-                    deathTotal: data.death,
-                    recoveredTotal: Number(data.confirmed) - Number(data.isolation)
+                    testedTotal: data.nepal.samples_tested,
+                    confirmedTotal: data.nepal.positive,
+                    deathTotal: data.nepal.deaths,
+                    recoveredTotal: data.nepal.extra1
                 };
 
                 if (count != undefined) {
@@ -149,7 +149,7 @@ export default class App {
             cron.schedule('0 0 */1 * * *', async () => {
                 let date = new Date();
 
-                global.logger.log({ level: 'info', message: `Scheduler to update Nepal count triggered. Time: ${date}` });
+                global.logger.log({ level: 'info', message: `Scheduler to update Global count triggered. Time: ${date}` });
 
                 date.setUTCHours(0, 0, 0, 0);
                 const nextDate = new Date(date);
