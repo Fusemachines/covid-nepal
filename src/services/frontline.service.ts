@@ -85,7 +85,7 @@ export class FrontlineService {
     }
 
     async getRequestById(id: string) {
-        const request = await this.requestModel.findById(id);
+        const request = await this.requestModel.findById(id).populate("fulfilledBy").lean();
         return request;
     }
 
