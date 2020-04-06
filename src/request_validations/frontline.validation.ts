@@ -79,7 +79,8 @@ export const validateUpdateSupporter = (request: CRequest, response: CResponse, 
         isVerified: Joi.boolean(),
         location: Joi.string(),
         providedItems: Joi.array().items(Joi.string()),
-        others: Joi.string()
+        others: Joi.string(),
+        fulfillByDate: Joi.date()
     }
 
     const result = Joi.validate(body, updateSupporterSchema);
