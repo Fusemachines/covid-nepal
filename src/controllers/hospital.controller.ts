@@ -44,7 +44,6 @@ export class HospitalController implements IController {
             })
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
-            response.status(500).json({ error })
         }
     }
 
