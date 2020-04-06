@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
 import paginate from "../shared/plugins/pagination.plugin";
 
-
+// Request Schema
+// --------------
 const RequestSchema = new Schema({
 
     name: {
@@ -13,7 +14,10 @@ const RequestSchema = new Schema({
             type: Schema.Types.String,
             required: true
         },
-        phone: Schema.Types.String
+        phone: {
+            type: Schema.Types.String,
+            required: true
+        }
     },
     organization: {
         type: Schema.Types.String,
@@ -33,9 +37,10 @@ const RequestSchema = new Schema({
 })
 
 RequestSchema.plugin(paginate)
-
 export const RequestModel = model("request", RequestSchema, "requests");
 
+// Supporter
+// --------------
 const SupporterSchema = new Schema({
     name: {
         type: Schema.Types.String,
@@ -46,7 +51,10 @@ const SupporterSchema = new Schema({
             type: Schema.Types.String,
             required: true
         },
-        phone: Schema.Types.String
+        phone: {
+            type: Schema.Types.String,
+            required: true
+        }
     },
     organization: {
         type: Schema.Types.String,
@@ -56,6 +64,7 @@ const SupporterSchema = new Schema({
     location: Schema.Types.String,
     providedItems: [Schema.Types.String],
     others: Schema.Types.String,
+    fulfillByDate: Schema.Types.Date
 })
 
 SupporterSchema.plugin(paginate)

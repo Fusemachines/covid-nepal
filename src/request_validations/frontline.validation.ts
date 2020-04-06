@@ -9,13 +9,14 @@ export const validateCreateSupporter = (req: CRequest, res: CResponse, next: Nex
         name: Joi.string().required(),
         contact: {
             email: Joi.string().email().required(),
-            phone: Joi.string()
+            phone: Joi.string().required()
         },
         organization: Joi.string().required(),
         isVerified: Joi.boolean(),
         location: Joi.string(),
         providedItems: Joi.array().items(Joi.string()),
-        others: Joi.string()
+        others: Joi.string(),
+        fulfillByDate: Joi.date()
     }
 
     const result = Joi.validate(body, createSupporterSchema);
@@ -39,7 +40,7 @@ export const validateCreateRequest = (req: CRequest, res: CResponse, next: NextF
         name: Joi.string().required(),
         contact: {
             email: Joi.string().email().required(),
-            phone: Joi.string()
+            phone: Joi.string().required()
         },
         organization: Joi.string().required(),
         isVerified: Joi.boolean(),
