@@ -60,14 +60,15 @@ paths:
         - "application/xml"
         - "application/json"
       parameters:
-      - $ref: '#/parameters/District'
-      - $ref: '#/parameters/Province'
-      - $ref: '#/parameters/CovidTest'
-      - $ref: '#/parameters/Order'
-      - $ref: '#/parameters/OrderBy'
-      - $ref: '#/parameters/Size'
-      - $ref: '#/parameters/Page'
-      - $ref: '#/parameters/Lang'
+        - $ref: "#/parameters/District"
+        - $ref: "#/parameters/Province"
+        - $ref: "#/parameters/CovidTest"
+        - $ref: "#/parameters/Order"
+        - $ref: "#/parameters/OrderBy"
+        - $ref: "#/parameters/Size"
+        - $ref: "#/parameters/Page"
+        - $ref: "#/parameters/Lang"
+        - $ref: "#/parameters/Name"
       responses:
         200:
           description: "successful operation"
@@ -81,6 +82,19 @@ paths:
         - basicAuth:
             - "write:hospitals"
             - "read:hospitals"
+  /hospitals/count:
+    get:
+      tags:
+        - "Hospitals"
+      summary: "Get hospital counts"
+      description: "Get total count for beds, isolation beds, icus and total,verified hospitals"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/HospitalCount"
   /hospitals/{nameSlug}:
     get:
       tags:
@@ -398,8 +412,8 @@ paths:
       description: ""
       operationId: "postVirusCount"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       responses:
         200:
           description: "successful operation"
@@ -458,14 +472,14 @@ paths:
       description: ""
       operationId: "deleteVirusCountLatest"
       produces:
-      - "application/json"
-      - "application/xml"
+        - "application/json"
+        - "application/xml"
       parameters:
-      - name: "id"
-        in: "path"
-        description: "Id of count to update"
-        required: true
-        type: "number"
+        - name: "id"
+          in: "path"
+          description: "Id of count to update"
+          required: true
+          type: "number"
       responses:
         200:
           description: "successful operation"
@@ -562,8 +576,33 @@ parameters:
     in: "query"
     description: "Order values that need to be considered for filter"
     type: "string"
+  Name:
+    name: "name"
+    in: "query"
+    description: "Filter hospitals by name"
+    type: "string"
 
 definitions:
+  HospitalCount:
+    type: "object"
+    properties:
+      totalHospitals:
+        type: "number"
+      totalVerified:
+        type: "number"
+      totalPending:
+        type: "number"
+      totalBeds:
+        type: "number"
+      totalIsolationBeds:
+        type: "number"
+      totalVentilators:
+        type: "number"
+      totalIcus:
+        type: "number"
+      _id:
+        type: "number"
+
   Hospital:
     type: "object"
     required:

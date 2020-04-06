@@ -6,6 +6,10 @@ export class GlobalCountService {
     return await GlobalCountModel.findOne({}).sort({ 'createdAt': 'desc' }).exec();
   }
 
+  async getById(id: string) {
+    return await GlobalCountModel.findById(id).lean().exec();
+  }
+
   async add(data: IGlobalCount) {
     let date = new Date();
 
@@ -53,9 +57,7 @@ export class GlobalCountService {
     page = Number(page);
     size = Number(size);
 
-    let query = GlobalCountModel.find({});
-    const data = await query.skip(page * size).limit(size).exec();
-
+    const data = await GlobalCountModel.find({}).skip(page * size).limit(size).exec();
     const totalItems = await GlobalCountModel.countDocuments({}).exec();
     const totalPages = Math.ceil(totalItems / size);
 

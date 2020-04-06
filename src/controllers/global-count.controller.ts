@@ -16,6 +16,7 @@ export class GlobalCountController implements IController {
     this.router.get("/latest", this.getLatestCounts);
     this.router.put("/:id", this.update);
     this.router.get("/", this.getCountsWithPagination);
+    this.router.get("/:id", this.getById);
   }
 
   getLatestCounts = async (request: Request, response: Response) => {
@@ -50,6 +51,20 @@ export class GlobalCountController implements IController {
     try {
       const counts = await this.globalCountService.getCountsWithPagination(request.query.page, request.query.size);
       response.json(counts);
+    } catch (error) {
+      error = new HttpException({
+        statusCode: 500,
+        description: error.message,
+      });
+      const parsedError = error.parse();
+      response.status(parsedError.statusCode).json(parsedError);
+    }
+  }
+
+  getById = async (request: Request, response: Response) => {
+    try {
+      const count = await this.globalCountService.getById(request.params.id);
+      response.json(count);
     } catch (error) {
       error = new HttpException({
         statusCode: 500,

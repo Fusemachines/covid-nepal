@@ -55,11 +55,12 @@ export default class App {
             if (connOptions.username || connOptions.password) {
                 connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
             }
-
+            
             await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useFindAndModify: false
+                useFindAndModify: false,
+                useCreateIndex :true
             });
 
         } catch (error) {
