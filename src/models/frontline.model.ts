@@ -30,7 +30,7 @@ const RequestSchema = new Schema({
     isFulfilled: Schema.Types.Boolean,
     fulfilledBy: [{
         type: Schema.Types.ObjectId,
-        ref: "supporter"
+        ref: "supporters"
     }],
     requestedItems: [Schema.Types.String],
     others: Schema.Types.String
@@ -66,7 +66,7 @@ const SupporterSchema = new Schema({
 
 SupporterSchema.plugin(paginate)
 
-export const SupporterModel = model("supporter", SupporterSchema, "supporters")
+export const SupporterModel = model("supporters", SupporterSchema, "supporters")
 
 
 
