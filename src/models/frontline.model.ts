@@ -56,10 +56,7 @@ const SupporterSchema = new Schema({
             required: true
         }
     },
-    organization: {
-        type: Schema.Types.String,
-        required: true
-    },
+    organization: Schema.Types.String,
     isVerified: Schema.Types.Boolean,
     location: Schema.Types.String,
     providedItems: [Schema.Types.String],
