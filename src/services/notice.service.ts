@@ -27,7 +27,8 @@ export class NoticeService {
     const news = await NoticeModel.find({ 'type': type })
       .skip(page * size)
       .limit(size)
-      .lean().exec();
+      .sort({ _id: -1 })
+      .lean();
 
     const totalItems = await NoticeModel.countDocuments({'type': type}).exec();
     const totalPages = Math.ceil(totalItems / size);
