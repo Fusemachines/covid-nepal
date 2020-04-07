@@ -35,8 +35,6 @@ export class FrontlineController implements IController {
     }
 
     deleteRequestById = async (request: CRequest, response: CResponse) => {
-
-
         try {
             const result = await this.frontlineService.deleteRequestById(request.params.id)
             if (!result) {
