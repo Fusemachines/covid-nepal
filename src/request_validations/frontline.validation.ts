@@ -11,7 +11,7 @@ export const validateCreateSupporter = (req: CRequest, res: CResponse, next: Nex
             email: Joi.string().email().required(),
             phone: Joi.string().required()
         },
-        organization: Joi.string().required(),
+        organization: Joi.string(),
         isVerified: Joi.boolean(),
         location: Joi.string(),
         providedItems: Joi.array().items(Joi.string()),
@@ -42,7 +42,7 @@ export const validateCreateRequest = (req: CRequest, res: CResponse, next: NextF
             email: Joi.string().email().required(),
             phone: Joi.string().required()
         },
-        organization: Joi.string().required(),
+        organization: Joi.string(),
         isVerified: Joi.boolean(),
         isFulfilled: Joi.boolean(),
         location: Joi.string(),
