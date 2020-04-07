@@ -47,7 +47,7 @@ export class NoticeService {
   getByType(type: string) {
     return NoticeModel.find({
         type
-    }).lean();
+    }).sort({ _id: -1 }).lean();
   }
 
   deleteById(id: string) {
