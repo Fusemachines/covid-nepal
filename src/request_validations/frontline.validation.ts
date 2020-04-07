@@ -11,12 +11,12 @@ export const validateCreateSupporter = (req: CRequest, res: CResponse, next: Nex
             email: Joi.string().email().required(),
             phone: Joi.string().required()
         },
-        organization: Joi.string(),
-        isVerified: Joi.boolean(),
-        location: Joi.string(),
-        providedItems: Joi.array().items(Joi.string()),
-        others: Joi.string(),
-        fulfillByDate: Joi.date()
+        organization: Joi.string().allow(null, ''),
+        isVerified: Joi.boolean().allow(null, ''),
+        location: Joi.string().allow(null, ''),
+        providedItems: Joi.array().items(Joi.string().allow(null, '')),
+        others: Joi.string().allow(null, ''),
+        fulfillByDate: Joi.date().allow(null, '')
     }
 
     const result = Joi.validate(body, createSupporterSchema);
@@ -42,13 +42,13 @@ export const validateCreateRequest = (req: CRequest, res: CResponse, next: NextF
             email: Joi.string().email().required(),
             phone: Joi.string().required()
         },
-        organization: Joi.string(),
-        isVerified: Joi.boolean(),
-        isFulfilled: Joi.boolean(),
-        location: Joi.string(),
-        requestedItems: Joi.array().items(Joi.string()),
-        fulfilledBy: Joi.array().items(Joi.string()),
-        others: Joi.string()
+        organization: Joi.string().allow(null, ''),
+        isVerified: Joi.boolean().allow(null, ''),
+        isFulfilled: Joi.boolean().allow(null, ''),
+        location: Joi.string().allow(null, ''),
+        requestedItems: Joi.array().items(Joi.string().allow(null, '')),
+        fulfilledBy: Joi.array().items(Joi.string().allow(null, '')),
+        others: Joi.string().allow(null, '')
     }
 
     const result = Joi.validate(body, createRequestSchema);
@@ -72,15 +72,15 @@ export const validateUpdateSupporter = (request: CRequest, response: CResponse, 
     const updateSupporterSchema = {
         name: Joi.string(),
         contact: {
-            email: Joi.string().email(),
+            email: Joi.string().email().allow(null, ''),
             phone: Joi.string()
         },
-        organization: Joi.string(),
-        isVerified: Joi.boolean(),
-        location: Joi.string(),
-        providedItems: Joi.array().items(Joi.string()),
-        others: Joi.string(),
-        fulfillByDate: Joi.date()
+        organization: Joi.string().allow(null, ''),
+        isVerified: Joi.boolean().allow(null, ''),
+        location: Joi.string().allow(null, ''),
+        providedItems: Joi.array().items(Joi.string().allow(null, '')),
+        others: Joi.string().allow(null, ''),
+        fulfillByDate: Joi.date().allow(null, '')
     }
 
     const result = Joi.validate(body, updateSupporterSchema);
@@ -104,15 +104,15 @@ export const validateUpdateRequest = (request: CRequest, response: CResponse, ne
     const updateRequestSchema = {
         name: Joi.string(),
         contact: {
-            email: Joi.string().email(),
+            email: Joi.string().email().allow(null, ''),
             phone: Joi.string()
         },
-        organization: Joi.string(),
-        isVerified: Joi.boolean(),
-        isFulfilled: Joi.boolean(),
-        location: Joi.string(),
-        requestedItems: Joi.array().items(Joi.string()),
-        fulfilledBy: Joi.array().items(Joi.string()),
+        organization: Joi.string().allow(null, ''),
+        isVerified: Joi.boolean().allow(null, ''),
+        isFulfilled: Joi.boolean().allow(null, ''),
+        location: Joi.string().allow(null, ''),
+        requestedItems: Joi.array().items(Joi.string().allow(null, '')),
+        fulfilledBy: Joi.array().items(Joi.string().allow(null, '')),
         others: Joi.string()
     }
 

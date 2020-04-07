@@ -8,10 +8,10 @@ const validateNotice = (req: CRequest, res: CResponse, next: NextFunction) => {
     const noticeSchema = Joi.object().keys({
         title: Joi.string().required(),
         url: Joi.string().required(),
-        tag: Joi.string(),
-        addedAt: Joi.date(),
-        type: Joi.string(),
-        imageUrl: Joi.string()
+        tag: Joi.string().optional(),
+        addedAt: Joi.date().optional(),
+        type: Joi.string().optional(),
+        imageUrl: Joi.string().optional()
     })
 
     const result = Joi.validate(body, noticeSchema);
