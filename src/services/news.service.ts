@@ -28,9 +28,10 @@ export class NewsService {
     const news = await NewsModel.find({ 'type': type })
       .skip(page * size)
       .limit(size)
+      .sort({ 'uploadedAt': 'desc' })
       .lean().exec();
 
-    const totalItems = await NewsModel.countDocuments({'type': type}).exec();
+    const totalItems = await NewsModel.countDocuments({ 'type': type }).exec();
     const totalPages = Math.ceil(totalItems / size);
 
     return {
@@ -45,7 +46,7 @@ export class NewsService {
   }
 
   async getTips() {
-    return await NewsModel.find({ 'type': 'TIP' }).lean().exec();
+    return await NewsModel.find({ 'type': 'TIP' }).sort({ 'uploadedAt': 'desc' }).lean().exec();
   }
 
   async getTop() {
