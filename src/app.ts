@@ -15,8 +15,6 @@ import axios from "axios";
 import { NepalCountService, GlobalCountService } from "./services";
 import { GlobalCountModel } from "./models/global-count.model";
 import { IGlobalCount } from "./shared/interfaces/global-count.interface";
-// import { specs } from "./shared/utils";
-// import { any } from "joi";
 
 const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
