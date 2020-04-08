@@ -54,8 +54,6 @@ guidelines for [contributing][contributing] and then check out one of our issues
 
 ## License
 
-## License
-
 The source code is licensed under GPL v3. License is available [here](https://github.com/Fusemachines/covid-nepal-web/blob/master/LICENSE).
 
 Copyright (c) 2020-present, Fusemachines
