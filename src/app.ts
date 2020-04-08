@@ -1,4 +1,4 @@
-import Express, { Application, NextFunction } from "express";
+import Express, { Application } from "express";
 import { IApplicationOptions, IDatabaseConnectionOptions, INepalCount } from "./shared/interfaces";
 import { connect } from "mongoose";
 import cors from "cors"
@@ -15,8 +15,8 @@ import axios from "axios";
 import { NepalCountService, GlobalCountService } from "./services";
 import { GlobalCountModel } from "./models/global-count.model";
 import { IGlobalCount } from "./shared/interfaces/global-count.interface";
-import { specs } from "./shared/utils";
-import { any } from "joi";
+// import { specs } from "./shared/utils";
+// import { any } from "joi";
 
 const YAML = require("yamljs");
 const swaggerYAML = YAML.load("api_docs/swagger.yaml")
@@ -216,25 +216,25 @@ export default class App {
             response.json({
                 status: "UP"
             });
-        })
-
+        });
+        
         this.app.post("*", basicAuth({
-            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            users: { [process.env.API_USERNAME]: process.env.API_PASSWORD },
             unauthorizedResponse: this.getUnauthorizedResponse
         }))
 
         this.app.put("*", basicAuth({
-            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            users: { [process.env.API_USERNAME]: process.env.API_PASSWORD },
             unauthorizedResponse: this.getUnauthorizedResponse
         }))
 
         this.app.patch("*", basicAuth({
-            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            users: { [process.env.API_USERNAME]: process.env.API_PASSWORD },
             unauthorizedResponse: this.getUnauthorizedResponse
         }))
 
         this.app.delete("*", basicAuth({
-            users: { 'apiadmin': '37d224b2-a0d0-4786-a331-708ceea4ae93' },
+            users: { [process.env.API_USERNAME]: process.env.API_PASSWORD },
             unauthorizedResponse: this.getUnauthorizedResponse
         }))
 
