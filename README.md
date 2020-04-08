@@ -65,7 +65,7 @@ Copyright (c) 2020-present, Fusemachines
 
 * [Rabin Bhandari](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
 * [Rokin Maharjan](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
-* [Pratik Manandhar](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
+* [Pratik Manandhar](https://github.com/fuserabin)  &lt;pratik.manandhar@fusemachines.com&gt;
 * [Prashanna Ja.Ba.Ra](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
 
 ### Collaborators
