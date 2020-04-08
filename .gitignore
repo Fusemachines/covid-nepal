@@ -1,0 +1,11 @@
+
+
+.env*
+
+dist/
+node_modules/
+
+logs/
+dist/
+
+.idea/
