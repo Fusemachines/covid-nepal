@@ -3,7 +3,7 @@ import { Router } from "express";
 import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
-import validateHospital from "../request_validations/hospital.validation";
+import validateHospital, {validateHospitalTag} from "../request_validations/hospital.validation";
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -15,6 +15,12 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
+
+        // hospital tag routes
+        this.router.get("/tags", this.getTags);
+        this.router.post("/tags", validateHospitalTag, this.createHospitalTag);
+        this.router.delete("/tags/:name", this.removeHospitalTag);
+
         this.router.post("/", validateHospital, this.createHospital);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/count", this.getHospitalCount);
@@ -179,5 +185,48 @@ export class HospitalController implements IController {
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
         }
+    }
+    
+    getTags = async (request: CRequest, response: CResponse) => {
+        try {
+            const docs = await this.hospitalService.getHospitalTags();
+            response.status(200).json({ docs });
+        } catch (error) {
+            this.handleError(500, error.message, response);
+        }
+    }
+
+    createHospitalTag = async (request: CRequest, response: CResponse) => {
+        try {
+            const result = await this.hospitalService.createHospitalTag(request.body);
+            response.status(201).json(result);
+        } catch (error) {
+            this.handleError(500, error.message, response);
+        }
+    }
+
+    removeHospitalTag = async (request: CRequest, response: CResponse) => {
+        try {
+            const { name } = request.params;
+            const result = await this.hospitalService.removeHospitalTag(name);
+            if (!result) {
+                this.handleError(404, `Tag does not exist`, response);
+                return
+            }
+            response.status(200).json({
+                message: `Tag: '${result.get("name")}' has been removed successfully`
+            });
+        } catch (error) {
+            this.handleError(500, error.message, response);
+        }
+    }
+
+    handleError(code: number, message: string, response: CResponse) {
+        let error = new HttpException({
+            statusCode: code,
+            description: message,
+        })
+        const parsedError = error.parse()
+        response.status(parsedError.statusCode).json(parsedError)
     }
 }

@@ -1,6 +1,7 @@
 import HospitalModel from "../models/hospital.model";
 import { getSorting, getPagination } from "../shared/utils/";
 import { ESortOrder } from "../shared/interfaces/http.interface";
+import TagModel from "../models/tag.model";
 
 
 
@@ -65,7 +66,7 @@ export class HospitalService {
         }
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string, name: string }) {
+    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string, name: string, tags: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         const { lang = "en" } = query;
@@ -95,6 +96,11 @@ export class HospitalService {
             filter = { ...filter, ["name.en"]: new RegExp(query.name, 'gi') }
         }
 
+        if (query.tags) {
+            const tags = query.tags.split(",");
+            filter = { ...filter, "tags": { $in: tags } }
+        }
+
 
         // query with pagination and sorting
         return await HospitalModel.paginate(filter, {
@@ -122,6 +128,7 @@ export class HospitalService {
             contact.${lang}
             province
             district.${lang}
+            tags
             `,
             ...getPagination(query),
             ...getSorting(query)
@@ -173,5 +180,22 @@ export class HospitalService {
 
     deleteAll() {
         return HospitalModel.find({}).remove()
+    }
+
+
+    async getHospitalTags() {
+        const result = await TagModel.find({}).select("-__v").lean().exec()
+        return result;
+    }
+
+    async createHospitalTag(data: {name: string}) {
+        const result = await TagModel.create(data)
+        return result;
+    }
+
+
+    async removeHospitalTag(id: string) {
+        const result = await TagModel.findByIdAndRemove(id);
+        return result;
     }
 }
