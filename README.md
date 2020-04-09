@@ -1,4 +1,12 @@
-# Covid Nepal API
+[![Gitter](https://badges.gitter.im/covidnepalopensource/community.svg)](https://gitter.im/covidnepalopensource/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+# COVID-19 NEPAL API
+
+The project has 3 sub division to complete a full cycle
+1) [COVID Nepal User](https://github.com/Fusemachines/covid-nepal-web)
+2) [COVID Nepal API](https://github.com/Fusemachines/covid-nepal)
+3) [COVID Nepal Admin for Data Validation](https://github.com/Fusemachines/covid-nepal-web-admin)
+
 
 ## Installation
 
@@ -46,11 +54,11 @@ guidelines for [contributing][contributing] and then check out one of our issues
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT)
+The source code is licensed under GPL v3. License is available [here](https://github.com/Fusemachines/covid-nepal-web/blob/master/LICENSE).
 
 Copyright (c) 2020-present, Fusemachines
 
-<h3 align="center">Special Sponsors</h3>
+<h3 align="center">Started At and Supported By</h3>
 <!--special start-->
 
 <p align="center">
@@ -59,13 +67,4 @@ Copyright (c) 2020-present, Fusemachines
   </a>
 </p>
 
-## Thanks to our Collaborators
-
-### Maintainer
-
-* [Rabin Bhandari](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
-* [Rokin Maharjan](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
-* [Pratik Manandhar](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
-* [Prashanna Ja.Ba.Ra](https://github.com/fuserabin)  &lt;rabin@fusemachines.com&gt;
-
-### Collaborators
+## Thanks to our [Collaborators](https://github.com/Fusemachines/covid-nepal-web#collaborators)

@@ -4,10 +4,6 @@ import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 import validateHospital from "../request_validations/hospital.validation";
-// @ts-ignore: Resolve json module
-import hospitalJson from "../../hospitaldata.json"
-import { prepareJsonFileImport, prepareJsonFileUpdate } from "../services/hospitalExcel.service"
-import { query } from "winston";
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -20,8 +16,6 @@ export class HospitalController implements IController {
 
     initRoutes() {
         this.router.post("/", validateHospital, this.createHospital);
-        this.router.post("/import-json/:rows/:remove", this.importHospitalFromJsonFile);
-        this.router.put("/import-json/update", this.updateHospitalFromJsonFile);
         this.router.get("/", this.getAllHospitals);
         this.router.get("/count", this.getHospitalCount);
         this.router.get("/covid", this.getHospitalsForCovid);
@@ -61,83 +55,6 @@ export class HospitalController implements IController {
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
             response.status(500).json({ error })
-        }
-    }
-
-    importHospitalFromJsonFile = async (request: CRequest, response: CResponse) => {
-        let insertAll = false;
-        let removeAll = false;
-        let from, to;
-
-        if (request.params.rows === "all") {
-            insertAll = true;
-
-            // remove all and insert all again
-            if (request.params.remove == "true") {
-                removeAll = true;
-            }
-
-        } else {
-            const rows = request.params.rows.split('-');
-            from = Number(rows[0]);
-            to = Number(rows[1]);
-        }
-
-        let records: any = prepareJsonFileImport({
-            data: hospitalJson,
-            query: {
-                insertAll,
-                from,
-                to
-            }
-        })
-
-        // inserting data
-        if (records.length) {
-
-            // removing all hospital records
-            if (removeAll) {
-                global.logger.log({ level: 'info', message: 'Removing all hospital records' })
-                await this.hospitalService.deleteAll();
-            }
-
-            for (let record of records) {
-                await this.hospitalService.createHospital(record);
-            }
-        }
-
-        response.send("Data load completed");
-    }
-
-    updateHospitalFromJsonFile = async (request: CRequest, response: CResponse) => {
-        let updateRecords = prepareJsonFileUpdate({
-            data: hospitalJson
-        });
-
-        const records = updateRecords.data;
-        const updatedSerialNumbers = updateRecords.sn;
-
-        // updaing data
-        if (records.length) {
-            for (let record of records) {
-                const deletedHospital: any = await this.hospitalService.deleteHospitalBySlug(record.nameSlug);
-                if (deletedHospital != null) {
-                    global.logger.log({
-                        level: "info",
-                        message: `Deleted hospital -> ${deletedHospital.name}`
-                    });
-                }
-
-                await this.hospitalService.createHospital(record);
-            }
-
-            response.json({
-                message: `Hospitals updated successfully`,
-                updatedSerialNumbers
-            });
-        }
-        else {
-            response.send("There are no data to update from json.")
         }
     }
 
