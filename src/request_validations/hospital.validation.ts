@@ -50,7 +50,8 @@ const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => 
             name: commonLangValidation
         }),
         district: commonLangValidation,
-        isVerified: Joi.bool()
+        isVerified: Joi.bool(),
+        tags: Joi.array().items(Joi.string())
     })
 
     const result = Joi.validate(body, hospitalSchema);
