@@ -3,7 +3,7 @@ import { Router } from "express";
 import { HospitalService } from "../services/hospital.service";
 import HttpException from "../shared/exceptions/httpException";
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
-import validateHospital from "../request_validations/hospital.validation";
+import validateHospital, {validateHospitalTag} from "../request_validations/hospital.validation";
 // @ts-ignore: Resolve json module
 import hospitalJson from "../../hospitaldata.json"
 import { prepareJsonFileImport, prepareJsonFileUpdate } from "../services/hospitalExcel.service"
@@ -18,6 +18,12 @@ export class HospitalController implements IController {
     }
 
     initRoutes() {
+
+        // hospital tag routes
+        this.router.get("/tags", this.getTags);
+        this.router.post("/tags", validateHospitalTag, this.createHospitalTag);
+        this.router.delete("/tags/:name", this.removeHospitalTag);
+
         this.router.post("/", validateHospital, this.createHospital);
         this.router.post("/import-json/:rows/:remove", this.importHospitalFromJsonFile);
         this.router.put("/import-json/update", this.updateHospitalFromJsonFile);

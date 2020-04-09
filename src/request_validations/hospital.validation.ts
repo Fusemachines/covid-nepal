@@ -3,6 +3,24 @@ import commonLangValidation, { nullableLanguageSchema } from "./commonLang.valid
 import { CRequest, CResponse } from "../shared/interfaces/http.interface";
 import { NextFunction } from "express";
 
+export const validateHospitalTag = (req: CRequest, res: CResponse, next: NextFunction) => {
+    const { body } = req;
+    const hospitalTagSchema = Joi.object().keys({
+        name: Joi.string().required(),
+    })
+    const result = Joi.validate(body, hospitalTagSchema);
+    const { error } = result;
+
+    if (error && error.details) {
+        res.status(422).json({
+            message: 'Invalid request',
+            errors: error.details
+        })
+    } else {
+        next()
+    }
+}
+
 const validateHospital = (req: CRequest, res: CResponse, next: NextFunction) => {
     const { body } = req;
 
