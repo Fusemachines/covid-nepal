@@ -21,7 +21,7 @@ declare global {
     }
 }
 
-// Configuration
+// Configuration for evironments
 const environment = process.env.NODE_ENV;
 const { error } = config({
     path: resolve(__dirname, "../", `.env.${environment}`)
