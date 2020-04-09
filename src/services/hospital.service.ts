@@ -1,6 +1,7 @@
 import HospitalModel from "../models/hospital.model";
 import { getSorting, getPagination } from "../shared/utils/";
 import { ESortOrder } from "../shared/interfaces/http.interface";
+import TagModel from "../models/tag.model";
 
 
 
@@ -173,5 +174,22 @@ export class HospitalService {
 
     deleteAll() {
         return HospitalModel.find({}).remove()
+    }
+
+
+    async getHospitalTags() {
+        const result = await TagModel.find({}).select("-__v").lean().exec()
+        return result;
+    }
+
+    async createHospitalTag(data: {name: string}) {
+        const result = await TagModel.create(data)
+        return result;
+    }
+
+
+    async removeHospitalTag(id: string) {
+        const result = await TagModel.findByIdAndRemove(id);
+        return result;
     }
 }
