@@ -7,7 +7,6 @@ import validateHospital from "../request_validations/hospital.validation";
 // @ts-ignore: Resolve json module
 import hospitalJson from "../../hospitaldata.json"
 import { prepareJsonFileImport, prepareJsonFileUpdate } from "../services/hospitalExcel.service"
-import { query } from "winston";
 
 export class HospitalController implements IController {
     route: string = "hospitals"
@@ -262,5 +261,48 @@ export class HospitalController implements IController {
             const parsedError = error.parse()
             response.status(parsedError.statusCode).json(parsedError)
         }
+    }
+    
+    getTags = async (request: CRequest, response: CResponse) => {
+        try {
+            const docs = await this.hospitalService.getHospitalTags();
+            response.status(200).json({ docs });
+        } catch (error) {
+            this.handleError(500, error.message, response);
+        }
+    }
+
+    createHospitalTag = async (request: CRequest, response: CResponse) => {
+        try {
+            const result = await this.hospitalService.createHospitalTag(request.body);
+            response.status(201).json(result);
+        } catch (error) {
+            this.handleError(500, error.message, response);
+        }
+    }
+
+    removeHospitalTag = async (request: CRequest, response: CResponse) => {
+        try {
+            const { name } = request.params;
+            const result = await this.hospitalService.removeHospitalTag(name);
+            if (!result) {
+                this.handleError(404, `Tag does not exist`, response);
+                return
+            }
+            response.status(200).json({
+                message: `Tag: '${result.get("name")}' has been removed successfully`
+            });
+        } catch (error) {
+            this.handleError(500, error.message, response);
+        }
+    }
+
+    handleError(code: number, message: string, response: CResponse) {
+        let error = new HttpException({
+            statusCode: code,
+            description: message,
+        })
+        const parsedError = error.parse()
+        response.status(parsedError.statusCode).json(parsedError)
     }
 }
