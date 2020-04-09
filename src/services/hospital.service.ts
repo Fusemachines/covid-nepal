@@ -65,7 +65,7 @@ export class HospitalService {
         }
     }
 
-    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string, name: string }) {
+    async getHospitals(query?: { district: string, province: number, covidTest: string, order: ESortOrder, orderBy: string, size: number, page: number, lang: string, name: string, tags: string }) {
         const queryDistrict = query.district && query.district.replace(/,+$/g, "").split(',') || []
         const provinceCode: number = (query.province && !isNaN(Number(query.province))) ? Number(query.province) : null;
         const { lang = "en" } = query;
@@ -95,6 +95,11 @@ export class HospitalService {
             filter = { ...filter, ["name.en"]: new RegExp(query.name, 'gi') }
         }
 
+        if (query.tags) {
+            const tags = query.tags.split(",");
+            filter = { ...filter, "tags": { $in: tags } }
+        }
+
 
         // query with pagination and sorting
         return await HospitalModel.paginate(filter, {
@@ -122,6 +127,7 @@ export class HospitalService {
             contact.${lang}
             province
             district.${lang}
+            tags
             `,
             ...getPagination(query),
             ...getSorting(query)
