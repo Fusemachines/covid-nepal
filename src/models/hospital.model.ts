@@ -94,6 +94,9 @@ const HospitalSchema = new Schema({
     district: {
         type: LangSchema,
         required: true
+    },
+    tags: {
+        type: [Schema.Types.String]
     }
 }, {
     timestamps: true
