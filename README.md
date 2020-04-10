@@ -68,5 +68,3 @@ Copyright (c) 2020-present, Fusemachines
 </p>
 
 ## Thanks to our [Collaborators](https://github.com/Fusemachines/covid-nepal-web#collaborators)
-
-* [ajshres](https://github.com/ajshres) - **Ajay Gopal Shrestha** (he/him)
