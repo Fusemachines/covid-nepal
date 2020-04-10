@@ -10,9 +10,7 @@
       "prod:deploy": "tsc && yarn pm2 restart all",
       "build": "tsc",
       "watch-ts": "tsc -w",
-      "dev": "yarn clean:build && NODE_ENV=local nodemon",
-      "seed:dev": "NODE_ENV=development ts-node ./src/seed/seeder.ts",
-      "seed:prod": "NODE_ENV=production ts-node ./src/seed/seeder.ts"
+      "dev": "yarn clean:build && NODE_ENV=local nodemon"
     },
     "dependencies": {
       "axios": "^0.19.2",
