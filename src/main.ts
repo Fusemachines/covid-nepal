@@ -3,8 +3,8 @@ import { json, urlencoded, } from "express";
 import { config } from "dotenv";
 import { resolve } from "path";
 import { UserController } from "./controllers/user.controller";
-import { UserService, DistrictService, VirusCountService, HospitalService, NepalCountService, GlobalCountService, FrontlineService, NewsService } from "./services";
-import { ContactController, VirusCountController, DistrictController, HospitalController, NepalCountController, GlobalCountController, NewsController, FrontlineController } from "./controllers";
+import { UserService, DistrictService, HospitalService, NepalCountService, GlobalCountService, FrontlineService, NewsService } from "./services";
+import { ContactController, DistrictController, HospitalController, NepalCountController, GlobalCountController, NewsController, FrontlineController } from "./controllers";
 
 import LoggerMiddleware from "./middlewares/loggerMiddleware";
 import logger from "./shared/logger"
@@ -34,7 +34,6 @@ global.logger = logger;
 const app = new App({
     controllers: [
         new UserController(new UserService()),
-        new VirusCountController(new VirusCountService()),
         new ContactController(
             new ContactService()
         ),
