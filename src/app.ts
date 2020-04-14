@@ -41,6 +41,7 @@ export default class App {
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             host: process.env.DB_HOST,
+            authSource: process.env.DB_AUTH_SOURCE,
             port: parseInt(process.env.DB_PORT, 10)
         });
         this.initRoutes(controllers);
@@ -55,9 +56,14 @@ export default class App {
                 connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
             }
 
+            // auth source 
+            if (connOptions.authSource) {
+                connectionUri = `${connectionUri}?authSource=${connOptions.authSource}`
+            }
+
             // logging connection
             if(process.env.NODE_ENV !== "production") {
-                global.logger.log({
+                console.log({
                     level: "debug", 
                     message: connectionUri,
                     metadata: {
