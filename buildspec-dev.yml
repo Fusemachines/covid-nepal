@@ -16,7 +16,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - aws s3 cp s3://fuse-configuration-deployment-prod/covidnepal/api/develop/env.development .
+      - aws s3 cp s3://fuse-configuration-deployment-dev/covidnepal/api/develop/env.development .
       - mv env.development .env.development
       - pwd && ls -lah
       - docker build -t $REPOSITORY_URI:latest .
