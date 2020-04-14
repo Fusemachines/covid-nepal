@@ -4,5 +4,6 @@ WORKDIR /app
 COPY ./package.json ./yarn.lock /app/
 RUN yarn install
 COPY . /app
-CMD ["yarn", "start"]
+RUN yarn clean:build
+CMD ["node", "/app/dist/main.js"]
 EXPOSE 5000
