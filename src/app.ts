@@ -35,6 +35,7 @@ export default class App {
         this.globalCountService = new GlobalCountService();
 
         this.middlewares(middlewares);
+
         this.createDatabaseConnection({
             database: process.env.DB_DATABASE,
             username: process.env.DB_USER,
@@ -53,7 +54,21 @@ export default class App {
             if (connOptions.username || connOptions.password) {
                 connectionUri = `mongodb://${connOptions.username || ''}:${connOptions.password || ''}@${connOptions.host}:${connOptions.port}/${connOptions.database}`;
             }
-            
+
+            // logging connection
+            if(process.env.NODE_ENV !== "production") {
+                global.logger.log({
+                    level: "debug", 
+                    message: connectionUri,
+                    metadata: {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true,
+                        useFindAndModify: false,
+                        useCreateIndex :true
+                    }
+                })
+            }
+
             await connect(connectionUri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,

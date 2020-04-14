@@ -6,7 +6,7 @@
       "clean:build": "rm -rf ./dist && tsc",
       "prod": "yarn clean:build && NODE_ENV=production pm2 start dist/main.js -i max -- --production",
       "development": "yarn clean:build && NODE_ENV=development pm2 start dist/main.js -i max -- --production",
-      "start": "yarn clean:build && NODE_ENV=development node ./dist/main.js",
+      "start": "yarn clean:build && pm2 start dist/main.js -i max -- --production",
       "prod:deploy": "tsc && yarn pm2 restart all",
       "build": "tsc",
       "watch-ts": "tsc -w",
