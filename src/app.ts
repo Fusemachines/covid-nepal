@@ -338,18 +338,19 @@ export default class App {
     }
 
     run(cb: () => void) {
+        this.app.listen(this.port, cb);
 
-        if (process.env.NODE_ENV !== "local") {
-            https.createServer({
-                key: readFileSync(process.env.SSL_KEY),
-                cert: readFileSync(process.env.SSL_CERT),
-                ca: readFileSync(process.env.SSL_CA)
-            }, this.app).listen(5000, () => {
-                console.log(`App is running under 5000 port`)
-            })
+        // if (process.env.NODE_ENV !== "local") {
+        //     https.createServer({
+        //         key: readFileSync(process.env.SSL_KEY),
+        //         cert: readFileSync(process.env.SSL_CERT),
+        //         ca: readFileSync(process.env.SSL_CA)
+        //     }, this.app).listen(5000, () => {
+        //         console.log(`App is running under 5000 port`)
+        //     })
 
-        } else {
-            this.app.listen(this.port, cb);
-        }
+        // } else {
+        //     this.app.listen(this.port, cb);
+        // }
     }
 }
