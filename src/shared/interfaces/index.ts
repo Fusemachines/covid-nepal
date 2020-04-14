@@ -12,6 +12,7 @@ export interface IDatabaseConnectionOptions {
     password: string;
     database: string;
     port: number;
+    readonly authSource: string;
 }
 
 export interface IController {
