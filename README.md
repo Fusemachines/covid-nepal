@@ -1,4 +1,5 @@
 [![Gitter](https://badges.gitter.im/covidnepalopensource/community.svg)](https://gitter.im/covidnepalopensource/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFusemachines%2Fcovid-nepal.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FFusemachines%2Fcovid-nepal?ref=badge_shield)
 
 # COVID-19 NEPAL API
 
@@ -66,5 +67,8 @@ Copyright (c) 2020-present, Fusemachines
     <img width="260px" src="https://fusemachines.com/assets/img/fusemachines-logo.png">
   </a>
 </p>
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFusemachines%2Fcovid-nepal.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FFusemachines%2Fcovid-nepal?ref=badge_large)
 
 ## Thanks to our [Collaborators](https://github.com/Fusemachines/covid-nepal-web#collaborators)
